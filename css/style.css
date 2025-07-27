@@ -1,0 +1,466 @@
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+#background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.main-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: 20px;
+    width: 50%;
+    margin-top: 20px;
+}
+
+.left-section {
+    position: fixed;
+    left: 20px;
+    top: 40px;
+    width: calc(50% - 40px);
+    z-index: 1;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-widgets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.welcome-message {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.welcome-message h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.welcome-message p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #fff;
+    margin: 15px 0 5px 0;
+    font-style: italic;
+}
+
+#quote-meaning {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-style: italic;
+}
+
+.current-image-container {
+    text-align: center;
+    height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    padding: 20px;
+}
+
+.current-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+    object-fit: contain;
+    display: block;
+}
+
+.current-image:hover {
+    transform: scale(1.05);
+}
+
+.widget {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.image-widget {
+    overflow: visible;
+}
+
+.widget-header {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.widget-header h3 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.widget-content {
+    padding: 20px;
+}
+
+.clock-display {
+    font-size: 2.5rem;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
+}
+
+.date-display {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+
+.weather-location {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.weather-temp {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.weather-desc {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.todo-input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#todo-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+#todo-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+#add-todo-btn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.todo-list {
+    list-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.todo-item.empty-message {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    padding: 20px 0;
+}
+
+.todo-checkbox {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+}
+
+.todo-text {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.todo-text.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.delete-todo {
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.popup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.popup-overlay.active .popup-content {
+    transform: scale(1);
+}
+
+.popup-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.popup-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.welcome-user {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome-user h2 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        gap: 10px;
+        padding: 40px;
+        width: 50%;
+        margin-left: auto;
+        margin-right: 20px;
+        margin-top: 40px;
+    }
+    
+    .welcome-message {
+        grid-column: 1 / -1;
+    }
+    
+    .left-section {
+        position: fixed;
+        left: 20px;
+        top: 40px;
+        width: calc(50% - 40px);
+        transform: none;
+    }
+    
+    .right-section {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .top-widgets {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .main-content {
+        gap: 10px;
+        padding: 60px;
+        width: 50%;
+        margin-left: auto;
+        margin-right: 20px;
+        margin-top: 40px;
+    }
+    
+    .welcome-message {
+        grid-column: 1 / -1;
+    }
+    
+    .left-section {
+        position: fixed;
+        left: 20px;
+        top: 40px;
+        width: calc(50% - 40px);
+        transform: none;
+    }
+    
+    .right-section {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .top-widgets {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+}
