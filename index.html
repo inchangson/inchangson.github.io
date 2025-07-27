@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Italian Brainrot Momentum</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 배경 이미지 컨테이너 -->
+    <div id="background-container"></div>
+    
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 사용자 환영 메시지 -->
+        <div id="welcome-user" class="welcome-user hidden">
+            <h2>Ciao, <span id="user-name"></span>! 👋</h2>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+        
+        <!-- 환영 메시지 -->
+        <div class="welcome-message">
+            <h1>Benvenuto! 🇮🇹</h1>
+            <p>Welcome to Italian Brainrot</p>
+            <p id="quote-text"></p>
+            <p id="quote-meaning"></p>
+        </div>
+        
+        <!-- 좌측 영역: 이미지 위젯 -->
+        <div class="left-section">
+            <div class="widget image-widget">
+                <div class="widget-header">
+                    <h3>🖼️ Current Image</h3>
+                </div>
+                <div class="widget-content">
+                    <div id="current-image-container" class="current-image-container">
+                        <img id="current-image" class="current-image" src="" alt="Italian Brainrot Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 우측 영역: 다른 위젯들 -->
+        <div class="right-section">
+            <!-- 시계와 날씨를 나란히 배치 -->
+            <div class="top-widgets">
+                <!-- 시계 -->
+                <div class="widget clock-widget">
+                    <div class="widget-header">
+                        <h3>🕐 Current Time</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div id="clock" class="clock-display"></div>
+                        <div id="date" class="date-display"></div>
+                    </div>
+                </div>
+                
+                <!-- 날씨 정보 -->
+                <div class="widget weather-widget">
+                    <div class="widget-header">
+                        <h3>🌤️ Weather</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div id="weather-info">
+                            <div class="weather-location">Checking location...</div>
+                            <div class="weather-temp">--°C</div>
+                            <div class="weather-desc">Checking weather information...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 투두 리스트 -->
+            <div class="widget todo-widget">
+                <div class="widget-header">
+                    <h3>📝 Todo List</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="todo-input-container">
+                        <input type="text" id="todo-input" placeholder="Enter a new task...">
+                        <button id="add-todo-btn">Add</button>
+                    </div>
+                    <ul id="todo-list" class="todo-list">
+                        <!-- 투두 아이템들이 여기에 동적으로 추가됩니다 -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 로그인 팝업 -->
+    <div id="login-popup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>🍕 Italian Brainrot Login</h2>
+                <button id="close-popup" class="close-btn">&times;</button>
+            </div>
+            <div class="popup-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">username:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="login-btn">login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script src="js/clock.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/todo.js"></script>
+    <script src="js/backgroundAndQuotes.js"></script>
+    <script src="js/weather.js"></script>
+</body>
+</html>
