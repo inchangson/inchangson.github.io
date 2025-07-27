@@ -35,10 +35,9 @@ function handleLogin(e) {
     e.preventDefault();
     
     const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
     
     // 간단한 인증 (실제로는 서버에서 처리해야 함)
-    if (username && password) {
+    if (username) {
         currentUser = {
             username: username,
             loginTime: new Date().toISOString()
@@ -54,7 +53,7 @@ function handleLogin(e) {
         // 폼 초기화
         loginForm.reset();
     } else {
-        alert('Please enter username and password!');
+        alert('Please enter username!');
     }
 }
 
