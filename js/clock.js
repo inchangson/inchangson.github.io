@@ -50,13 +50,6 @@ function startClock() {
     clockInterval = setInterval(updateTime, 1000);
 }
 
-// 시계 정지 함수
-function stopClock() {
-    if (clockInterval) {
-        clearInterval(clockInterval);
-    }
-}
-
 // 초기화 함수
 function initClock() {
     initClockElements();

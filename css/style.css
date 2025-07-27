@@ -7,8 +7,9 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: beige;
     min-height: 100vh;
+    max-height: 100vh;
 }
 
 #background-container {
@@ -30,29 +31,28 @@ body {
     flex-direction: column;
     gap: 10px;
     max-width: 1400px;
-    margin-left: auto;
-    margin-right: 20px;
-    width: 50%;
-    margin-top: 48px;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .left-section {
-    position: fixed;
-    left: 20px;
-    top: 20px;
-    width: calc(50% - 40px);
-    z-index: 1;
-    height: calc(100vh - 80px);
+    position: relative;
+    width: 100%;
+    height: 400px;
+    gap: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
 .right-section {
     display: flex;
-    top: 20px;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 
 .top-widgets {
@@ -96,36 +96,26 @@ body {
     font-style: italic;
 }
 
+/* --- 이미지 컨테이너 --- */
+/* 이제 부모(.widget-content)의 높이가 명확하므로 100%를 사용할 수 있음 */
 .current-image-container {
-    flex: 1 1 0;
+    width: 95%;
+    height: 95%;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    padding: 2px;
-    border-radius: 15px;
-    height: auto;
+    border-radius: 15px; /* 테두리는 컨테이너에 적용 */
+    overflow: hidden; /* 이미지 모서리도 둥글게 처리하기 위함 */
+}
+
+/* --- 최종 이미지 스타일 --- */
+/* 컨테이너 안에서 잘리지 않고 꽉 차도록 설정 */
+.current-image {
     max-width: 100%;
     max-height: 100%;
-    box-sizing: border-box;
-}
-
-.current-image {
-    /* 핵심 변경 사항 */
-    height: 95%;         /* 컨테이너 높이의 95%로 증가 */
-    width: auto;         /* 높이에 맞춰 너비는 자동으로 조절 (비율 유지) */
-    object-fit: contain; /* 이미지가 잘리지 않고 요소 안에 모두 보이도록 보장 */
-
-    /* 기존 스타일 유지 */
-    max-width: 100%;     /* 컨테이너 너비를 넘지 않도록 제한 */
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease;
+    object-fit: contain; /* 이미지 비율을 유지하며, 잘리지 않게 함 */
+    border-radius: 10px; /* 이미지 자체에도 약간의 둥근 모서리 적용 */
     display: block;
-    box-sizing: border-box;
-}
-.current-image:hover {
-    transform: scale(1.05);
 }
 
 .widget {
@@ -144,6 +134,7 @@ body {
     max-width: 100%;
     max-height: 100%;
     box-sizing: border-box;
+    margin: 20px 20px;
 }
 
 .widget-header {
@@ -160,6 +151,16 @@ body {
 
 .widget-content {
     padding: 20px;
+}
+
+.widget-image-content {
+    flex: 1; /* 헤더를 제외한 모든 남은 세로 공간을 차지하도록 설정 */
+    display: flex; /* 자식(.current-image-container)을 중앙 정렬하기 위해 flex 사용 */
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* 위젯 콘텐츠 영역의 안쪽 여백 유지 */
+    min-height: 0; /* Flexbox의 고질적인 넘침(overflow) 문제를 방지하는 안전장치 */
+    box-sizing: border-box;
 }
 
 .clock-display {
@@ -274,7 +275,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -290,7 +291,7 @@ body {
 }
 
 .popup-content {
-    background: rgba(66, 63, 68, 0.95);
+    background: rgba(66, 63, 68, 0.726);
     border-radius: 20px;
     width: 90%;
     max-width: 400px;
@@ -303,21 +304,22 @@ body {
 }
 
 .popup-header {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(15px);
-    color: #333;
+    color: #fff;
     padding: 20px;
     border-radius: 20px 20px 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .popup-header h2 {
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.3rem;
     margin: 0;
+    color: #fff;
 }
 
 .close-btn {
@@ -351,21 +353,28 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #333;
+    color: #fff;
     font-weight: 500;
 }
 
 .form-group input {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #e1e5e9;
+    border: 2px solid rgba(66, 63, 68, 0.5);
     border-radius: 8px;
     font-size: 1rem;
+    background: rgba(66, 63, 68, 0.3);
+    color: #fff;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: rgba(66, 63, 68, 0.8);
+    background: rgba(66, 63, 68, 0.5);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .login-btn {
@@ -424,6 +433,32 @@ body {
     display: none !important;
 }
 
+/* 모바일 기본 스타일 (768px 미만) */
+.top-widgets {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 모바일에서 left-section이 main-content의 패딩을 제대로 반영하도록 */
+@media (max-width: 767px) {
+    .main-content {
+        padding: 20px;
+        width: 100%;
+        margin: 0 auto;
+    }
+    
+    .left-section {
+        width: 100%;
+        margin: 0;
+        gap: 10px;
+    }
+    
+    .right-section {
+        width: 100%;
+    }
+}
+
 @media (min-width: 768px) {
     .main-content {
         gap: 10px;
@@ -443,7 +478,9 @@ body {
         left: 20px;
         top: 48px;
         width: calc(50% - 40px);
+        height: calc(100vh - 80px);
         transform: none;
+        margin-bottom: 0;
     }
     
     .right-section {

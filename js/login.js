@@ -3,7 +3,6 @@
 // 전역 변수들
 let loginPopup;
 let loginForm;
-let closePopupBtn;
 let welcomeUser;
 let userNameSpan;
 let logoutBtn;
@@ -14,7 +13,6 @@ let currentUser = null;
 function initLoginElements() {
     loginPopup = document.getElementById('login-popup');
     loginForm = document.getElementById('login-form');
-    closePopupBtn = document.getElementById('close-popup');
     welcomeUser = document.getElementById('welcome-user');
     userNameSpan = document.getElementById('user-name');
     logoutBtn = document.getElementById('logout-btn');
@@ -96,21 +94,8 @@ function setupEventListeners() {
         loginForm.addEventListener('submit', handleLogin);
     }
     
-    if (closePopupBtn) {
-        closePopupBtn.addEventListener('click', closePopup);
-    }
-    
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);
-    }
-    
-    // 팝업 외부 클릭 시 닫기
-    if (loginPopup) {
-        loginPopup.addEventListener('click', (e) => {
-            if (e.target === loginPopup) {
-                closePopup();
-            }
-        });
     }
 }
 
