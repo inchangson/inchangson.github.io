@@ -5,7 +5,7 @@ let backgroundContainer;
 let quoteElement;
 let quoteMeaningElement;
 let currentImageElement;
-let currentImageIndex = 0;
+let currentIndex = 0;
 const changeInterval = 30000; // 30초마다 이미지 변경
 
 // Italian Brainrot 이미지와 명언 데이터
@@ -86,8 +86,8 @@ function displayImageBox(imageUrl) {
 
 // 랜덤 배경과 명언 설정
 function setRandomBackground() {
-    const randomIndex = Math.floor(Math.random() * italianBrainrotData.length);
-    const randomData = italianBrainrotData[randomIndex];
+    currentIndex = (currentIndex + Math.ceil(Math.random() * (italianBrainrotData.length - 1))) % italianBrainrotData.length;
+    const randomData = italianBrainrotData[currentIndex];
 
     displayBackground(randomData.image);
     displayImageBox(randomData.image);

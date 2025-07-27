@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Italian Brainrot Momentum</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- 배경 이미지 컨테이너 -->
     <div id="background-container"></div>
+        
+    <!-- 좌측 영역: 이미지 위젯 -->
+    <div class="left-section">
+        <div class="widget image-widget">
+            <div class="widget-header">
+                <h3>🖼️ Current Image</h3>
+            </div>
+            <div class="widget-content">
+                <div id="current-image-container" class="current-image-container">
+                    <img id="current-image" class="current-image" src="" alt="Italian Brainrot Image">
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- 메인 콘텐츠 -->
     <div class="main-content">
@@ -25,20 +38,6 @@
             <p>Welcome to Italian Brainrot</p>
             <p id="quote-text"></p>
             <p id="quote-meaning"></p>
-        </div>
-        
-        <!-- 좌측 영역: 이미지 위젯 -->
-        <div class="left-section">
-            <div class="widget image-widget">
-                <div class="widget-header">
-                    <h3>🖼️ Current Image</h3>
-                </div>
-                <div class="widget-content">
-                    <div id="current-image-container" class="current-image-container">
-                        <img id="current-image" class="current-image" src="" alt="Italian Brainrot Image">
-                    </div>
-                </div>
-            </div>
         </div>
         
         <!-- 우측 영역: 다른 위젯들 -->
@@ -101,10 +100,6 @@
                     <div class="form-group">
                         <label for="username">username:</label>
                         <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">password:</label>
-                        <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" class="login-btn">login</button>
                 </form>

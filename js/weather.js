@@ -64,62 +64,10 @@ function displayWeather(data) {
     const location = data.name;
     const temp = Math.round(data.main.temp);
     const description = data.weather[0].description;
-    const icon = data.weather[0].icon;
     
     if (weatherLocation) weatherLocation.textContent = location;
     if (weatherTemp) weatherTemp.textContent = `${temp}°C`;
     if (weatherDesc) weatherDesc.textContent = description;
-    
-    // 날씨 아이콘 추가 (선택사항)
-    addWeatherIcon(icon);
-}
-
-// 날씨 아이콘 추가
-function addWeatherIcon(iconCode) {
-    if (!weatherInfo) return;
-    
-    // 기존 아이콘 제거
-    const existingIcon = weatherInfo.querySelector('.weather-icon');
-    if (existingIcon) {
-        existingIcon.remove();
-    }
-    
-    // 새 아이콘 추가
-    const icon = document.createElement('div');
-    icon.className = 'weather-icon';
-    icon.innerHTML = getWeatherEmoji(iconCode);
-    icon.style.fontSize = '2rem';
-    icon.style.textAlign = 'center';
-    icon.style.marginBottom = '10px';
-    
-    weatherInfo.insertBefore(icon, weatherLocation);
-}
-
-// 날씨 이모지 가져오기
-function getWeatherEmoji(iconCode) {
-    // OpenWeatherMap 아이콘 코드에 따른 이모지 매핑
-    const emojiMap = {
-        '01d': '☀️', // 맑음 (낮)
-        '01n': '🌙', // 맑음 (밤)
-        '02d': '⛅', // 구름 조금 (낮)
-        '02n': '☁️', // 구름 조금 (밤)
-        '03d': '☁️', // 구름 많음
-        '03n': '☁️',
-        '04d': '☁️', // 흐림
-        '04n': '☁️',
-        '09d': '🌧️', // 소나기
-        '09n': '🌧️',
-        '10d': '🌦️', // 비 (낮)
-        '10n': '🌧️', // 비 (밤)
-        '11d': '⛈️', // 천둥번개
-        '11n': '⛈️',
-        '13d': '🌨️', // 눈
-        '13n': '🌨️',
-        '50d': '🌫️', // 안개
-        '50n': '🌫️'
-    };
-    
-    return emojiMap[iconCode] || '🌤️';
 }
 
 // 기본 날씨 표시
@@ -127,18 +75,6 @@ function showDefaultWeather() {
     if (weatherLocation) weatherLocation.textContent = 'Seoul, South Korea';
     if (weatherTemp) weatherTemp.textContent = '22°C';
     if (weatherDesc) weatherDesc.textContent = 'Clear';
-    
-    // 기본 아이콘 추가
-    if (weatherInfo) {
-        const icon = document.createElement('div');
-        icon.className = 'weather-icon';
-        icon.innerHTML = '🌤️';
-        icon.style.fontSize = '2rem';
-        icon.style.textAlign = 'center';
-        icon.style.marginBottom = '10px';
-        
-        weatherInfo.insertBefore(icon, weatherLocation);
-    }
 }
 
 // 수동으로 위치 설정 (테스트용)
