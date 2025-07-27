@@ -6,7 +6,7 @@
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
 }
@@ -33,19 +33,24 @@ body {
     margin-left: auto;
     margin-right: 20px;
     width: 50%;
-    margin-top: 20px;
+    margin-top: 48px;
 }
 
 .left-section {
     position: fixed;
     left: 20px;
-    top: 40px;
+    top: 20px;
     width: calc(50% - 40px);
     z-index: 1;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .right-section {
     display: flex;
+    top: 20px;
     flex-direction: column;
     gap: 10px;
 }
@@ -59,14 +64,14 @@ body {
 .welcome-message {
     text-align: center;
     padding: 40px 20px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(66, 63, 68, 0.726);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(66, 63, 68, 0.726);
 }
 
 .welcome-message h1 {
-    font-family: 'Playfair Display', serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 3rem;
     color: #fff;
     margin-bottom: 10px;
@@ -78,7 +83,7 @@ body {
 }
 
 #quote-text {
-    font-family: 'Playfair Display', serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.4rem;
     color: #fff;
     margin: 15px 0 5px 0;
@@ -92,41 +97,53 @@ body {
 }
 
 .current-image-container {
-    text-align: center;
-    height: calc(100vh - 60px);
+    flex: 1 1 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: visible;
-    padding: 20px;
+    overflow: hidden;
+    padding: 2px;
+    border-radius: 15px;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
 }
 
 .current-image {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+    /* 핵심 변경 사항 */
+    height: 95%;         /* 컨테이너 높이의 95%로 증가 */
+    width: auto;         /* 높이에 맞춰 너비는 자동으로 조절 (비율 유지) */
+    object-fit: contain; /* 이미지가 잘리지 않고 요소 안에 모두 보이도록 보장 */
+
+    /* 기존 스타일 유지 */
+    max-width: 100%;     /* 컨테이너 너비를 넘지 않도록 제한 */
     border-radius: 10px;
     border: 2px solid rgba(255, 255, 255, 0.2);
     transition: transform 0.3s ease;
-    object-fit: contain;
     display: block;
+    box-sizing: border-box;
 }
-
 .current-image:hover {
     transform: scale(1.05);
 }
 
 .widget {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(66, 63, 68, 0.726);
     backdrop-filter: blur(15px);
     border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(66, 63, 68, 0.726);
     overflow: hidden;
 }
 
 .image-widget {
-    overflow: visible;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
 }
 
 .widget-header {
@@ -150,7 +167,7 @@ body {
     color: #fff;
     text-align: center;
     margin-bottom: 10px;
-    font-family: 'Playfair Display', serif;
+    font-family: Georgia, 'Times New Roman', serif;
 }
 
 .date-display {
@@ -273,7 +290,7 @@ body {
 }
 
 .popup-content {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(66, 63, 68, 0.95);
     border-radius: 20px;
     width: 90%;
     max-width: 400px;
@@ -286,25 +303,27 @@ body {
 }
 
 .popup-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(15px);
+    color: #333;
     padding: 20px;
     border-radius: 20px 20px 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .popup-header h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.3rem;
     margin: 0;
 }
 
 .close-btn {
-    background: none;
-    border: none;
-    color: white;
+    background: rgba(66, 63, 68, 0.726);
+    border: 1px solid rgba(66, 63, 68, 0.8);
+    color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
     width: 30px;
@@ -313,6 +332,12 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(66, 63, 68, 0.9);
+    transform: scale(1.1);
 }
 
 .popup-body {
@@ -346,20 +371,26 @@ body {
 .login-btn {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border: none;
+    background: rgba(66, 63, 68, 0.726);
+    color: #fff;
+    border: 1px solid rgba(66, 63, 68, 0.8);
     border-radius: 8px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    background: rgba(66, 63, 68, 0.9);
+    transform: translateY(-2px);
 }
 
 .welcome-user {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(66, 63, 68, 0.726);
     backdrop-filter: blur(15px);
     border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(66, 63, 68, 0.8);
     overflow: hidden;
     padding: 20px;
     display: flex;
@@ -374,8 +405,8 @@ body {
 }
 
 .logout-btn {
-    background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(66, 63, 68, 0.726);
+    border: 1px solid rgba(66, 63, 68, 0.8);
     color: #fff;
     padding: 8px 15px;
     border-radius: 15px;
@@ -385,7 +416,7 @@ body {
 }
 
 .logout-btn:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(66, 63, 68, 0.9);
     transform: translateY(-2px);
 }
 
@@ -400,7 +431,7 @@ body {
         width: 50%;
         margin-left: auto;
         margin-right: 20px;
-        margin-top: 40px;
+        margin-top: 48px;
     }
     
     .welcome-message {
@@ -410,7 +441,7 @@ body {
     .left-section {
         position: fixed;
         left: 20px;
-        top: 40px;
+        top: 48px;
         width: calc(50% - 40px);
         transform: none;
     }
@@ -436,7 +467,7 @@ body {
         width: 50%;
         margin-left: auto;
         margin-right: 20px;
-        margin-top: 40px;
+        margin-top: 48px;
     }
     
     .welcome-message {
@@ -446,7 +477,7 @@ body {
     .left-section {
         position: fixed;
         left: 20px;
-        top: 40px;
+        top: 48px;
         width: calc(50% - 40px);
         transform: none;
     }
