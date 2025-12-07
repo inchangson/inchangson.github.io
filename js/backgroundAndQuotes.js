@@ -86,8 +86,10 @@ function displayImageBox(imageUrl) {
 
 // 랜덤 배경과 명언 설정
 function setRandomBackground() {
+    currentIndex = localStorage.getItem('currentIndex');
     currentIndex = (currentIndex + Math.ceil(Math.random() * (italianBrainrotData.length - 1))) % italianBrainrotData.length;
     const randomData = italianBrainrotData[currentIndex];
+    localStorage.setItem('currentIndex', currentIndex);
 
     displayBackground(randomData.image);
     displayImageBox(randomData.image);
