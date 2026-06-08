@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title="손인창 블로그"
+  description="Backend Engineer의 기술 기록, 프로젝트 노트, 운영 경험을 정리하는 개인 블로그"
+>
+  <main class="page">
+    <SiteHeader
+      title="기술 기록을 쌓는 개인 블로그"
+      description="백엔드, 플랫폼, 운영, 그리고 새로 배운 것을 글로 정리합니다."
+    />
+
+    <div class="content-grid">
+      <section class="panel stack" aria-labelledby="latest-posts">
+        <div>
+          <h2 id="latest-posts">Latest Posts</h2>
+          <p class="lede" style="font-size: 1rem; margin-top: 8px;">최근 작성한 글을 먼저 보여줍니다.</p>
+        </div>
+
+        <div class="list">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+
+        <a href="/blog">모든 글 보기</a>
+      </section>
+
+      <aside class="panel stack">
+        <section>
+          <h2>About</h2>
+          <p>
+            Java/Spring, Kubernetes, Spring Cloud, Kafka/RabbitMQ 기반의 백엔드와 플랫폼 운영 경험을 중심으로 기록합니다.
+          </p>
+        </section>
+
+        <section>
+          <h3>Focus</h3>
+          <ul class="pill-list">
+            <li>Backend</li>
+            <li>Platform</li>
+            <li>Cloud</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Links</h3>
+          <ul>
+            <li><a href="/about">Profile</a></li>
+            <li><a href="mailto:inchangson21@gmail.com">Email</a></li>
+            <li><a href="https://github.com/inchangson" target="_blank" rel="noreferrer">GitHub</a></li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </main>
+</BaseLayout>

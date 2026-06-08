@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.home/
+*.tsbuildinfo
+tmp_*.md
+AGENTS.md
+RTK.md
+AGENTS.md
+RTK.md
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.env
+*.env.local

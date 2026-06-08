@@ -1,0 +1,12 @@
+---
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+  <p class="post-card__meta">
+    {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}
+    {post.data.tags.length ? ` · ${post.data.tags.join(', ')}` : ''}
+  </p>
+  <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+  <p>{post.data.description}</p>
+</article>

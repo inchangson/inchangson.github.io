@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Blog | 손인창" description="손인창의 기술 블로그 글 목록">
+  <main class="page">
+    <SiteHeader title="Blog" description="프로젝트 판단과 기술 선택을 글로 정리합니다." />
+
+    <section class="panel">
+      <div class="list">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
