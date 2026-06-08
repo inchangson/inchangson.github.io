@@ -1,0 +1,19 @@
+---
+const { title, description } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="/">손인창</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+      <a href="https://github.com/inchangson" target="_blank" rel="noreferrer">GitHub</a>
+    </nav>
+  </div>
+  <div class="hero">
+    <p class="eyebrow">Backend Engineer</p>
+    <h1>{title}</h1>
+    <p class="lede">{description}</p>
+  </div>
+</header>

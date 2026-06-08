@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<BaseLayout title="About | 손인창" description="손인창의 경력과 관심사를 정리한 소개 페이지">
+  <main class="page">
+    <SiteHeader
+      title="About"
+      description="백엔드, 플랫폼, 운영 자동화, 그리고 기록하는 습관에 대해 정리합니다."
+    />
+
+    <section class="panel stack">
+      <div>
+        <h2>Profile</h2>
+        <p>
+          Java/Spring 생태계, Kubernetes, 마이크로서비스 아키텍처를 중심으로 백엔드 시스템을 설계하고 운영해 왔습니다.
+          실서비스 기반의 문제를 정리하고, 구조를 단순하게 만드는 데 관심이 많습니다.
+        </p>
+      </div>
+
+      <div>
+        <h2>What I write about</h2>
+        <ul>
+          <li>백엔드 시스템 설계와 운영 경험</li>
+          <li>Spring Cloud, Kafka, RabbitMQ, Redis 같은 인프라 연동</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><a href="mailto:inchangson21@gmail.com">inchangson21@gmail.com</a></li>
+          <li><a href="https://github.com/inchangson" target="_blank" rel="noreferrer">github.com/inchangson</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

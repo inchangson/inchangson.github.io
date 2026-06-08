@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({
+      params: { slug: post.slug },
+      props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} | 손인창`} description={post.data.description}>
+  <main class="page">
+    <article class="post">
+      <header>
+        <p class="meta">
+          {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}
+          {post.data.tags.length ? ` · ${post.data.tags.join(', ')}` : ''}
+        </p>
+        <h1>{post.data.title}</h1>
+        <p class="lede">{post.data.description}</p>
+      </header>
+
+      <div class="post__content">
+        <Content />
+      </div>
+    </article>
+  </main>
+</BaseLayout>
