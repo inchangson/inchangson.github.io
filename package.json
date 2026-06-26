@@ -10,7 +10,8 @@
     "check": "astro check"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "mermaid": "^11.15.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

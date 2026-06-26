@@ -192,6 +192,23 @@ a:hover {
   padding-left: 1.2rem;
 }
 
+.post__content .mermaid {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.post__content .mermaid svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
 .footer {
   margin-top: 26px;
   padding: 18px 22px 0;
