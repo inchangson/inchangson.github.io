@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+---
+
+<BaseLayout
+  title="Resume | 손인창"
+  description="손인창의 백엔드 개발 경력, 프로젝트 경험, 기술 역량을 정리한 이력서"
+>
+  <main class="page resume-page">
+    <SiteHeader
+      eyebrow="Resume"
+      title="손인창"
+      description="Java와 Spring 기반의 백엔드 API, 인증, 외부 연동, 배치, 운영 문제를 다뤄왔습니다. 운영 중인 계약을 지키면서 구조를 조금씩 고치는 일을 선호합니다."
+    />
+
+    <section class="resume-summary" aria-labelledby="resume-summary">
+      <div>
+        <h2 id="resume-summary">요약</h2>
+        <p>
+          KT에서 백엔드 개발자로 일하고 있습니다. IoT, 스마트시티, 모빌리티 도메인에서 API 개발과 외부 시스템 연동,
+          인증 흐름 설계, 운영 이슈 분석을 맡았습니다. 문제가 생겼을 때 로그, 지표, DB 실행 계획을 함께 보고 원인을
+          좁혀가는 편입니다.
+        </p>
+      </div>
+
+      <address class="contact-list">
+        <a href="mailto:inchangson21@gmail.com">inchangson21@gmail.com</a>
+        <a href="https://github.com/inchangson" target="_blank" rel="noreferrer">github.com/inchangson</a>
+      </address>
+    </section>
+
+    <section class="panel stack" aria-labelledby="strengths">
+      <h2 id="strengths">잘 다뤄온 일</h2>
+      <ul class="resume-grid">
+        <li>Java, Spring Boot 기반 API와 배치 개발</li>
+        <li>OAuth2, OIDC, LDAP, JWT 기반 인증 흐름 정리</li>
+        <li>운영 중인 API와 DB 계약을 유지한 점진적 개선</li>
+        <li>PostgreSQL 실행 계획과 운영 지표를 함께 본 병목 분석</li>
+        <li>외부 연동 장애의 원인 분석과 재발 방지 문서화</li>
+        <li>설계 검토, 코드 리뷰, 영향 분석을 개발 과정에 녹이는 일</li>
+      </ul>
+    </section>
+
+    <section class="panel stack" aria-labelledby="career">
+      <div>
+        <h2 id="career">경력</h2>
+        <p class="section-note">KT, 백엔드 개발자, 2022.05 ~ 현재</p>
+      </div>
+
+      <div class="timeline">
+        <article class="timeline-item">
+          <header>
+            <div>
+              <h3>IVI 모빌리티 플랫폼</h3>
+              <p>차량 서비스의 인증, 구독 결제, 편의 기능과 공통 플랫폼 기능을 개발하고 운영하고 있습니다.</p>
+            </div>
+            <span>2025.01 ~ 현재</span>
+          </header>
+          <ul>
+            <li>신규 정비에이전트 서비스를 수용하기 위해 LDAP/ADFS 연동 구조를 AuthConnector Strategy와 커넥터 레지스트리로 분리했습니다.</li>
+            <li>테넌트별 IdP 연결, 활성 여부, 우선순위를 데이터로 관리하고 Home Realm Discovery와 짧은 TTL 캐시를 적용했습니다.</li>
+            <li>외부 신원을 내부 식별자로 변환하고, 서비스에는 고객키와 권한 claim을 담은 전용 토큰만 전달하도록 인증 책임을 나눴습니다.</li>
+            <li>Legacy API와 공통 고객 기능을 수용하는 Service Delivery Gateway의 동적 라우팅을 설계하고 개발했습니다.</li>
+            <li>PostgreSQL 메모리 알람 시점의 로그와 APM을 함께 분석해 쿠폰 통계 API 병목을 특정하고, 복합 인덱스로 측정 실행 시간을 34.802ms에서 14.510ms로 줄였습니다.</li>
+          </ul>
+          <p class="tech-line">Java, Spring Boot, Spring Cloud Gateway/Config, Spring Security, PostgreSQL, Redis, RabbitMQ, Kafka, OAuth2/OIDC, LDAP</p>
+        </article>
+
+        <article class="timeline-item">
+          <header>
+            <div>
+              <h3>OEM 내비게이션 업데이트 사이트 운영 개선</h3>
+              <p>차량용 소프트웨어 다운로드 사이트의 운영 장애와 데이터 조회 문제를 분석하고 수정했습니다.</p>
+            </div>
+            <span>2026.02</span>
+          </header>
+          <ul>
+            <li>월 7천여 건의 다운로드를 처리하는 OEM별 사이트에서 다운로드가 99%에서 실패하는 현상을 로그와 직접 다운로드로 재현했습니다.</li>
+            <li>특정 파일 경로에 적용된 보안 차단을 원인으로 좁히고, 운영 가이드와 배포 절차를 함께 정리했습니다.</li>
+            <li>MySQL 버전 변경 후 드러난 비결정적 조회 순서 의존 문제를 확인하고 명시적 정렬을 적용했습니다.</li>
+          </ul>
+          <p class="tech-line">Java, Spring, JPA, MySQL, Apache Web Server, Azure Application Gateway</p>
+        </article>
+
+        <article class="timeline-item">
+          <header>
+            <div>
+              <h3>스마트시티 플랫폼</h3>
+              <p>IoT 장비의 센서, 이벤트, 알림을 연결하는 도시 관제 플랫폼을 개발했습니다.</p>
+            </div>
+            <span>2024.06 ~ 2024.12</span>
+          </header>
+          <ul>
+            <li>Event, Push, Device 모듈의 데이터를 조합해 사용자 이벤트의 접수, 조치, 종료, 지도 프리셋, 위젯 정보를 제공하는 Dashboard API를 구현했습니다.</li>
+            <li>기기 센서 데이터, 장애 이력, 이력 통계 조회 기능을 별도 로그 모듈로 분리했습니다.</li>
+            <li>API 문서를 RAG 소스로 사용해 사용자 질의에서 API path와 parameter를 생성하고 실제 호출 결과를 반환하는 챗봇 흐름을 설계하고 개발했습니다.</li>
+            <li>Redis, Kafka, PostgreSQL, InfluxDB를 사용하는 여러 모듈 사이의 데이터 흐름과 장애 영향을 추적했습니다.</li>
+          </ul>
+          <p class="tech-line">Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka, InfluxDB, Python, FastAPI, LangChain</p>
+        </article>
+
+        <article class="timeline-item">
+          <header>
+            <div>
+              <h3>홈IoT, 시니어케어 서비스</h3>
+              <p>기가지니 기반 독거노인 돌봄 서비스에서 B2G/B2C 기능, 외부 시스템 연동, 운영 자동화와 레거시 현대화를 맡았습니다.</p>
+            </div>
+            <span>2022.09 ~ 2024.06</span>
+          </header>
+          <ul>
+            <li>Spring Boot 1.5/Maven 기반 레거시 API를 기존 DB 스키마와 API 응답 계약을 유지한 채 Spring Boot 2.7/Gradle 기반으로 전환했습니다.</li>
+            <li>시니어케어와 호텔 도메인이 섞여 있던 구조를 16개 도메인으로 나누고 Controller, Service, Mapper, Model 계층을 표준화했습니다.</li>
+            <li>Java 코드 268개, 54,120 LOC를 189개, 20,864 LOC로 줄여 LOC 기준 61.5%를 절감했습니다.</li>
+            <li>외부 API 호출을 Sender Service로 캡슐화하고 공통 예외 처리, traceId, AOP 로깅, Actuator/Prometheus로 장애 추적성을 보강했습니다.</li>
+            <li>기가지니 사용자 응답의 대화서버 이력 등록, TV 시청 이상 패턴 기반 텔레캅 출동 요청, 안내방송, 서비스 사용 내역 조회 기능을 설계하고 개발했습니다.</li>
+          </ul>
+          <p class="tech-line">Java, Spring Boot, Spring MVC, MyBatis, PostgreSQL, Spring Scheduling, Actuator, Prometheus</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel stack" aria-labelledby="work-style">
+      <h2 id="work-style">개발 방식</h2>
+      <ul>
+        <li>설계 변경 전에는 API 계약, DB 영향, 운영 배포 순서부터 확인합니다.</li>
+        <li>문제 분석 결과는 원인, 선택지, 적용한 조치, 남은 리스크 순서로 남기려고 합니다.</li>
+        <li>AI 도구는 설계 검토, 코드 리뷰, 문서 초안 작성에 보조적으로 사용하고 최종 판단은 코드와 운영 조건으로 검증합니다.</li>
+      </ul>
+    </section>
+
+    <section class="panel stack" aria-labelledby="skills">
+      <h2 id="skills">기술</h2>
+      <div class="skill-table">
+        <div>
+          <strong>Backend</strong>
+          <span>Java, Spring Boot, Spring MVC, Spring Security, Spring Cloud Gateway/Config, MyBatis, JPA, Querydsl</span>
+        </div>
+        <div>
+          <strong>Data</strong>
+          <span>PostgreSQL, MySQL, Redis, InfluxDB, SQL 실행 계획 분석</span>
+        </div>
+        <div>
+          <strong>Integration</strong>
+          <span>REST API, OAuth2/OIDC, LDAP, JWT, Kafka, RabbitMQ, Batch/Scheduling</span>
+        </div>
+        <div>
+          <strong>Quality & Observability</strong>
+          <span>JUnit, Testcontainers, k6, Actuator, Micrometer, Prometheus, WhaTap</span>
+        </div>
+        <div>
+          <strong>Delivery</strong>
+          <span>GitHub Actions, Jenkins, Docker, Kubernetes 환경의 서비스 운영 경험</span>
+        </div>
+        <div>
+          <strong>AI & Automation</strong>
+          <span>GitHub Copilot CLI, Codex, Claude Code, AGENTS.md, MCP, LangChain</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel stack" aria-labelledby="education">
+      <h2 id="education">교육 및 수상</h2>
+      <ul>
+        <li><strong>KT AIVLE SCHOOL AI 개발자 트랙</strong>, 2021.12 ~ 2022.05, 개인/최종 프로젝트 최우수상</li>
+        <li><strong>KT 제2회 사내 코딩 올림피아드</strong>, 2025.01, 장려상</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
