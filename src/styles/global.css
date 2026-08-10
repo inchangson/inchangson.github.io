@@ -272,19 +272,15 @@ a:hover {
   color: var(--muted);
 }
 
+.resume-summary p + p {
+  margin-top: 12px;
+}
+
 .contact-list {
   display: grid;
   gap: 8px;
   font-style: normal;
   text-align: right;
-}
-
-.resume-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 22px;
-  padding-left: 1.1rem;
-  margin: 0;
 }
 
 .section-note {
@@ -397,8 +393,7 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .resume-summary,
-  .resume-grid {
+  .resume-summary {
     grid-template-columns: 1fr;
   }
 

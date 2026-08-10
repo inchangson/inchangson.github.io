@@ -11,16 +11,21 @@ import SiteHeader from '../components/SiteHeader.astro';
     <SiteHeader
       eyebrow="Resume"
       title="손인창"
-      description="레거시 시스템을 안정적으로 리팩터링하고, 고객사별 인증 환경을 하나의 구조로 통합해 온 Java/Spring 백엔드 개발자입니다."
+      description="기능 구현에 그치지 않고 변경 영향과 판단 근거를 문서화해, 오래 운영할 수 있는 구조를 만드는 백엔드 개발자입니다."
     />
 
     <section class="resume-summary" aria-labelledby="resume-summary">
       <div>
         <h2 id="resume-summary">요약</h2>
         <p>
-          기존 API와 DB 계약을 유지하며 레거시 구조를 리팩터링한 경험과, 고객사마다 다른 IdP를 하나의 흐름으로
-          수용하는 멀티테넌트 고객 인증 기능을 설계하고 개발한 경험이 있습니다. 운영 중인 시스템의 변경 범위를
-          통제하면서 확장 가능한 구조를 만드는 데 강점이 있습니다.
+          Java와 Spring Boot를 중심으로 IoT, 스마트시티, 모빌리티 서비스의 백엔드 API와 인증, 외부 시스템 연동,
+          배치, 운영 문제를 다뤄왔습니다. 레거시 시스템에서는 기존 API·DB 계약과 운영 일정을 지키면서 구조를
+          검증 가능한 단위로 개선하고, 신규 요구사항은 책임과 변경 범위가 드러나도록 모듈 경계를 나눕니다.
+        </p>
+        <p>
+          문서는 결과를 보고하는 수단이 아니라 문제를 재현하고 팀의 판단을 맞추는 도구라고 생각합니다. 문제의
+          배경과 원인, 선택지, 운영 영향을 문서로 남기는 데 강점이 있으며, 이를 바탕으로 20명 규모 팀의 AIDD 문서
+          목록과 템플릿, 디렉터리 규칙을 정립하고 전파했습니다.
         </p>
       </div>
 
@@ -28,18 +33,6 @@ import SiteHeader from '../components/SiteHeader.astro';
         <a href="mailto:inchangson21@gmail.com">inchangson21@gmail.com</a>
         <a href="https://github.com/inchangson" target="_blank" rel="noreferrer">github.com/inchangson</a>
       </address>
-    </section>
-
-    <section class="panel stack" aria-labelledby="strengths">
-      <h2 id="strengths">잘 다뤄온 일</h2>
-      <ul class="resume-grid">
-        <li>멀티테넌트 인증 기능의 요구사항 정리부터 설계, 개발, 배포, 운영</li>
-        <li>OAuth2, OIDC, LDAP, JWT 기반 고객 인증 흐름 설계</li>
-        <li>Java, Spring Boot 기반 API, Gateway, 배치 개발</li>
-        <li>외부 시스템 연동과 시스템 간 책임 및 데이터 흐름 설계</li>
-        <li>운영 이슈 분석과 Slow Query 개선 검토</li>
-        <li>운영 중인 API와 DB 계약을 지키며 변경 가능한 구조 설계</li>
-      </ul>
     </section>
 
     <section class="panel stack" aria-labelledby="career">
@@ -135,17 +128,30 @@ import SiteHeader from '../components/SiteHeader.astro';
           <article class="timeline-item">
             <header>
               <div>
-                <h4>스마트 시티 관제 플랫폼</h4>
-                <p>도시 내 IoT 장비의 센서, 이벤트, 알림을 연결하는 관제 기능 개발</p>
+                <h4>스마트 시티 관제 대시보드</h4>
+                <p>여러 관제 모듈의 데이터를 조합하는 Dashboard API 설계·개발</p>
               </div>
               <span>2024.06 ~ 2024.12</span>
             </header>
             <ul>
               <li>Event, Push, Device 모듈의 데이터를 조합하는 Dashboard API(오케스트레이션 모듈) 설계·개발</li>
-              <li>기기 센서 데이터, 장애 이력 및 통계 조회를 위한 로그 모듈 설계·개발</li>
-              <li>API 문서 RAG와 실시간 API 호출을 결합한 관제 챗봇 설계·개발</li>
+              <li>사용자 이벤트의 접수·조치·종료 흐름과 지도 프리셋 및 위젯 관리 기능 구현</li>
             </ul>
-            <p class="tech-line">Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka, InfluxDB, Python, FastAPI, LangChain</p>
+            <p class="tech-line">Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka</p>
+          </article>
+
+          <article class="timeline-item">
+            <header>
+              <div>
+                <h4>스마트 시티 AI 챗봇</h4>
+                <p>API 문서 기반 RAG와 실제 관제 API 호출을 연결하는 챗봇 설계·개발</p>
+              </div>
+              <span>2024.06 ~ 2024.12</span>
+            </header>
+            <ul>
+              <li>API 문서를 RAG 소스로 사용해 사용자 질의에서 API path와 parameter를 생성하고 호출 결과를 반환하는 흐름 설계·개발</li>
+            </ul>
+            <p class="tech-line">Python, FastAPI, LangChain</p>
           </article>
 
           <article class="timeline-item">
@@ -188,6 +194,7 @@ import SiteHeader from '../components/SiteHeader.astro';
         <li>기능 출시에서 끝내지 않고 배포 이후의 설정 변경, 기능 확장, 장애 대응까지 고려해 구조와 운영 절차를 함께 설계합니다.</li>
         <li>설계 변경 전에는 API 계약, DB 영향, 운영 배포 순서부터 확인합니다.</li>
         <li>레거시는 한 번에 교체하기보다 기존 계약과 운영 일정을 지키면서 검증 가능한 단위로 개선합니다.</li>
+        <li>문제의 배경과 원인, 선택지, 운영 영향을 문서화해 다음 담당자가 같은 탐색을 반복하지 않도록 합니다.</li>
       </ul>
     </section>
 
