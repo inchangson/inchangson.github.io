@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>블로그 에디터</title>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div>
+            <span class="eyebrow">LOCAL WORKSPACE</span>
+            <h1>Blog Editor</h1>
+          </div>
+          <button id="new-post" class="icon-button" title="새 글" aria-label="새 글">＋</button>
+        </div>
+        <label class="search">
+          <span aria-hidden="true">⌕</span>
+          <input id="post-search" type="search" placeholder="글 검색" />
+        </label>
+        <nav id="post-list" class="post-list" aria-label="글 목록"></nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <span id="document-kind" class="eyebrow">DOCUMENT</span>
+            <strong id="document-title">글을 선택하세요</strong>
+          </div>
+          <div class="topbar__actions">
+            <span id="save-status" class="save-status">저장됨</span>
+            <a id="preview-link" class="button button--ghost is-disabled" href="#" target="_blank" rel="noreferrer">블로그에서 보기</a>
+            <button id="save-post" class="button button--primary" disabled>저장</button>
+          </div>
+        </header>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-state__mark">✦</div>
+          <h2>작성할 글을 선택하세요</h2>
+          <p>기존 글을 열거나 새 문서를 만들어 바로 작성할 수 있습니다.</p>
+          <button id="empty-new-post" class="button button--primary">새 글 작성</button>
+        </div>
+
+        <section id="editor-screen" class="editor-screen" hidden>
+          <div class="metadata-panel">
+            <label class="field field--title">
+              <span>제목</span>
+              <input id="title" type="text" placeholder="글 제목" required />
+            </label>
+            <label class="field">
+              <span>Slug</span>
+              <input id="slug" type="text" placeholder="my-post-slug" spellcheck="false" required />
+            </label>
+            <label class="field field--description">
+              <span>설명</span>
+              <textarea id="description" rows="2" placeholder="목록과 검색 결과에 표시할 설명" required></textarea>
+            </label>
+            <label class="field">
+              <span>발행일</span>
+              <input id="pub-date" type="date" required />
+            </label>
+            <label class="field">
+              <span>수정일</span>
+              <input id="updated-date" type="date" />
+            </label>
+            <label class="field field--tags">
+              <span>태그</span>
+              <input id="tags" type="text" placeholder="backend, java, testing" />
+            </label>
+            <label class="draft-toggle">
+              <input id="draft" type="checkbox" />
+              <span>초안</span>
+            </label>
+          </div>
+
+          <div class="editor-heading">
+            <div>
+              <span class="eyebrow">CONTENT</span>
+              <h2>본문</h2>
+            </div>
+            <button id="html-blocks-button" class="button button--ghost" type="button" hidden>HTML 블록 <span id="html-block-count"></span></button>
+          </div>
+          <div id="toast-editor"></div>
+          <p class="editor-help">이미지를 붙여넣거나 끌어놓을 수 있습니다. Mermaid는 <code>mermaid</code> 코드 블록으로 작성하세요.</p>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="html-blocks-dialog">
+      <form method="dialog" class="dialog-card">
+        <header>
+          <div>
+            <span class="eyebrow">PROTECTED SOURCE</span>
+            <h2>HTML 블록 편집</h2>
+          </div>
+          <button class="icon-button" value="cancel" aria-label="닫기">×</button>
+        </header>
+        <p>WYSIWYG 변환 중 손상되지 않도록 보호한 원문입니다.</p>
+        <div id="html-blocks-list"></div>
+        <footer>
+          <button class="button button--ghost" value="cancel">취소</button>
+          <button id="apply-html-blocks" class="button button--primary" value="default">적용</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
