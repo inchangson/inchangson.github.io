@@ -292,6 +292,42 @@ a:hover {
   color: var(--muted);
 }
 
+.career-track {
+  display: grid;
+  gap: 18px;
+}
+
+.career-track + .career-track {
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.career-track__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.career-track__header h3,
+.career-track__header p {
+  margin: 0;
+}
+
+.career-track__header h3 {
+  font-size: 1.35rem;
+}
+
+.career-track__header p,
+.career-track__header span {
+  color: var(--muted);
+}
+
+.career-track .timeline {
+  padding-left: 18px;
+  border-left: 2px solid var(--border);
+}
+
 .timeline {
   display: grid;
   gap: 22px;
@@ -315,12 +351,12 @@ a:hover {
   margin-bottom: 12px;
 }
 
-.timeline-item h3,
+.timeline-item h4,
 .timeline-item p {
   margin: 0;
 }
 
-.timeline-item h3 {
+.timeline-item h4 {
   font-size: 1.2rem;
 }
 
@@ -393,9 +429,14 @@ a:hover {
     flex-direction: column;
   }
 
+  .career-track__header,
   .timeline-item header,
   .skill-table div {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+
+  .career-track .timeline {
+    padding-left: 12px;
   }
 }
