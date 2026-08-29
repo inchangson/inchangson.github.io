@@ -239,9 +239,166 @@ a:hover {
   font-size: 0.92rem;
 }
 
+.resume-page {
+  display: grid;
+  gap: 22px;
+}
+
+.resume-page .panel,
+.resume-page .resume-summary {
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.resume-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: start;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.resume-summary h2 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.resume-summary p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.resume-summary p + p {
+  margin-top: 12px;
+}
+
+.contact-list {
+  display: grid;
+  gap: 8px;
+  font-style: normal;
+  text-align: right;
+}
+
+.section-note {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.career-track {
+  display: grid;
+  gap: 18px;
+}
+
+.career-track + .career-track {
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.career-track__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.career-track__header h3,
+.career-track__header p {
+  margin: 0;
+}
+
+.career-track__header h3 {
+  font-size: 1.35rem;
+}
+
+.career-track__header p,
+.career-track__header span {
+  color: var(--muted);
+}
+
+.career-track .timeline {
+  padding-left: 18px;
+  border-left: 2px solid var(--border);
+}
+
+.timeline {
+  display: grid;
+  gap: 22px;
+}
+
+.timeline-item {
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+.timeline-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.timeline-item header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.timeline-item h4,
+.timeline-item p {
+  margin: 0;
+}
+
+.timeline-item h4 {
+  font-size: 1.2rem;
+}
+
+.timeline-item header p,
+.timeline-item header span {
+  color: var(--muted);
+}
+
+.timeline-item ul {
+  margin: 0;
+}
+
+.tech-line {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.skill-table {
+  display: grid;
+  border-top: 1px solid var(--border);
+}
+
+.skill-table div {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.skill-table span {
+  color: var(--muted);
+}
+
 @media (max-width: 860px) {
   .content-grid {
     grid-template-columns: 1fr;
+  }
+
+  .resume-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-list {
+    text-align: left;
   }
 }
 
@@ -265,5 +422,16 @@ a:hover {
   .site-header__inner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .career-track__header,
+  .timeline-item header,
+  .skill-table div {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .career-track .timeline {
+    padding-left: 12px;
   }
 }
