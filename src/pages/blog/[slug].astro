@@ -8,8 +8,8 @@ export async function getStaticPaths() {
   const seriesById = new Map(allSeries.map((entry) => [entry.id, entry]));
   return posts.map((post) => {
     const siblings = post.data.series ? bySeriesOrder(posts.filter((item) => item.data.series === post.data.series)) : [];
-    const position = siblings.findIndex((item) => item.slug === post.slug);
-    return { params: { slug: post.slug }, props: {
+    const position = siblings.findIndex((item) => item.id === post.id);
+    return { params: { slug: post.id }, props: {
       post,
       series: post.data.series ? seriesById.get(post.data.series) : undefined,
       previous: position > 0 ? siblings[position - 1] : undefined,
@@ -41,9 +41,9 @@ const { Content } = await render(post);
       </aside>}
       <div class="post__content"><Content /></div>
       {series && <nav class="series-navigation" aria-label="시리즈 글 탐색">
-        {previous ? <a href={`/blog/${previous.slug}`}>← {previous.data.seriesLabel || previous.data.title}</a> : <span />}
+        {previous ? <a href={`/blog/${previous.id}`}>← {previous.data.seriesLabel || previous.data.title}</a> : <span />}
         <a href={`/blog/series/${series.id}`}>시리즈 전체 보기</a>
-        {next ? <a href={`/blog/${next.slug}`}>{next.data.seriesLabel || next.data.title} →</a> : <span />}
+        {next ? <a href={`/blog/${next.id}`}>{next.data.seriesLabel || next.data.title} →</a> : <span />}
       </nav>}
     </article>
 </BlogLayout>
