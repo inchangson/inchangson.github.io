@@ -15,6 +15,8 @@ npm install
 npm run dev
 ```
 
+The development server includes draft posts across the blog so series and navigation can be previewed before publishing. Drafts are marked with a `Draft` badge and remain excluded from production builds.
+
 ## Build
 
 ```bash

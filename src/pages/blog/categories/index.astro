@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
-import { getPublishedPosts, taxonomyValues } from '../../../lib/blog';
-const posts = await getPublishedPosts();
+import { getBlogPosts, taxonomyValues } from '../../../lib/blog';
+const posts = await getBlogPosts();
 const categories = taxonomyValues(posts, 'category');
 ---
 <BaseLayout title="Categories | 손인창" description="블로그 카테고리 목록">

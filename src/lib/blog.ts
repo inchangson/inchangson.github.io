@@ -3,9 +3,13 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type PostEntry = CollectionEntry<'posts'>;
 export type SeriesEntry = CollectionEntry<'series'>;
 
-export async function getPublishedPosts() {
+export interface BlogQueryOptions {
+  includeDrafts?: boolean;
+}
+
+export async function getBlogPosts({ includeDrafts = import.meta.env.DEV }: BlogQueryOptions = {}) {
   return (await getCollection('posts'))
-    .filter((post) => !post.data.draft)
+    .filter((post) => includeDrafts || !post.data.draft)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
@@ -13,8 +17,8 @@ export function bySeriesOrder(posts: PostEntry[]) {
   return [...posts].sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
 }
 
-export async function getPublishedSeries() {
-  const [posts, series] = await Promise.all([getPublishedPosts(), getCollection('series')]);
+export async function getBlogSeries(options: BlogQueryOptions = {}) {
+  const [posts, series] = await Promise.all([getBlogPosts(options), getCollection('series')]);
   return series
     .map((entry) => ({ entry, posts: bySeriesOrder(posts.filter((post) => post.data.series === entry.id)) }))
     .filter((item) => item.posts.length > 0)

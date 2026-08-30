@@ -171,6 +171,21 @@ a:hover {
   font-size: .84rem;
 }
 .taxonomy-list { margin-top: 12px; }
+.draft-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 2px 7px;
+  border: 1px solid #b97818;
+  border-radius: 999px;
+  color: #8a5510;
+  font-size: .72rem;
+  font-weight: 700;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+.post-card__meta .draft-badge, .post-taxonomy .draft-badge { margin-left: 0; }
+.series-card > span .draft-badge { margin-left: 0; color: #8a5510; }
 .taxonomy-list a, .taxonomy-tag { border: 0; background: transparent; padding: 2px 0; }
 .post-taxonomy { margin-bottom: 10px; color: var(--muted); }
 .taxonomy-directory, .taxonomy-cloud, .series-grid { display: grid; gap: 14px; }

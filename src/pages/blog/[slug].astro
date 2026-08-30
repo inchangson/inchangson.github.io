@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { bySeriesOrder } from '../../lib/blog';
+import { bySeriesOrder, getBlogPosts } from '../../lib/blog';
 
 export async function getStaticPaths() {
-  const [posts, allSeries] = await Promise.all([getCollection('posts'), getCollection('series')]);
-  const published = posts.filter((post) => !post.data.draft);
+  const [posts, allSeries] = await Promise.all([getBlogPosts(), getCollection('series')]);
   const seriesById = new Map(allSeries.map((entry) => [entry.id, entry]));
-  return published.map((post) => {
-    const siblings = post.data.series ? bySeriesOrder(published.filter((item) => item.data.series === post.data.series)) : [];
+  return posts.map((post) => {
+    const siblings = post.data.series ? bySeriesOrder(posts.filter((item) => item.data.series === post.data.series)) : [];
     const position = siblings.findIndex((item) => item.slug === post.slug);
     return { params: { slug: post.slug }, props: {
       post,
@@ -29,6 +28,7 @@ const { Content } = await render(post);
       <header>
         <div class="post-taxonomy">
           <time>{post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+          {post.data.draft && <span class="draft-badge">Draft</span>}
           <a class="taxonomy-chip" href={`/blog/categories/${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>
           {post.data.tags.map((tag) => <a class="taxonomy-tag" href={`/blog/tags/${encodeURIComponent(tag)}`}>#{tag}</a>)}
         </div>
