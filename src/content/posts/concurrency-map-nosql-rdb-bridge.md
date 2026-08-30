@@ -164,12 +164,16 @@ Idempotency-Key: 7d0c...
 put(command):
   lock writeSequencer
   try:
+    if dedupeIndex contains command.requestId:
+      return dedupeIndex[command.requestId].result
+
+    outcome = validateExpectedVersionAndPlanMutation(map, command)
     lsn = nextSequence()
-    record = encode(lsn, command, checksum)
+    record = encode(lsn, command.requestId, outcome, checksum)
     appendFully(wal, record)
     force(wal)                 // 내구성을 성공 조건에 넣는 정책이라면 필수
-    applyIdempotently(map, record)
-    return OK(lsn)
+    applyRecordedOutcome(map, dedupeIndex, record)
+    return outcome.result
   finally:
     unlock writeSequencer
 
@@ -177,8 +181,10 @@ recover():
   loadLastValidSnapshot()
   for record in scanWalUntilFirstInvalidRecord():
     if record.lsn > snapshot.lastAppliedLsn:
-      applyIdempotently(map, record)
+      applyRecordedOutcome(map, dedupeIndex, record)
 ```
+
+여기서 WAL에 기록하는 것은 아직 판단하지 않은 raw 요청이 아니라 **검증을 끝낸 outcome**이다. stale version이나 중복 request도 그 결과를 결정적으로 기록·재생해야, 복구 뒤에 같은 `requestId`가 다른 성공 응답으로 바뀌지 않는다.
 
 쓰기 경로와 복구 경로의 관계는 다음과 같다.
 
@@ -191,11 +197,12 @@ sequenceDiagram
     participant M as In-memory Map
 
     C->>Q: PUT key, expectedVersion, requestId
-    Q->>W: append length + LSN + command + checksum
+    Q->>Q: dedupe 확인 · version 검증 · outcome 결정
+    Q->>W: append LSN + requestId + outcome + checksum
     Q->>W: force according to durability policy
     W-->>Q: durable
-    Q->>M: apply command
-    Q-->>C: success + LSN
+    Q->>M: apply recorded outcome
+    Q-->>C: recorded result
 
     Note over W,M: apply 전에 crash가 나도<br/>재시작 시 WAL을 replay한다
 ```

@@ -117,6 +117,9 @@ public final class NioEchoServer {
                         if (key.isReadable()) {
                             read(key);
                         }
+                        if (key.isWritable()) {
+                            drainPendingWrite(key);
+                        }
                     } catch (IOException e) {
                         key.cancel();
                         key.channel().close();
@@ -134,12 +137,13 @@ public final class NioEchoServer {
         }
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ,
-                ByteBuffer.allocateDirect(8 * 1024));
+                new ConnectionState(ByteBuffer.allocateDirect(8 * 1024)));
     }
 
     private static void read(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer buffer = (ByteBuffer) key.attachment();
+        ConnectionState state = (ConnectionState) key.attachment();
+        ByteBuffer buffer = state.readBuffer;
 
         int read = channel.read(buffer);
         if (read == -1) {
@@ -152,20 +156,45 @@ public final class NioEchoServer {
         }
 
         buffer.flip();
-        while (buffer.hasRemaining()) {
-            int written = channel.write(buffer);
-            if (written == 0) {
-                // 운영 코드에서는 남은 buffer를 connection state에 보관하고
-                // OP_WRITE를 등록해 다음 readiness에서 이어 쓴다.
-                break;
-            }
-        }
+        state.pendingWrite = ByteBuffer.allocate(buffer.remaining());
+        state.pendingWrite.put(buffer).flip();
         buffer.compact();
+        drainPendingWrite(key);
+    }
+
+    private static void drainPendingWrite(SelectionKey key) throws IOException {
+        SocketChannel channel = (SocketChannel) key.channel();
+        ConnectionState state = (ConnectionState) key.attachment();
+        ByteBuffer pending = state.pendingWrite;
+        if (pending == null) {
+            return;
+        }
+
+        channel.write(pending);
+        if (pending.hasRemaining()) {
+            // 남은 바이트를 보존하고 writable readiness에서 다시 시도한다.
+            key.interestOps((key.interestOps() | SelectionKey.OP_WRITE)
+                    & ~SelectionKey.OP_READ);
+            return;
+        }
+
+        state.pendingWrite = null;
+        key.interestOps((key.interestOps() | SelectionKey.OP_READ)
+                & ~SelectionKey.OP_WRITE);
+    }
+
+    private static final class ConnectionState {
+        final ByteBuffer readBuffer;
+        ByteBuffer pendingWrite;
+
+        ConnectionState(ByteBuffer readBuffer) {
+            this.readBuffer = readBuffer;
+        }
     }
 }
 ```
 
-이 예제는 API의 핵심만 보이기 위해 framing, partial write용 output queue, buffer 상한을 생략했다. 운영 코드에서 이 셋을 생략하면 메시지 경계가 깨지거나 느린 client가 메모리를 계속 점유한다.
+이 예제는 partial write가 생기면 남은 bytes를 attachment에 보관하고 `OP_WRITE`로 이어 쓰는 최소 경로까지 포함한다. 여전히 framing, 여러 응답을 위한 output queue, buffer 상한은 생략했다. 운영 코드에서 이 셋을 생략하면 메시지 경계가 깨지거나 느린 client가 메모리를 계속 점유한다.
 
 ### 흔한 잘못: event loop에서 CPU 작업을 끝낸다
 
@@ -237,15 +266,20 @@ final class EventLoopBoundary {
 
         try {
             cpuExecutor.execute(() -> {
-                Result result = parseAndVerify(frame);
-                completions.add(() -> {
-                    attachOutput(key, result);
-                    key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
-                });
-                selector.wakeup();
+                try {
+                    Result result = parseAndVerify(frame);
+                    completions.add(() -> {
+                        attachOutput(key, result);
+                        key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
+                    });
+                } catch (RuntimeException failed) {
+                    completions.add(() -> closeKey(key));
+                } finally {
+                    selector.wakeup();
+                }
             });
         } catch (RejectedExecutionException overloaded) {
-            rejectOrClose(key); // event loop에서 CallerRunsPolicy를 쓰지 않는다
+            closeKey(key); // event loop에서 CallerRunsPolicy를 쓰지 않는다
         }
     }
 
@@ -258,7 +292,14 @@ final class EventLoopBoundary {
     // 예제의 관심사를 드러내기 위한 placeholder
     private static Result parseAndVerify(byte[] frame) { return new Result(); }
     private static void attachOutput(SelectionKey key, Result result) {}
-    private static void rejectOrClose(SelectionKey key) { key.cancel(); }
+    private static void closeKey(SelectionKey key) {
+        try {
+            key.cancel();
+            key.channel().close();
+        } catch (java.io.IOException ignored) {
+            // 종료 경로에서는 이미 닫힌 channel도 허용한다.
+        }
+    }
     private static final class Result {}
 }
 ```

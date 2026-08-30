@@ -35,7 +35,7 @@ MySQL 8.x 클라이언트의 `--ssl-mode`는 다음과 같이 강해진다.
 
 강한 검증은 잘못된 상태를 숨기지 않고 연결 실패로 바꾼다. 보안상 올바른 동작이지만 다음 준비가 끝나지 않았다면 곧바로 가용성 문제가 된다.
 
-- 일부 클라이언트에 새 CA 또는 중간 인증서가 없다.
+- 클라이언트 trust store에 새 trust root가 없거나, 서버가 leaf와 함께 필요한 intermediate chain을 제공하지 않는다.
 - `db.internal.example` 인증서로 `10.0.12.34`, `localhost`, 프록시의 별칭에 접속한다.
 - 인증서 SAN에 실제 접속 DNS 이름이나 IP 주소가 없다.
 - 오래된 드라이버가 서버와 공통 TLS 버전·암호군을 협상하지 못한다.
@@ -157,7 +157,7 @@ openssl verify \
   server-cert.pem
 ```
 
-서버는 leaf 인증서뿐 아니라 클라이언트가 루트까지 체인을 구성하는 데 필요한 중간 인증서도 제공해야 한다. 단, 루트 CA 자체는 일반적으로 서버가 보내는 체인에 넣지 않고 클라이언트의 신뢰 저장소에 둔다.
+일반적인 TLS 서버 구성에서 서버는 leaf와 검증에 필요한 intermediate chain을 제시한다. 다만 MySQL 자체나 TLS 종료 프록시가 PEM chain을 읽는 방식은 구성요소별 설정을 확인한다. 루트 CA 자체는 일반적으로 서버가 보내는 체인에 넣지 않고 클라이언트의 신뢰 저장소에 둔다.
 
 MySQL 8.0.16 이상에서는 파일과 설정을 준비한 뒤 서버 재시작 없이 TLS 컨텍스트를 다시 읽을 수 있다.
 
@@ -183,6 +183,8 @@ mysql \
   --tls-version=TLSv1.2,TLSv1.3 \
   --execute="SHOW SESSION STATUS LIKE 'Ssl_cipher'; SELECT 1;"
 ```
+
+`TLSv1.3`을 명시하기 전에는 실제 MySQL build와 client가 지원하는 OpenSSL 및 `tls_version`을 확인한다. MySQL main interface는 8.0.16부터 TLS 1.3을 지원하고, Group Replication의 TLS 1.3 지원은 8.0.18부터다. 8.0.28부터 TLS 1.0·1.1은 제거됐으므로 전환 대상의 버전별 교집합을 먼저 시험한다.
 
 인증서 파일 검사만 통과했다고 끝내면 안 된다. 로드 밸런서나 프록시가 다른 인증서를 종료할 수 있으므로 원격 핸드셰이크도 검사한다. OpenSSL 3.x의 `s_client`는 MySQL의 TLS 전환 메시지를 이해하는 `-starttls mysql`을 지원한다.
 
