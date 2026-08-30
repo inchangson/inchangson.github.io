@@ -7,6 +7,7 @@ const { post } = Astro.props;
 <article class="post-card">
   <div class="post-card__meta">
     <time>{post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+    {post.data.draft && <span class="draft-badge">Draft</span>}
     <a class="taxonomy-chip" href={`/blog/categories/${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>
   </div>
   <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
