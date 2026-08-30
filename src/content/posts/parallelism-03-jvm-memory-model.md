@@ -3,6 +3,10 @@ title: "Java Memory Model: 소스 순서가 아니라 관찰 가능한 결과를
 description: "source order, bytecode, JIT, CPU 실행을 JMM의 관찰 가능 결과와 분리하고 happens-before, volatile, final, VarHandle, CAS와 안전한 공개를 코드로 검증한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 3
+seriesLabel: 3편
 tags:
   - backend
   - java
@@ -11,8 +15,6 @@ tags:
   - jmm
   - practice
 ---
-
-> **동시성과 병렬성 3편** · 이전 글: [OS 스레드와 스케줄러](/blog/parallelism-02-os-threads-scheduler) · [시리즈 전체 보기](/blog/concurrency-parallelism-series) · 다음 글: [비동기와 논블로킹](/blog/parallelism-04-async-nonblocking)
 
 앞선 글에서는 runnable 스레드가 있다고 해서 곧바로 CPU에서 실행 중인 것은 아니며, 실제 실행 기회는 OS 스케줄러가 나눈다는 점을 보았다. 이제 두 스레드가 정말 실행되었다고 해 보자. 한쪽이 `data = 42`를 쓰고 `ready = true`를 썼다면 다른 쪽은 반드시 `ready == true`와 `data == 42`를 함께 볼까?
 

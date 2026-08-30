@@ -16,11 +16,18 @@
           </div>
           <button id="new-post" class="icon-button" title="새 글" aria-label="새 글">＋</button>
         </div>
+        <div class="document-nav" aria-label="문서 종류">
+          <button id="nav-posts" class="is-active" type="button">글</button>
+          <button id="nav-resume" type="button">Resume</button>
+          <button id="nav-series" type="button">시리즈</button>
+        </div>
+        <div id="post-sidebar">
         <label class="search">
           <span aria-hidden="true">⌕</span>
           <input id="post-search" type="search" placeholder="글 검색" />
         </label>
         <nav id="post-list" class="post-list" aria-label="글 목록"></nav>
+        </div>
       </aside>
 
       <main class="workspace">
@@ -65,9 +72,28 @@
               <span>수정일</span>
               <input id="updated-date" type="date" />
             </label>
+            <label class="field">
+              <span>카테고리</span>
+              <input id="category" type="text" list="category-options" placeholder="backend" required />
+              <datalist id="category-options"></datalist>
+            </label>
             <label class="field field--tags">
               <span>태그</span>
-              <input id="tags" type="text" placeholder="backend, java, testing" />
+              <div id="tag-chips" class="tag-editor"></div>
+              <input id="tags" type="text" list="tag-options" placeholder="태그 입력 후 Enter" />
+              <datalist id="tag-options"></datalist>
+            </label>
+            <label class="field">
+              <span>시리즈</span>
+              <select id="series"><option value="">없음</option></select>
+            </label>
+            <label class="field series-field">
+              <span>시리즈 순서</span>
+              <input id="series-order" type="number" min="0" step="1" />
+            </label>
+            <label class="field series-field">
+              <span>회차 라벨</span>
+              <input id="series-label" type="text" placeholder="3편, 브리지" />
             </label>
             <label class="draft-toggle">
               <input id="draft" type="checkbox" />
@@ -84,6 +110,28 @@
           </div>
           <div id="toast-editor"></div>
           <p class="editor-help">이미지를 붙여넣거나 끌어놓을 수 있습니다. Mermaid는 <code>mermaid</code> 코드 블록으로 작성하세요.</p>
+        </section>
+
+        <section id="resume-screen" class="editor-screen structured-screen" hidden>
+          <div class="structured-card">
+            <div class="editor-heading"><div><span class="eyebrow">PROFILE</span><h2>기본 정보</h2></div><button id="save-resume" class="button button--primary">Resume 저장</button></div>
+            <div id="resume-profile" class="form-grid"></div>
+          </div>
+          <div class="editor-heading"><div><span class="eyebrow">SECTIONS</span><h2>Resume 섹션</h2></div><div class="inline-actions"><select id="new-section-type"><option value="prose">일반 글</option><option value="timeline">타임라인</option><option value="list">글머리 목록</option><option value="keyValue">키-값 표</option></select><button id="add-section" class="button">섹션 추가</button></div></div>
+          <div id="resume-sections" class="structured-list"></div>
+        </section>
+
+        <section id="series-screen" class="editor-screen structured-screen" hidden>
+          <div class="series-workspace">
+            <div class="structured-card"><div class="editor-heading"><div><span class="eyebrow">SERIES</span><h2>시리즈 목록</h2></div><button id="new-series" class="button">새 시리즈</button></div><div id="series-list" class="manage-list"></div></div>
+            <form id="series-form" class="structured-card" hidden>
+              <div class="editor-heading"><div><span class="eyebrow">DETAIL</span><h2 id="series-form-title">시리즈 편집</h2></div></div>
+              <label class="field"><span>ID</span><input id="series-id" required placeholder="my-series" /></label>
+              <label class="field"><span>이름</span><input id="series-title" required /></label>
+              <label class="field"><span>설명</span><textarea id="series-description" rows="4" required></textarea></label>
+              <div class="inline-actions"><button id="delete-series" class="button button--danger" type="button">삭제</button><button class="button button--primary" type="submit">저장</button></div>
+            </form>
+          </div>
         </section>
       </main>
     </div>

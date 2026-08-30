@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import { getPublishedSeries } from '../../../lib/blog';
+const collections = await getPublishedSeries();
+---
+<BaseLayout title="Series | 손인창" description="블로그 시리즈 목록">
+  <main class="page"><SiteHeader title="Series" description="순서대로 이어지는 글을 한곳에서 봅니다." />
+    <section class="series-grid">{collections.map(({ entry, posts }) => <article class="panel series-card"><span>{posts.length} posts</span><h2><a href={`/blog/series/${entry.id}`}>{entry.data.title}</a></h2><p>{entry.data.description}</p></article>)}</section>
+  </main>
+</BaseLayout>

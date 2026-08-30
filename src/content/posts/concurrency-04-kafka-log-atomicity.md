@@ -3,6 +3,10 @@ title: "파일 append에서 Kafka 복제 로그로: 원자성의 경계"
 description: "파티션 순서와 오프셋, ISR 복제, 멱등적 프로듀서, Kafka 트랜잭션의 보장 범위를 코드와 장애 실험으로 확인한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 5
+seriesLabel: 4편
 tags:
   - backend
   - concurrency
@@ -11,8 +15,6 @@ tags:
   - durability
   - practice
 ---
-
-> **동시성에서 원자성까지 4편** · 이전 글: [파일시스템의 원자성과 내구성](/blog/concurrency-03-filesystem-atomicity-durability) · [시리즈 전체 보기](/blog/concurrency-atomicity-series) · 다음 글: [DBMS 동시성 제어](/blog/concurrency-05-dbms-concurrency-control)
 
 파일에 레코드를 append하면 곧 원장이 될 것 같지만, 운영에 필요한 질문은 금세 파일 하나를 넘어선다. writer가 죽으면 누가 이어 쓰는가? 저장 장치가 사라지면 복제본은 어디에 있는가? 응답만 유실되어 재시도할 때 같은 레코드가 두 번 생기지 않는가? 여러 로그와 처리 위치를 한 번에 확정할 수 있는가?
 

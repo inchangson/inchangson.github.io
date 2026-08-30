@@ -10,7 +10,11 @@ const metadata = {
   description: '설명',
   pubDate: '2026-08-11',
   updatedDate: '',
+  category: 'backend',
   tags: ['backend', 'test'],
+  series: '',
+  seriesOrder: undefined,
+  seriesLabel: '',
   draft: true,
 };
 
@@ -32,6 +36,12 @@ test('slug 경로 탈출과 잘못된 문자를 거부한다', () => {
   assert.throws(() => validateSlug('../secret'));
   assert.throws(() => validateSlug('한글-slug'));
   assert.equal(validateSlug('valid-post-2'), 'valid-post-2');
+});
+
+test('카테고리와 시리즈 순서를 검증한다', () => {
+  assert.throws(() => serializePostFile({ ...metadata, category: '' }, '본문'), /카테고리/);
+  assert.throws(() => serializePostFile({ ...metadata, series: 'test-series', seriesOrder: -1 }, '본문'), /시리즈 순서/);
+  assert.throws(() => serializePostFile({ ...metadata, series: '', seriesOrder: 1 }, '본문'), /시리즈를 먼저/);
 });
 
 test('글 생성, 조회, 수정과 revision 충돌을 처리한다', async () => {

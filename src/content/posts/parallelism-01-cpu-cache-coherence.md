@@ -3,6 +3,10 @@ title: "CPU 위의 병렬성: 캐시 라인과 메모리 순서까지"
 description: "싱글 코어의 동시성 환상에서 멀티코어 병렬성으로 내려가, SMT, 캐시 일관성, 메모리 순서, atomic 연산, false sharing과 NUMA를 Java 코드로 연결한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 1
+seriesLabel: 1편
 tags:
   - backend
   - concurrency
@@ -11,8 +15,6 @@ tags:
   - hardware
   - practice
 ---
-
-> **동시성과 병렬성 1편** · [시리즈 전체 보기](/blog/concurrency-parallelism-series) · 다음 글: [OS 스레드와 스케줄러](/blog/parallelism-02-os-threads-scheduler)
 
 한 스레드가 `ConcurrentHashMap.compute`를 호출하면 JVM은 결국 CPU의 atomic 명령과 메모리 순서 보장을 이용한다. 그렇다면 CPU의 CAS를 알면 `ConcurrentHashMap`의 원자성도 전부 이해한 것일까? 그렇지 않다. CPU는 한 메모리 위치를 원자적으로 바꾸고 관찰 순서를 제한할 **재료**를 제공한다. Java Memory Model과 컬렉션 API는 그 재료 위에 프로그래머가 의존할 수 있는 **언어 계약**을 만든다.
 
@@ -424,7 +426,7 @@ CPU의 atomic 연산과 coherence는 `ConcurrentHashMap` 같은 동시성 도구
 
 ---
 
-목록: [동시성과 병렬성 — 시리즈 안내](/blog/concurrency-parallelism-series) · 다음: [OS 스레드와 스케줄러](/blog/parallelism-02-os-threads-scheduler) · 함께 읽기: [JVM 안의 원자성: volatile에서 ConcurrentHashMap까지](/blog/concurrency-02-jvm-concurrent-hash-map)
+함께 읽기: [JVM 안의 원자성: volatile에서 ConcurrentHashMap까지](/blog/concurrency-02-jvm-concurrent-hash-map)
 
 ## 참고 자료
 

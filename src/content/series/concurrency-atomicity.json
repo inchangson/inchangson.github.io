@@ -1,0 +1,4 @@
+{
+  "title": "동시성에서 원자성까지",
+  "description": "File Lock에서 DBMS WAL 복구까지, 계층마다 달라지는 원자성과 내구성의 경계를 따라갑니다."
+}

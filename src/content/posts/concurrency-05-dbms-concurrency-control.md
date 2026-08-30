@@ -3,6 +3,10 @@ title: "DBMS 동시성 제어: SQL 한 문장에서 Serializable까지"
 description: "PostgreSQL의 MVCC와 행 잠금, 격리 수준, 제약조건과 재시도로 lost update와 write skew를 막고 업무 불변식을 지키는 방법"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 6
+seriesLabel: 5편
 tags:
   - backend
   - concurrency
@@ -11,8 +15,6 @@ tags:
   - atomicity
   - practice
 ---
-
-> **동시성에서 원자성까지 5편** · 이전 글: [Kafka 로그의 원자성](/blog/concurrency-04-kafka-log-atomicity) · [시리즈 전체 보기](/blog/concurrency-atomicity-series) · 다음 글: [DBMS WAL과 복구](/blog/concurrency-06-dbms-wal-recovery)
 
 재고가 1개 남은 상품을 두 요청이 동시에 주문했다. 두 요청 모두 `SELECT stock`에서 1을 읽었고, 각각 0을 저장한 뒤 성공을 반환했다. 최종 재고는 음수가 아니지만 주문은 두 건이다. 데이터베이스가 각 SQL 문장을 정상적으로 실행했어도 **“성공한 주문 수만큼 재고가 감소한다”**는 업무 불변식은 깨질 수 있다.
 
@@ -516,5 +518,3 @@ DBMS는 SQL 문장, 트랜잭션, MVCC, 잠금, 제약조건, 격리 수준이�
 - [PostgreSQL 18 — PostgreSQL Error Codes](https://www.postgresql.org/docs/current/errcodes-appendix.html)
 
 ---
-
-이전: [Kafka 로그의 원자성](/blog/concurrency-04-kafka-log-atomicity) · 목록: [파일 락에서 DBMS 복구까지](/blog/concurrency-atomicity-series) · 다음: [DBMS WAL과 복구](/blog/concurrency-06-dbms-wal-recovery)

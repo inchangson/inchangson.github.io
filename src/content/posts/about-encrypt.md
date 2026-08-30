@@ -3,6 +3,7 @@ title: "암호화, 해시, 비밀번호 저장 구분하기"
 description: "SHA-256, Argon2id, 암호화를 목적과 사용 사례에 따라 구분하고 안전한 비밀번호 저장 방식을 정리한다"
 pubDate: 2026-06-11
 updatedDate: 2026-06-18
+category: backend
 tags:
   - backend
   - security

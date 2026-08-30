@@ -55,7 +55,13 @@ export function serializePostFile(metadata, body) {
   };
 
   if (normalized.updatedDate) ordered.updatedDate = normalized.updatedDate;
+  ordered.category = normalized.category;
   ordered.tags = normalized.tags;
+  if (normalized.series) {
+    ordered.series = normalized.series;
+    ordered.seriesOrder = normalized.seriesOrder;
+    if (normalized.seriesLabel) ordered.seriesLabel = normalized.seriesLabel;
+  }
   if (normalized.draft) ordered.draft = true;
 
   const frontmatter = stringifyYaml(ordered, { lineWidth: 0 }).trimEnd();
@@ -67,16 +73,28 @@ export function normalizeMetadata(value, strict = false) {
   const description = stringValue(value.description);
   const pubDate = dateValue(value.pubDate);
   const updatedDate = dateValue(value.updatedDate, true);
+  const category = stringValue(value.category);
   const tags = Array.isArray(value.tags)
     ? [...new Set(value.tags.map(stringValue).filter(Boolean))]
     : [];
   const draft = value.draft === true;
+  const series = stringValue(value.series);
+  const seriesLabel = stringValue(value.seriesLabel);
+  const seriesOrder = value.seriesOrder === '' || value.seriesOrder == null
+    ? undefined
+    : Number(value.seriesOrder);
 
-  if (strict && (!title || !description || !pubDate)) {
-    throw new PostStoreError(400, '제목, 설명, 발행일은 필수입니다.');
+  if (strict && (!title || !description || !pubDate || !category)) {
+    throw new PostStoreError(400, '제목, 설명, 발행일, 카테고리는 필수입니다.');
+  }
+  if (series && (!Number.isInteger(seriesOrder) || seriesOrder < 0)) {
+    throw new PostStoreError(400, '시리즈 순서는 0 이상의 정수여야 합니다.');
+  }
+  if (!series && (seriesOrder != null || seriesLabel)) {
+    throw new PostStoreError(400, '시리즈를 먼저 선택해 주세요.');
   }
 
-  return { title, description, pubDate, updatedDate, tags, draft };
+  return { title, description, pubDate, updatedDate, category, tags, series, seriesOrder, seriesLabel, draft };
 }
 
 function stringValue(value) {

@@ -3,6 +3,7 @@ title: "CIDR 대역이 겹치는지 계산하는 방법"
 description: "IPv4 네트워크의 시작·끝 주소를 계산해 두 CIDR 대역의 중복 여부를 판정하는 방법을 정리한다"
 pubDate: 2026-06-11
 updatedDate: 2026-06-18
+category: backend
 tags:
   - backend
   - network

@@ -3,6 +3,10 @@ title: "ConcurrentHashMap에 네트워크를 붙이면 DB가 될까?"
 description: "동시성 컬렉션에 API, 영속성, 복제와 질의를 하나씩 더하는 사고 실험으로 ConcurrentHashMap, NoSQL, RDBMS의 공통 본질과 결정적 차이를 구분한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 3
+seriesLabel: 브리지
 tags:
   - backend
   - concurrency
@@ -11,8 +15,6 @@ tags:
   - rdbms
   - atomicity
 ---
-
-> **동시성에서 원자성까지 브리지 편** · 이전 글: [JVM 안의 원자성: volatile에서 ConcurrentHashMap까지](/blog/concurrency-02-jvm-concurrent-hash-map) · [시리즈 전체 보기](/blog/concurrency-atomicity-series) · 다음 글: [파일 I/O의 원자성: 보이는 순간과 장애 후 남는 순간](/blog/concurrency-03-filesystem-atomicity-durability)
 
 `ConcurrentHashMap`을 보다 보면 묘한 기시감이 든다. 여러 사용자가 동시에 값을 읽고 바꿔도 망가지지 않고, 키로 값을 찾으며, `compute`로 조건부 갱신도 한다. 이것은 이미 아주 작은 데이터베이스처럼 보인다.
 

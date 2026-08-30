@@ -1,12 +1,15 @@
 ---
+import type { PostEntry } from '../lib/blog';
+interface Props { post: PostEntry }
 const { post } = Astro.props;
 ---
 
 <article class="post-card">
-  <p class="post-card__meta">
-    {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}
-    {post.data.tags.length ? ` · ${post.data.tags.join(', ')}` : ''}
-  </p>
+  <div class="post-card__meta">
+    <time>{post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+    <a class="taxonomy-chip" href={`/blog/categories/${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>
+  </div>
   <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
   <p>{post.data.description}</p>
+  {post.data.tags.length > 0 && <div class="taxonomy-list">{post.data.tags.map((tag) => <a href={`/blog/tags/${encodeURIComponent(tag)}`}>#{tag}</a>)}</div>}
 </article>

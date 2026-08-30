@@ -3,6 +3,10 @@ title: "Java 가상 스레드: 동시 작업을 늘리면 병렬성도 늘어나
 description: "Java 26의 virtual thread가 carrier에 mount·unmount되는 과정부터 blocking I/O, scheduler 병렬도, pinning, 자원 제한, 취소와 운영 관측까지 검증한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 5
+seriesLabel: 5편
 tags:
   - backend
   - java
@@ -11,8 +15,6 @@ tags:
   - virtual-threads
   - practice
 ---
-
-> **동시성과 병렬성 5편** · 이전 글: [비동기와 논블로킹](/blog/parallelism-04-async-nonblocking) · [시리즈 전체 보기](/blog/concurrency-parallelism-series) · 다음 글: [동시성 모델 선택](/blog/parallelism-06-choosing-concurrency-model)
 
 플랫폼 스레드 200개를 가상 스레드 20만 개로 바꾸면 1,000배 병렬로 실행될까? 그렇지 않다. CPU 코어도, DB connection도, 외부 API가 처리할 수 있는 요청 수도 그대로다.
 

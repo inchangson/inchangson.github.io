@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { getPublishedPosts, taxonomyValues } from '../../../lib/blog';
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return taxonomyValues(posts, 'category').map((category) => ({ params: { category }, props: { category, posts: posts.filter((post) => post.data.category === category) } }));
+}
+const { category, posts } = Astro.props;
+---
+<BaseLayout title={`${category} | Categories`} description={`${category} 카테고리의 글`}><main class="page"><SiteHeader eyebrow="Category" title={category} description={`${posts.length}개의 글`} /><section class="panel list">{posts.map((post) => <PostCard post={post} />)}</section></main></BaseLayout>

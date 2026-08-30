@@ -2,6 +2,7 @@
 title: "gRPC, GraphQL, Kafka, Redis, Batch, Test 기초 학습 로드맵"
 description: "8주 동안 여섯 가지 백엔드 주제를 개념, 실습, 연습문제, 통합 프로젝트 순서로 익히는 커리큘럼"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - curriculum

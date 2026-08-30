@@ -3,6 +3,7 @@ title: "UUID를 식별자로 사용할 때 알아둘 점"
 description: "UUID v4와 시간 정렬 UUID의 차이, 데이터베이스 저장 방식, 보안상 오해와 선택 기준을 정리한다"
 pubDate: 2026-06-11
 updatedDate: 2026-06-18
+category: backend
 tags:
   - backend
   - database

@@ -2,6 +2,7 @@
 title: "Redis 기초부터 실전까지: 캐시와 중복 방지 워크북"
 description: "자료구조, TTL, Cache Aside, Stampede, eviction, 영속화와 분산 락을 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - redis
@@ -238,4 +239,3 @@ Leaderboard, 로그인 세션, 상품 캐시, 고유 방문자 추정에 적합�
 - [ ] 분산 락 해제를 Token 비교로 구현했다.
 - [ ] eviction, Big Key, Hit Ratio를 관찰했다.
 - [ ] RDB와 AOF의 trade-off를 설명할 수 있다.
-

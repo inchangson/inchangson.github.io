@@ -2,6 +2,7 @@
 title: "블로그 개시"
 description: "잘 부탁드립니다."
 pubDate: 2026-06-01
+category: backend
 tags:
   - backend
   - architecture
@@ -18,4 +19,3 @@ tags:
 - 해결하려 했던 논리적 흐름 + 찾아본 내용
 - 왜 그 해법을 택했는지
 - 결과(긍정/ 부정 모두)
-

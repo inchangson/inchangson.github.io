@@ -2,6 +2,7 @@
 title: "Batch 기초부터 실전까지: 주문 정산 워크북"
 description: "Job, Step, Chunk, 재시작, 멱등성, Skip과 Retry를 주문 정산 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - batch
@@ -195,4 +196,3 @@ Skip 한도를 무제한으로 두면 Job은 성공처럼 보이지만 실제 �
 - [ ] 같은 데이터를 다시 처리해도 결과가 중복되지 않는다.
 - [ ] Skip과 Retry 정책을 코드와 로그로 확인했다.
 - [ ] 처리 건수, 실패 건수, 실행 시간을 관찰할 수 있다.
-

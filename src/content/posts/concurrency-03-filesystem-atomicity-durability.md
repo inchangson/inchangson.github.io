@@ -3,6 +3,10 @@ title: "파일 I/O의 원자성: 보이는 순간과 장애 후 남는 순간"
 description: "short write, O_APPEND, flush와 fsync, 임시 파일과 atomic rename을 구분하고 Java NIO로 단일 파일 교체의 보장 경계를 설계한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 4
+seriesLabel: 3편
 tags:
   - backend
   - concurrency
@@ -11,8 +15,6 @@ tags:
   - durability
   - practice
 ---
-
-> **동시성에서 원자성까지 3편** · 이전 글: [ConcurrentHashMap에 네트워크를 붙이면 DB가 될까?](/blog/concurrency-map-nosql-rdb-bridge) · [시리즈 전체 보기](/blog/concurrency-atomicity-series) · 다음 글: [Kafka 로그의 원자성](/blog/concurrency-04-kafka-log-atomicity)
 
 설정 파일을 새 버전으로 저장하는 API가 `write()` 성공 직후 200 응답을 보냈다고 하자. 다른 프로세스가 반쪽짜리 JSON을 읽지 않았다는 뜻일까? 그 직후 서버 전원이 끊겨도 새 파일이 남는다는 뜻일까? 둘 다 자동으로 따라오지 않는다.
 
@@ -316,7 +318,6 @@ short write는 테스트용 `WritableByteChannel`이 한 번에 몇 바이트만
 
 ---
 
-이전: [ConcurrentHashMap에 네트워크를 붙이면 DB가 될까?](/blog/concurrency-map-nosql-rdb-bridge) · 목록: [파일 락에서 DBMS 복구까지](/blog/concurrency-atomicity-series) · 다음: [Kafka 로그의 원자성](/blog/concurrency-04-kafka-log-atomicity)
 
 ## 참고 자료
 

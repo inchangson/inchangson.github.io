@@ -3,6 +3,10 @@ title: "OS 스레드와 스케줄러: runnable은 언제 running이 되는가"
 description: "프로세스·스레드·Linux task의 관계부터 run queue, 선점, context switch, blocking wakeup, CPU quota, SMT와 NUMA까지 Java 플랫폼 스레드 실험으로 연결한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 2
+seriesLabel: 2편
 tags:
   - backend
   - concurrency
@@ -11,8 +15,6 @@ tags:
   - os
   - practice
 ---
-
-> **동시성과 병렬성 2편** · 이전 글: [CPU 위의 병렬성: 캐시 라인과 메모리 순서까지](/blog/parallelism-01-cpu-cache-coherence) · [시리즈 전체 보기](/blog/concurrency-parallelism-series) · 다음 글: [Java Memory Model](/blog/parallelism-03-jvm-memory-model)
 
 Java에서 플랫폼 스레드 100개를 만들었다. 서버에는 논리 CPU가 8개 있다. 그렇다면 100개가 동시에 실행되는가, 8개만 실행되고 92개는 멈춰 있는가?
 
@@ -599,7 +601,6 @@ OS scheduler가 실행 순서를 바꿀 수 있다는 사실은 다음 질문으
 
 ---
 
-목록: [동시성과 병렬성 — 시리즈 안내](/blog/concurrency-parallelism-series) · 이전: [CPU 위의 병렬성: 캐시 라인과 메모리 순서까지](/blog/parallelism-01-cpu-cache-coherence) · 다음: [Java Memory Model](/blog/parallelism-03-jvm-memory-model)
 
 ## 참고 자료
 

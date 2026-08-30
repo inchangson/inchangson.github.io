@@ -35,7 +35,7 @@ Run the local-only WYSIWYG editor at `http://127.0.0.1:4322`:
 npm run editor
 ```
 
-The editor reads and writes the Markdown files in `src/content/posts/`. Pasted images are stored under `public/images/posts/<slug>/`. It does not commit, push, or ship with the GitHub Pages build. Run `npm run dev` separately if you want the “View on blog” link to open the live Astro page.
+The editor reads and writes blog Markdown, structured Resume data, and series definitions. Blog posts support one category, multiple tags, and an optional ordered series. Pasted images are stored under `public/images/posts/<slug>/`. It does not commit, push, or ship with the GitHub Pages build. Run `npm run dev` separately if you want the preview links to open the live Astro pages.
 
 ## Deployment
 

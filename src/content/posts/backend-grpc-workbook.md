@@ -2,6 +2,7 @@
 title: "gRPC 기초부터 실전까지: 재고 서비스 워크북"
 description: "Protocol Buffers, Unary와 Streaming, deadline, status code, 멱등성을 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - grpc
@@ -237,4 +238,3 @@ gRPC를 외부 공개 웹 API보다 내부 서비스 통신에 우선 고려하�
 - [ ] deadline을 직접 발생시켰다.
 - [ ] 상태 변경 RPC에 멱등성 키를 적용했다.
 - [ ] Retry가 실패를 증폭할 수 있는 이유를 설명할 수 있다.
-
