@@ -1,11 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import SiteHeader from '../../../components/SiteHeader.astro';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
 import { getBlogSeries } from '../../../lib/blog';
 const collections = await getBlogSeries();
 ---
-<BaseLayout title="Series | 손인창" description="블로그 시리즈 목록">
-  <main class="page"><SiteHeader title="Series" description="순서대로 이어지는 글을 한곳에서 봅니다." />
-    <section class="series-grid">{collections.map(({ entry, posts }) => <article class="panel series-card"><span>{posts.length} posts{posts.some((post) => post.data.draft) && <> · <span class="draft-badge">Draft 포함</span></>}</span><h2><a href={`/blog/series/${entry.id}`}>{entry.data.title}</a></h2><p>{entry.data.description}</p></article>)}</section>
-  </main>
-</BaseLayout>
+<BlogLayout title="Series | 손인창" headerTitle="Series" description="순서대로 이어지는 글을 한곳에서 봅니다.">
+  <section class="series-grid">{collections.map(({ entry, posts }) => <article class="panel series-card"><span>{posts.length} posts{posts.some((post) => post.data.draft) && <> · <span class="draft-badge">Draft 포함</span></>}</span><h2><a href={`/blog/series/${entry.id}`}>{entry.data.title}</a></h2><p>{entry.data.description}</p></article>)}</section>
+</BlogLayout>

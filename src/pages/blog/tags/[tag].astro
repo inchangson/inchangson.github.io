@@ -1,6 +1,5 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import SiteHeader from '../../../components/SiteHeader.astro';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
 import PostCard from '../../../components/PostCard.astro';
 import { getBlogPosts, taxonomyValues } from '../../../lib/blog';
 export async function getStaticPaths() {
@@ -9,4 +8,6 @@ export async function getStaticPaths() {
 }
 const { tag, posts } = Astro.props;
 ---
-<BaseLayout title={`#${tag} | Tags`} description={`#${tag} 태그의 글`}><main class="page"><SiteHeader eyebrow="Tag" title={`#${tag}`} description={`${posts.length}개의 글`} /><section class="panel list">{posts.map((post) => <PostCard post={post} />)}</section></main></BaseLayout>
+<BlogLayout title={`#${tag} | Tags`} eyebrow="Tag" headerTitle={`#${tag}`} description={`${posts.length}개의 글`}>
+  <section class="panel list">{posts.map((post) => <PostCard post={post} />)}</section>
+</BlogLayout>

@@ -6,7 +6,7 @@ import resume from '../data/resume.json';
 
 <BaseLayout title={`Resume | ${resume.profile.name}`} description={resume.profile.description}>
   <main class="page resume-page">
-    <SiteHeader eyebrow={resume.profile.eyebrow} title={resume.profile.name} description={resume.profile.description} />
+    <SiteHeader eyebrow={resume.profile.eyebrow} title={resume.profile.name} description={resume.profile.description} showNavigation={false} />
 
     {resume.sections.map((section, index) => {
       if (section.type === 'prose') return (

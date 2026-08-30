@@ -1,14 +1,11 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import SiteHeader from '../../../components/SiteHeader.astro';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
 import { getBlogSeries } from '../../../lib/blog';
 export async function getStaticPaths() {
   return (await getBlogSeries()).map(({ entry, posts }) => ({ params: { series: entry.id }, props: { entry, posts } }));
 }
 const { entry, posts } = Astro.props;
 ---
-<BaseLayout title={`${entry.data.title} | Series`} description={entry.data.description}>
-  <main class="page"><SiteHeader eyebrow="Series" title={entry.data.title} description={entry.data.description} />
-    <section class="panel series-list"><ol>{posts.map((post) => <li><span>{post.data.seriesLabel || `${post.data.seriesOrder}편`}</span><div><h2><a href={`/blog/${post.slug}`}>{post.data.title}</a>{post.data.draft && <span class="draft-badge">Draft</span>}</h2><p>{post.data.description}</p></div></li>)}</ol></section>
-  </main>
-</BaseLayout>
+<BlogLayout title={`${entry.data.title} | Series`} eyebrow="Series" headerTitle={entry.data.title} description={entry.data.description}>
+  <section class="panel series-list"><ol>{posts.map((post) => <li><span>{post.data.seriesLabel || `${post.data.seriesOrder}편`}</span><div><h2><a href={`/blog/${post.slug}`}>{post.data.title}</a>{post.data.draft && <span class="draft-badge">Draft</span>}</h2><p>{post.data.description}</p></div></li>)}</ol></section>
+</BlogLayout>

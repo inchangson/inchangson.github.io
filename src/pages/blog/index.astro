@@ -1,24 +1,22 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import SiteHeader from '../../components/SiteHeader.astro';
+import BlogLayout from '../../layouts/BlogLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getBlogPosts } from '../../lib/blog';
+import { getBlogPosts, taxonomyValues } from '../../lib/blog';
 
 const posts = await getBlogPosts();
+const categories = taxonomyValues(posts, 'category');
 ---
 
-<BaseLayout title="Blog | 손인창" description="손인창의 기술 블로그 글 목록">
-  <main class="page">
-    <SiteHeader title="Blog" description="프로젝트 판단과 기술 선택을 글로 정리합니다." />
-
-    <nav class="taxonomy-nav" aria-label="블로그 분류">
-      <a href="/blog/categories">Categories</a><a href="/blog/tags">Tags</a><a href="/blog/series">Series</a>
-    </nav>
-
-    <section class="panel">
+<BlogLayout title="Blog | 손인창" description="프로젝트 판단과 기술 선택을 글로 정리합니다.">
+  <div class="category-groups">
+    {categories.map((category) => <section class="panel category-group">
+      <header class="category-group__header">
+        <h2><a href={`/blog/categories/${encodeURIComponent(category)}`}>{category}</a></h2>
+        <span>{posts.filter((post) => post.data.category === category).length} posts</span>
+      </header>
       <div class="list">
-        {posts.map((post) => <PostCard post={post} />)}
+        {posts.filter((post) => post.data.category === category).map((post) => <PostCard post={post} />)}
       </div>
-    </section>
-  </main>
-</BaseLayout>
+    </section>)}
+  </div>
+</BlogLayout>

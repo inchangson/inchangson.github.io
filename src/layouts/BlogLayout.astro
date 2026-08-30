@@ -1,0 +1,68 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { getBlogPosts, taxonomyValues } from '../lib/blog';
+
+interface Props {
+  title: string;
+  description: string;
+  headerTitle?: string;
+  eyebrow?: string;
+  showHero?: boolean;
+  activeCategory?: string;
+}
+
+const {
+  title,
+  description,
+  headerTitle = 'Blog',
+  eyebrow,
+  showHero = true,
+  activeCategory,
+} = Astro.props;
+const posts = await getBlogPosts();
+const categories = taxonomyValues(posts, 'category');
+const pathname = decodeURIComponent(Astro.url.pathname).replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => pathname === href;
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="page blog-page">
+    <SiteHeader
+      title={headerTitle}
+      description={description}
+      eyebrow={eyebrow}
+      showHero={showHero}
+    />
+
+    <div class="blog-shell">
+      <aside class="blog-sidebar">
+        <nav aria-label="블로그 탐색">
+          <a class="blog-sidebar__all" href="/blog" aria-current={isCurrent('/blog') ? 'page' : undefined}>전체 글</a>
+          <p class="blog-sidebar__label">Categories</p>
+          <ul>
+            {categories.map((category) => {
+              const categoryPath = `/blog/categories/${category}`;
+              const href = `/blog/categories/${encodeURIComponent(category)}`;
+              const categoryIsCurrent = activeCategory === category || isCurrent(categoryPath);
+              return (
+                <li>
+                  <a href={href} aria-current={categoryIsCurrent ? 'page' : undefined}>
+                    <span>{category}</span>
+                    <span>{posts.filter((post) => post.data.category === category).length}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <div class="blog-sidebar__secondary">
+            <a href="/blog/tags" aria-current={pathname.startsWith('/blog/tags') ? 'page' : undefined}>Tags</a>
+            <a href="/blog/series" aria-current={pathname.startsWith('/blog/series') ? 'page' : undefined}>Series</a>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="blog-shell__content"><slot /></div>
+    </div>
+  </main>
+</BaseLayout>

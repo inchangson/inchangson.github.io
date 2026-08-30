@@ -1,12 +1,9 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import SiteHeader from '../../../components/SiteHeader.astro';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
 import { getBlogPosts, taxonomyValues } from '../../../lib/blog';
 const posts = await getBlogPosts();
 const categories = taxonomyValues(posts, 'category');
 ---
-<BaseLayout title="Categories | 손인창" description="블로그 카테고리 목록">
-  <main class="page"><SiteHeader title="Categories" description="대표 주제별로 글을 모아 봅니다." />
-    <section class="panel taxonomy-directory">{categories.map((category) => <a href={`/blog/categories/${encodeURIComponent(category)}`}><strong>{category}</strong><span>{posts.filter((post) => post.data.category === category).length} posts</span></a>)}</section>
-  </main>
-</BaseLayout>
+<BlogLayout title="Categories | 손인창" headerTitle="Categories" description="대표 주제별로 글을 모아 봅니다.">
+  <section class="panel taxonomy-directory">{categories.map((category) => <a href={`/blog/categories/${encodeURIComponent(category)}`}><strong>{category}</strong><span>{posts.filter((post) => post.data.category === category).length} posts</span></a>)}</section>
+</BlogLayout>

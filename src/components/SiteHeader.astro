@@ -1,20 +1,27 @@
 ---
-const { title, description, eyebrow = 'Backend Engineer' } = Astro.props;
+const {
+  title,
+  description,
+  eyebrow = 'Backend Engineer',
+  showNavigation = true,
+  showHero = true,
+} = Astro.props;
 ---
 
 <header class="site-header">
-  <div class="site-header__inner">
-    <a class="brand" href="/">inchangson</a>
-    <nav class="nav" aria-label="Primary">
-      <a href="/blog">Blog</a>
-      <a href="/resume">Resume</a>
-      <a href="/about">About</a>
-      <a href="https://github.com/inchangson" target="_blank" rel="noreferrer">GitHub</a>
-    </nav>
-  </div>
-  <div class="hero">
-    <p class="eyebrow">{eyebrow}</p>
-    <h1>{title}</h1>
-    <p class="lede">{description}</p>
-  </div>
+  {showNavigation && (
+    <div class="site-header__inner">
+      <a class="brand" href="/">inchangson</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/blog">Blog</a>
+      </nav>
+    </div>
+  )}
+  {showHero && (
+    <div class="hero">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+    </div>
+  )}
 </header>

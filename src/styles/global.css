@@ -50,7 +50,7 @@ a:hover {
 .site-header__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 20px;
   margin-bottom: 28px;
 }
@@ -104,6 +104,103 @@ a:hover {
   grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
   gap: 22px;
   align-items: start;
+}
+
+.blog-shell {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.blog-shell__content {
+  min-width: 0;
+}
+
+.blog-sidebar {
+  position: sticky;
+  top: 16px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.blog-sidebar nav,
+.blog-sidebar ul {
+  display: grid;
+  gap: 4px;
+}
+
+.blog-sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-sidebar a {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 9px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.blog-sidebar a:hover {
+  background: var(--surface-strong);
+  text-decoration: none;
+}
+
+.blog-sidebar a[aria-current='page'] {
+  background: var(--surface-strong);
+  color: var(--accent-strong);
+}
+
+.blog-sidebar__all {
+  color: var(--text) !important;
+}
+
+.blog-sidebar__label {
+  margin: 14px 9px 5px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.blog-sidebar__secondary {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.category-groups {
+  display: grid;
+  gap: 18px;
+}
+
+.category-group__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-group__header h2 {
+  margin: 0;
+}
+
+.category-group__header span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .panel {
@@ -450,6 +547,31 @@ a:hover {
 @media (max-width: 860px) {
   .content-grid {
     grid-template-columns: 1fr;
+  }
+
+  .blog-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-sidebar {
+    position: static;
+  }
+
+  .blog-sidebar nav,
+  .blog-sidebar ul,
+  .blog-sidebar__secondary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .blog-sidebar__label {
+    width: 100%;
+  }
+
+  .blog-sidebar__secondary {
+    width: 100%;
+    margin-top: 8px;
   }
 
   .resume-summary {

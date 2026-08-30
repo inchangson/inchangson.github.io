@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { bySeriesOrder, getBlogPosts } from '../../lib/blog';
 
@@ -22,8 +22,7 @@ const { post, series, previous, next } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BaseLayout title={`${post.data.title} | 손인창`} description={post.data.description}>
-  <main class="page">
+<BlogLayout title={`${post.data.title} | 손인창`} description={post.data.description} showHero={false} activeCategory={post.data.category}>
     <article class="post">
       <header>
         <div class="post-taxonomy">
@@ -47,8 +46,7 @@ const { Content } = await render(post);
         {next ? <a href={`/blog/${next.slug}`}>{next.data.seriesLabel || next.data.title} →</a> : <span />}
       </nav>}
     </article>
-  </main>
-</BaseLayout>
+</BlogLayout>
 
 <script>
   const renderMermaid = async () => {
