@@ -77,7 +77,7 @@ flowchart LR
 | topic replication factor | partition replica의 배치 수 | topic 생성 정책에 따름 | 값 3이라고 매 순간 3개가 ISR이라는 뜻은 아님 |
 | producer `acks` | producer가 성공으로 인정할 복제 확인 수준 | `all` | `all`은 현재 ISR 전체이며 `min.insync.replicas=1`이면 ISR 1개에서도 성공 가능 |
 | topic `min.insync.replicas` | `acks=all` write가 성공할 최소 ISR 수 | `1` | 내구성 우선이면 topic별로 명시해야 함 |
-| cluster `eligible.leader.replicas.enable` | ISR에서 빠졌지만 committed data를 보존한 replica를 안전 후보로 추적 | Kafka 4.1+ 새 cluster에서 활성 | 업그레이드 cluster와 관리형 서비스는 실제 feature 상태 확인 |
+| cluster feature `eligible.leader.replicas.version` | KRaft controller가 ELR을 추적하는 feature level (`1` = 활성) | Kafka 4.1+ 새 cluster에서 기본 활성 | `kafka-features.sh --describe`로 확인하고 업그레이드 cluster는 공식 절차로 level 1 전환 |
 | broker `unclean.leader.election.enable` | ISR·ELR 같은 안전 후보가 없을 때 뒤처진 replica의 leader 승격 허용 | `false` | 켜면 가용성을 얻는 대신 committed record도 잃을 수 있음 |
 
 `acks=0`은 broker 수신 여부도 확인하지 않고, `acks=1`은 leader의 local log 기록만 확인한 뒤 follower 복제를 기다리지 않는다. leader가 응답 직후 죽으면 `acks=1` record는 유실될 수 있다. 가장 강한 `acks=all`도 replica 수, ISR 크기, leader election 정책과 함께 설정하지 않으면 의도한 내구성이 되지 않는다.
@@ -88,11 +88,11 @@ Kafka 4.3 공식 topic 설정 문서는 **Eligible Leader Replicas(ELR)** 기능
 
 ## 3. ELR과 unclean leader election을 구분한다
 
-leader가 죽으면 Kafka는 원칙적으로 ISR 안의 replica 중 하나를 새 leader로 선출한다. ISR 구성원은 committed record를 가진 후보이므로 로그의 앞부분을 보존할 수 있다.
+leader 선출은 안전 후보를 다음 순서로 찾는다. **ISR → unfenced ELR → unfenced LastKnownLeader**다. ISR 구성원과 ELR은 committed record 보존을 위한 후보이고, LastKnownLeader는 앞선 두 집합이 비었을 때의 공식 fallback이다.
 
 Kafka 4.1 이후 새 cluster에서 기본 활성화된 **Eligible Leader Replicas(ELR)**는 ISR에서 빠졌더라도 committed record를 모두 가진 replica를 별도의 안전 후보로 추적한다. 따라서 ISR 후보가 없어도 ELR이 있다면 그 replica를 leader로 선출해 committed data를 보존할 수 있다. 기존 cluster를 업그레이드했거나 관리형 서비스를 사용한다면 ELR feature와 metadata version의 실제 상태를 확인해야 한다.
 
-문제는 ISR과 ELR을 포함한 안전 후보가 모두 돌아오지 못하는 경우다.
+이 세 후보로도 leader를 선출하지 못하는 경우에만 unclean election 정책이 문제 된다.
 
 - `unclean.leader.election.enable=false`이면 안전 후보가 돌아올 때까지 partition을 사용할 수 없다. 일관성을 위해 가용성을 포기한다.
 - `true`이면 안전 후보가 아닌 뒤처진 replica까지 leader로 올릴 수 있다. 서비스는 빨리 재개될 수 있지만, 그 replica에 없던 record는 새 로그에서 사라질 수 있다.
@@ -135,6 +135,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.CommitFailedException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -144,6 +145,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.AuthorizationException;
+import org.apache.kafka.common.errors.FencedInstanceIdException;
 import org.apache.kafka.common.errors.InvalidProducerEpochException;
 import org.apache.kafka.common.errors.InterruptException;
 import org.apache.kafka.common.errors.OutOfOrderSequenceException;
@@ -209,11 +211,18 @@ try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps)
                  | InterruptException stop) {
             // fatal 오류나 중단 요청에서는 루프를 계속하지 않고 client를 닫는다.
             throw stop;
+        } catch (CommitFailedException | FencedInstanceIdException ownershipLost) {
+            // group에서 제외된 consumer는 이전 assignment의 position을 되감을 수 없다.
+            abortWithRetryOrClose(producer);
+            throw ownershipLost;
         } catch (KafkaException abortable) {
-            producer.abortTransaction();
+            abortWithRetryOrClose(producer);
 
             // transactional offset commit은 취소돼도 poll()이 옮긴 현재 position은
             // 자동 복구되지 않는다. 같은 assignment를 아직 소유할 때 batch 시작으로 되감는다.
+            if (!consumer.assignment().containsAll(batchStartOffsets.keySet())) {
+                throw abortable;
+            }
             for (Map.Entry<TopicPartition, Long> entry : batchStartOffsets.entrySet()) {
                 consumer.seek(entry.getKey(), entry.getValue());
             }
@@ -232,11 +241,22 @@ static void commitWithRetry(KafkaProducer<?, ?> producer) {
         }
     }
 }
+
+static void abortWithRetryOrClose(KafkaProducer<?, ?> producer) {
+    while (true) {
+        try {
+            producer.abortTransaction();
+            return;
+        } catch (TimeoutException retrySameAbort) {
+            // timeout 뒤에는 abort 이외의 producer 연산으로 전환하지 않는다.
+        }
+    }
+}
 ```
 
 예제의 timeout 무한 retry는 보장 경계를 강조하기 위한 최소 형태다. 실제 운영에서는 재시도 경보와 process shutdown 정책이 필요하다. 다만 `commitTransaction()` timeout이나 interrupt는 “commit되지 않았다”는 뜻이 아니므로 곧바로 `abortTransaction()`으로 방향을 바꾸면 안 된다. 예제는 timeout이면 commit을 재시도하고, interrupt이면 바깥 try-with-resources를 통해 producer를 닫고 process를 중단한다. 공식 Java API도 불확실한 commit에서 재시도하지 않는다면 producer를 닫도록 요구한다.
 
-또한 consumer는 thread-safe하지 않고 rebalance가 일어날 수 있다. 처리 시간이 `max.poll.interval.ms`를 넘지 않게 batch 크기와 처리 시간을 제한한다. 예제의 `seek`는 같은 assignment를 계속 소유하는 경우에만 유효하다. `CommitFailedException` 등으로 group 소유권을 잃었다면 루프를 중단하고 client를 닫아 새 owner가 마지막 committed offset부터 다시 할당받게 해야 한다. Kafka 공식 설계가 권장하듯 consumer instance별 producer instance를 두는 구성이 fencing과 rebalance 추론을 단순하게 한다.
+또한 consumer는 thread-safe하지 않고 rebalance가 일어날 수 있다. 처리 시간이 `max.poll.interval.ms`를 넘지 않게 batch 크기와 처리 시간을 제한한다. 예제의 `seek`는 같은 assignment를 계속 소유하는 경우에만 유효하다. `CommitFailedException` 또는 `FencedInstanceIdException`으로 group 소유권을 잃었다면 루프를 중단하고 client를 닫아 새 owner가 마지막 committed offset부터 다시 할당받게 해야 한다. Kafka 공식 설계가 권장하듯 consumer instance별 producer instance를 두는 구성이 fencing과 rebalance 추론을 단순하게 한다.
 
 ## 6. `read_committed`, LSO, aborted record는 삭제가 아니라 공개 제어다
 
@@ -427,5 +447,6 @@ Kafka는 단일 파일 append보다 훨씬 넓은 장애 모델을 다룬다. pa
 - [Apache Kafka 4.3 Producer Configs — `acks`, idempotence, `transactional.id`](https://kafka.apache.org/43/configuration/producer-configs/)
 - [Apache Kafka 4.3 Topic Configs — `min.insync.replicas`](https://kafka.apache.org/43/configuration/topic-configs/)
 - [Apache Kafka 4.3 Broker Configs — unclean leader election](https://kafka.apache.org/43/configuration/broker-configs/)
+- [Apache Kafka 4.3 — Eligible Leader Replicas](https://kafka.apache.org/43/operations/eligible-leader-replicas/)
 - [Apache Kafka 4.3 `KafkaProducer` Java API](https://kafka.apache.org/43/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html)
 - [Apache Kafka 4.3 `KafkaConsumer` Java API — offsets, `read_committed`, LSO](https://kafka.apache.org/43/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html)
