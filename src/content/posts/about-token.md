@@ -3,6 +3,7 @@ title: "Access Token과 Refresh Token 설계"
 description: "토큰 기반 인증에서 access token, refresh token, 저장 위치, 폐기와 재발급 흐름을 정리한다"
 pubDate: 2026-06-11
 updatedDate: 2026-06-18
+category: backend
 tags:
   - backend
   - security

@@ -3,6 +3,7 @@ title: "백엔드 예외 처리의 경계와 원칙"
 description: "예외를 계층별로 변환하고 HTTP 응답, 로그, 재시도 정책을 분리하는 방법을 정리한다"
 pubDate: 2026-06-11
 updatedDate: 2026-06-18
+category: backend
 tags:
   - backend
   - spring

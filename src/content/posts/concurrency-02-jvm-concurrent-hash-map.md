@@ -3,6 +3,10 @@ title: "JVM 안의 원자성: volatile에서 ConcurrentHashMap까지"
 description: "synchronized, volatile, CAS, ConcurrentHashMap이 보장하는 가시성과 원자성의 범위를 코드와 동시성 테스트로 구분한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 2
+seriesLabel: 2편
 tags:
   - backend
   - java
@@ -10,8 +14,6 @@ tags:
   - atomicity
   - practice
 ---
-
-> **동시성에서 원자성까지 2편** · 이전 글: [File Lock으로 동시 쓰기 지키기](/blog/concurrency-01-file-locks) · [시리즈 전체 보기](/blog/concurrency-atomicity-series) · 다음 글: [ConcurrentHashMap에 네트워크를 붙이면 DB가 될까?](/blog/concurrency-map-nosql-rdb-bridge)
 
 1편에서는 여러 프로세스가 같은 파일에 들어가지 못하도록 임계 구역을 만들었다. 이번에는 경쟁 범위를 한 JVM의 스레드로 좁힌다. 그러면 파일 락 대신 `synchronized`, `Lock`, atomic 변수, 동시성 컬렉션을 사용할 수 있다. 하지만 도구가 정교해져도 질문은 같다.
 
@@ -411,7 +413,6 @@ CAS, cache coherence, OS scheduler와 Java Memory Model 자체를 더 깊게 보
 
 ---
 
-이전: [File Lock으로 동시 쓰기 지키기](/blog/concurrency-01-file-locks) · 목록: [동시성에서 원자성까지 — 시리즈 안내](/blog/concurrency-atomicity-series) · 다음: [ConcurrentHashMap에 네트워크를 붙이면 DB가 될까?](/blog/concurrency-map-nosql-rdb-bridge)
 
 ## 참고 자료
 

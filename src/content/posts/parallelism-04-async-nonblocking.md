@@ -3,6 +3,10 @@ title: "비동기와 논블로킹: 기다리지 않는 코드는 병렬 코드�
 description: "동기·비동기, 블로킹·논블로킹, 동시성·병렬성을 독립된 축으로 분리하고 Java NIO Selector, CompletableFuture, Flow의 실행·과부하·실패 경계를 코드와 부하 실험으로 검증한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 4
+seriesLabel: 4편
 tags:
   - backend
   - java
@@ -12,8 +16,6 @@ tags:
   - nonblocking
   - practice
 ---
-
-> **동시성과 병렬성 4편** · 이전 글: [Java Memory Model: JVM은 CPU의 차이를 어떤 계약으로 감추는가?](/blog/parallelism-03-jvm-memory-model) · [시리즈 전체 보기](/blog/concurrency-parallelism-series) · 다음 글: [Java 가상 스레드: 동시 작업을 늘리면 병렬성도 늘어나는가?](/blog/parallelism-05-java-virtual-threads)
 
 “비동기로 바꾸면 스레드를 점유하지 않고 병렬로 빨라진다.” 익숙하지만 서로 다른 주장을 한 문장에 섞었다. 비동기 API가 내부에서 blocking I/O를 수행할 수도 있고, non-blocking event loop가 한 코어에서만 실행될 수도 있다. callback이 호출됐어도 DB commit은 아직 아닐 수 있다.
 

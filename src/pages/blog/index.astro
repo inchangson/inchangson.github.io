@@ -2,16 +2,18 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '../../lib/blog';
 
-const posts = (await getCollection('posts'))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = await getPublishedPosts();
 ---
 
 <BaseLayout title="Blog | 손인창" description="손인창의 기술 블로그 글 목록">
   <main class="page">
     <SiteHeader title="Blog" description="프로젝트 판단과 기술 선택을 글로 정리합니다." />
+
+    <nav class="taxonomy-nav" aria-label="블로그 분류">
+      <a href="/blog/categories">Categories</a><a href="/blog/tags">Tags</a><a href="/blog/series">Series</a>
+    </nav>
 
     <section class="panel">
       <div class="list">

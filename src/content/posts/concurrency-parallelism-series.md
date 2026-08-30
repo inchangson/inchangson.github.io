@@ -3,13 +3,16 @@ title: "동시성은 어떻게 실제 병렬 실행이 되는가: HW에서 가�
 description: "CPU 코어와 캐시 일관성, OS 스케줄러, Java 메모리 모델, 비동기 I/O와 가상 스레드를 거쳐 동시성 모델을 선택하는 6편 시리즈 안내"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 0
+seriesLabel: 소개
 tags:
   - backend
   - concurrency
   - parallelism
   - cpu
   - java
-  - series
 ---
 
 “동시에 처리한다”는 코드는 언제 실제로 동시에 실행될까? 스레드를 열 개 만들면 열 개가 병렬로 움직이는가? CPU 코어, OS 스레드, Java 플랫폼 스레드, 가상 스레드는 서로 어떻게 연결되는가?

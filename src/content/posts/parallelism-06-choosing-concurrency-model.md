@@ -3,6 +3,10 @@ title: "동시성 모델 선택: 정확성, 처리량, 지연 시간을 함께 �
 description: "CPU-bound와 blocking I/O, 비동기 생태계와 혼합 workload에서 순차 실행, bounded thread pool, fork/join, reactive, virtual thread를 선택하고 주문 API 부하·장애 실험으로 검증한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-parallelism
+seriesOrder: 6
+seriesLabel: 6편
 tags:
   - backend
   - java
@@ -11,8 +15,6 @@ tags:
   - performance
   - practice
 ---
-
-> **동시성과 병렬성 6편** · 이전 글: [Java 가상 스레드: 동시 작업을 늘리면 병렬성도 늘어나는가?](/blog/parallelism-05-java-virtual-threads) · [시리즈 전체 보기](/blog/concurrency-parallelism-series) · 함께 읽기: [파일 락에서 DBMS 복구까지: 계층별 원자성 여정](/blog/concurrency-atomicity-series)
 
 “CPU 작업은 코어 수만큼 thread를 만들고, I/O 작업은 `코어 수 × (1 + 대기/계산)`만큼 만들면 된다.” 익숙한 공식이지만 운영 시스템의 답으로 바로 쓰기에는 빠진 것이 너무 많다. 컨테이너의 CPU quota, 작업 크기와 분할 비용, 요청 도착 패턴, DB connection 수, downstream rate limit, timeout과 retry, queue 상한이 실제 처리 폭을 함께 결정한다.
 

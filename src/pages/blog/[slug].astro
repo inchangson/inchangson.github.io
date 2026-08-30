@@ -1,18 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { bySeriesOrder } from '../../lib/blog';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts
-    .filter((post) => !post.data.draft)
-    .map((post) => ({
-      params: { slug: post.slug },
-      props: { post },
-    }));
+  const [posts, allSeries] = await Promise.all([getCollection('posts'), getCollection('series')]);
+  const published = posts.filter((post) => !post.data.draft);
+  const seriesById = new Map(allSeries.map((entry) => [entry.id, entry]));
+  return published.map((post) => {
+    const siblings = post.data.series ? bySeriesOrder(published.filter((item) => item.data.series === post.data.series)) : [];
+    const position = siblings.findIndex((item) => item.slug === post.slug);
+    return { params: { slug: post.slug }, props: {
+      post,
+      series: post.data.series ? seriesById.get(post.data.series) : undefined,
+      previous: position > 0 ? siblings[position - 1] : undefined,
+      next: position >= 0 && position < siblings.length - 1 ? siblings[position + 1] : undefined,
+    }};
+  });
 }
 
-const { post } = Astro.props;
+const { post, series, previous, next } = Astro.props;
 const { Content } = await render(post);
 ---
 
@@ -20,52 +27,43 @@ const { Content } = await render(post);
   <main class="page">
     <article class="post">
       <header>
-        <p class="meta">
-          {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}
-          {post.data.tags.length ? ` · ${post.data.tags.join(', ')}` : ''}
-        </p>
+        <div class="post-taxonomy">
+          <time>{post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+          <a class="taxonomy-chip" href={`/blog/categories/${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>
+          {post.data.tags.map((tag) => <a class="taxonomy-tag" href={`/blog/tags/${encodeURIComponent(tag)}`}>#{tag}</a>)}
+        </div>
         <h1>{post.data.title}</h1>
         <p class="lede">{post.data.description}</p>
       </header>
 
-      <div class="post__content">
-        <Content />
-      </div>
+      {series && <aside class="series-banner">
+        <span>{post.data.seriesLabel || `${post.data.seriesOrder}편`}</span>
+        <a href={`/blog/series/${series.id}`}>{series.data.title}</a>
+      </aside>}
+      <div class="post__content"><Content /></div>
+      {series && <nav class="series-navigation" aria-label="시리즈 글 탐색">
+        {previous ? <a href={`/blog/${previous.slug}`}>← {previous.data.seriesLabel || previous.data.title}</a> : <span />}
+        <a href={`/blog/series/${series.id}`}>시리즈 전체 보기</a>
+        {next ? <a href={`/blog/${next.slug}`}>{next.data.seriesLabel || next.data.title} →</a> : <span />}
+      </nav>}
     </article>
   </main>
 </BaseLayout>
 
 <script>
   const renderMermaid = async () => {
-    const blocks = document.querySelectorAll<HTMLElement>(
-      'pre[data-language="mermaid"] > code, pre > code.language-mermaid',
-    );
-
-    if (!blocks.length) {
-      return;
-    }
-
+    const blocks = document.querySelectorAll<HTMLElement>('pre[data-language="mermaid"] > code, pre > code.language-mermaid');
+    if (!blocks.length) return;
     const { default: mermaid } = await import('mermaid');
-
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: 'strict',
-      theme: 'neutral',
-    });
-
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
     blocks.forEach((block) => {
       const container = document.createElement('div');
       container.className = 'mermaid';
       container.textContent = block.textContent ?? '';
       block.parentElement?.replaceWith(container);
     });
-
-    try {
-      await mermaid.run({ querySelector: '.post__content .mermaid' });
-    } catch (error) {
-      console.error('Mermaid diagram rendering failed.', error);
-    }
+    try { await mermaid.run({ querySelector: '.post__content .mermaid' }); }
+    catch (error) { console.error('Mermaid diagram rendering failed.', error); }
   };
-
   void renderMermaid();
 </script>

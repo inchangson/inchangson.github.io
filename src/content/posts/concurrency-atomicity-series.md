@@ -3,6 +3,10 @@ title: "파일 락에서 DBMS 복구까지: 계층별 원자성 여정"
 description: "File Lock, ConcurrentHashMap, KV·NoSQL, 파일시스템, Kafka와 DBMS 복구를 보장 경계로 연결하는 6편과 브리지 편 안내"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 0
+seriesLabel: 소개
 tags:
   - backend
   - concurrency
@@ -10,7 +14,6 @@ tags:
   - filesystem
   - kafka
   - database
-  - series
 ---
 
 이 시리즈의 출발점은 다음 직관이다.

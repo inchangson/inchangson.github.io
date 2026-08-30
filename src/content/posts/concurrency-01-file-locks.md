@@ -3,6 +3,10 @@ title: "원자성의 첫 경계: File Lock으로 동시 쓰기 지키기"
 description: "FileChannel.lock, flock, fcntl, O_APPEND의 보장 범위를 코드와 장애 실험으로 확인하고 파일 동시성에서 원자성의 경계를 찾는다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 1
+seriesLabel: 1편
 tags:
   - backend
   - concurrency
@@ -10,8 +14,6 @@ tags:
   - atomicity
   - practice
 ---
-
-> **동시성에서 원자성까지 1편** · [시리즈 전체 보기](/blog/concurrency-atomicity-series) · 다음 글: [JVM 안의 원자성: ConcurrentHashMap](/blog/concurrency-02-jvm-concurrent-hash-map)
 
 여러 프로세스가 결과를 한 파일에 추가한다. 각 프로세스의 로그에는 성공이 찍혔는데 결과 파일에는 레코드가 빠지거나, 두 줄이 한 줄처럼 섞여 있다. 이때 “파일 락을 걸면 된다”는 답은 절반만 맞다. 락이 누구에게 보이는지, 모든 writer가 같은 규약을 따르는지, 한 레코드가 실제로 몇 번의 쓰기로 내려가는지를 먼저 정해야 한다.
 
@@ -244,7 +246,6 @@ Linux에서는 `/proc/locks`로 현재 락을 관찰하고 `strace`로 `fcntl`, 
 
 ---
 
-이전: [동시성에서 원자성까지 — 시리즈 안내](/blog/concurrency-atomicity-series) · 다음: [JVM 안의 원자성: ConcurrentHashMap](/blog/concurrency-02-jvm-concurrent-hash-map)
 
 ## 참고 자료
 

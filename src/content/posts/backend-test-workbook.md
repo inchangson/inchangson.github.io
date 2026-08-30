@@ -2,6 +2,7 @@
 title: "Backend Test 기초부터 실전까지: 주문 시스템 워크북"
 description: "테스트 피라미드, 단위·통합·인수 테스트, Mock, Testcontainers와 실패 시나리오를 문제로 익힌다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - test
@@ -223,4 +224,3 @@ Repository 테스트를 전부 Mock으로 작성했더니 운영에서 unique co
 - [ ] Batch 실패 후 재시작을 자동 검증했다.
 - [ ] Coverage 수치보다 위험 기반 시나리오를 우선했다.
 - [ ] 테스트 전체를 한 명령으로 반복 실행할 수 있다.
-

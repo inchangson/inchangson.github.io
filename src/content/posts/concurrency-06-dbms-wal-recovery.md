@@ -3,6 +3,10 @@ title: "DBMS WAL과 복구: 커밋은 어떻게 장애를 넘어 살아남는가
 description: "PostgreSQL의 WAL 선행 기록, 커밋 레코드 flush, checkpoint와 REDO, MVCC 가시성을 따라가며 ACID의 원자성과 내구성이 실제로 성립하는 경계를 확인한다"
 pubDate: 2026-08-27
 draft: true
+category: backend
+series: concurrency-atomicity
+seriesOrder: 7
+seriesLabel: 6편
 tags:
   - backend
   - concurrency
@@ -12,8 +16,6 @@ tags:
   - durability
   - practice
 ---
-
-> **동시성에서 원자성까지 6편** · 이전 글: [DBMS 동시성 제어](/blog/concurrency-05-dbms-concurrency-control) · [시리즈 전체 보기](/blog/concurrency-atomicity-series)
 
 계좌 이체 트랜잭션이 `COMMIT`에 성공한 직후 서버 전원이 내려갔다고 하자. 수정된 모든 데이터 페이지가 이미 디스크에 쓰였기 때문에 이체가 남는 것일까? 그렇지 않다. PostgreSQL은 보통 커밋 때마다 계좌 행과 인덱스 페이지를 전부 동기화하지 않는다. 대신 **그 변경을 다시 수행할 수 있는 WAL과 트랜잭션의 커밋 사실을 먼저 영구 저장**하고 성공을 반환한다.
 
@@ -444,11 +446,6 @@ DBMS가 파일 락이나 `fsync` 호출보다 높은 수준의 원자성을 제�
 그 계약에도 끝은 있다. 기본 동기 커밋은 살아남은 로컬 스토리지의 crash recovery를 강하게 만들지만 볼륨 전체 유실에는 backup과 replication이 필요하다. PostgreSQL 트랜잭션은 Kafka와 결제사를 자동 포함하지 않으므로 Outbox, 멱등성, 제약조건, reconciliation이 필요하다.
 
 시리즈 전체의 결론도 같다. **어떤 원자성 경계도 외부 시스템 전체를 자동으로 포함하지 않는다.** 기술 이름보다 먼저 “무엇을 한 단위로, 어느 성공 시점까지, 어떤 장애에 대해 보장하는가”를 적어야 한다.
-
-## 시리즈 내비게이션
-
-- 이전: [DBMS 동시성 제어: SQL 한 문장에서 Serializable까지](/blog/concurrency-05-dbms-concurrency-control)
-- 목록: [파일 락에서 DBMS 복구까지: 계층별 원자성 여정](/blog/concurrency-atomicity-series)
 
 ## 참고 자료
 

@@ -2,6 +2,7 @@
 title: "Kafka 기초부터 실전까지: 주문 이벤트 워크북"
 description: "Topic, Partition, Consumer Group, Offset, 전달 보장과 gzip·snappy·lz4·zstd 압축을 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - kafka
@@ -240,4 +241,3 @@ DLT에 쌓인 이벤트를 원본 Topic으로 그대로 재발행할 때 생길 
 - [ ] Consumer 중복을 직접 만들고 멱등 처리했다.
 - [ ] Rebalance와 Consumer Lag을 관찰했다.
 - [ ] DLT 이벤트를 안전하게 재처리했다.
-

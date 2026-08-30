@@ -2,6 +2,7 @@
 title: "파일 동시성 기초부터 커널·DB까지: 장비 결과 수집 워크북"
 description: "여러 장비가 한 파일에 결과를 쓸 때 발생하는 누락을 CPU, 시스템 콜, 페이지 캐시, 파일 락, WAL 관점에서 분석하고 안전한 수집 구조를 설계한다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - concurrency

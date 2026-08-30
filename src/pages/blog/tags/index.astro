@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import { getPublishedPosts, taxonomyValues } from '../../../lib/blog';
+const posts = await getPublishedPosts();
+const tags = taxonomyValues(posts, 'tags');
+---
+<BaseLayout title="Tags | 손인창" description="블로그 태그 목록"><main class="page"><SiteHeader title="Tags" description="세부 주제별로 글을 모아 봅니다." /><section class="panel taxonomy-cloud">{tags.map((tag) => <a href={`/blog/tags/${encodeURIComponent(tag)}`}>#{tag} <span>{posts.filter((post) => post.data.tags.includes(tag)).length}</span></a>)}</section></main></BaseLayout>

@@ -2,6 +2,7 @@
 title: "GraphQL 기초부터 실전까지: 주문 API 워크북"
 description: "Schema, Query, Mutation, Resolver, N+1, pagination과 오류 설계를 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+category: backend
 tags:
   - backend
   - graphql
@@ -247,4 +248,3 @@ GraphQL은 HTTP 200 응답 안에 `data`와 `errors`가 함께 존재할 수 있
 - [ ] DataLoader 적용 전후를 비교했다.
 - [ ] 페이지 크기와 Query 복잡도를 제한했다.
 - [ ] 필드 단위 인가가 필요한 이유를 설명할 수 있다.
-

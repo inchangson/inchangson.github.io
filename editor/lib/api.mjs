@@ -1,4 +1,5 @@
 import { MAX_IMAGE_BYTES, PostStoreError, createPostStore } from './posts.mjs';
+import { createDocumentStore } from './documents.mjs';
 
 const JSON_LIMIT = MAX_IMAGE_BYTES * 1.5 + 1024 * 1024;
 
@@ -31,6 +32,18 @@ function localRequestOnly(request) {
 
 export function localEditorApi(rootDir) {
   const store = createPostStore(rootDir);
+  const documents = createDocumentStore(rootDir);
+
+  async function validatePostSeries(payload, currentSlug) {
+    const seriesId = String(payload?.metadata?.series || '').trim();
+    if (!seriesId) return;
+    const order = Number(payload.metadata.seriesOrder);
+    const [series, posts] = await Promise.all([documents.listSeries(), store.listPosts()]);
+    if (!series.some((item) => item.id === seriesId)) throw new PostStoreError(400, '존재하지 않는 시리즈입니다.');
+    if (posts.some((post) => post.slug !== currentSlug && post.series === seriesId && post.seriesOrder === order)) {
+      throw new PostStoreError(409, '같은 시리즈에서 이미 사용 중인 순서입니다.');
+    }
+  }
 
   return {
     name: 'local-blog-editor-api',
@@ -46,14 +59,37 @@ export function localEditorApi(rootDir) {
           if (request.method === 'GET' && url.pathname === '/api/posts') {
             return sendJson(response, 200, { posts: await store.listPosts() });
           }
+          if (request.method === 'GET' && url.pathname === '/api/resume') {
+            return sendJson(response, 200, await documents.readResume());
+          }
+          if (request.method === 'PUT' && url.pathname === '/api/resume') {
+            return sendJson(response, 200, await documents.updateResume(await readJson(request)));
+          }
+          if (request.method === 'GET' && url.pathname === '/api/series') {
+            return sendJson(response, 200, { series: await documents.listSeries() });
+          }
+          if (request.method === 'POST' && url.pathname === '/api/series') {
+            return sendJson(response, 201, await documents.createSeries(await readJson(request)));
+          }
+          if (parts.length === 3 && parts[0] === 'api' && parts[1] === 'series') {
+            if (request.method === 'PUT') return sendJson(response, 200, await documents.updateSeries(parts[2], await readJson(request)));
+            if (request.method === 'DELETE') {
+              await documents.deleteSeries(parts[2], await store.listPosts());
+              return sendJson(response, 200, { ok: true });
+            }
+          }
           if (request.method === 'POST' && url.pathname === '/api/posts') {
-            return sendJson(response, 201, await store.createPost(await readJson(request)));
+            const payload = await readJson(request);
+            await validatePostSeries(payload);
+            return sendJson(response, 201, await store.createPost(payload));
           }
           if (request.method === 'GET' && parts.length === 3 && parts[0] === 'api' && parts[1] === 'posts') {
             return sendJson(response, 200, await store.readPost(parts[2]));
           }
           if (request.method === 'PUT' && parts.length === 3 && parts[0] === 'api' && parts[1] === 'posts') {
-            return sendJson(response, 200, await store.updatePost(parts[2], await readJson(request)));
+            const payload = await readJson(request);
+            await validatePostSeries(payload, parts[2]);
+            return sendJson(response, 200, await store.updatePost(parts[2], payload));
           }
           if (
             request.method === 'POST' &&
