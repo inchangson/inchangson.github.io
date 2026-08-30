@@ -365,6 +365,21 @@ a:hover {
   margin: 0 auto;
 }
 
+.post__content .mermaid.is-loading {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.post__content .mermaid-render-error {
+  margin: -0.7rem 0 1.5rem;
+  color: #9b3d33;
+  font-size: 0.86rem;
+}
+
+.post__content .mermaid-source-error {
+  border-color: #c98d87;
+}
+
 .footer {
   margin-top: 26px;
   padding: 18px 22px 0;

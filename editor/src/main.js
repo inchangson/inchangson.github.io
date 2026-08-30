@@ -1,8 +1,77 @@
 import Editor from '@toast-ui/editor';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+import Prism from 'prismjs';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import 'prismjs/themes/prism.css';
+import 'prismjs/components/prism-java.js';
+import 'prismjs/components/prism-bash.js';
+import 'prismjs/components/prism-sql.js';
+import 'prismjs/components/prism-graphql.js';
+import 'prismjs/components/prism-protobuf.js';
+import 'prismjs/components/prism-json.js';
+import 'prismjs/components/prism-ini.js';
+import 'prismjs/components/prism-groovy.js';
 import { extractProtectedBlocks, restoreProtectedBlocks } from './protected-blocks.js';
+import { POST_VIEWS, filterPosts, groupPosts, resolveInitialPostSlug } from './post-navigation.js';
+import { renderMermaidCodeBlocks, renderMermaidSource } from '../../src/lib/mermaid-client.js';
 import './style.css';
+
+Prism.languages.proto = Prism.languages.protobuf;
+Prism.languages.sh = Prism.languages.bash;
+Prism.languages.shell = Prism.languages.bash;
+
+const LAST_POST_STORAGE_KEY = 'blog-editor:last-post-slug';
+const MERMAID_REFRESH_EVENT = 'refreshMermaidPreviews';
+let requestWysiwygMermaidRefresh = () => {};
+
+function mermaidPreviewPlugin(context) {
+  const { eventEmitter } = context;
+  const pluginKey = new context.pmState.PluginKey('mermaidPreview');
+  let renderVersion = 0;
+  eventEmitter.addEventType(MERMAID_REFRESH_EVENT);
+  requestWysiwygMermaidRefresh = () => eventEmitter.emit(MERMAID_REFRESH_EVENT);
+
+  function decorationsFor(doc) {
+    renderVersion += 1;
+    const decorations = [];
+    let index = 0;
+    doc.descendants((node, pos) => {
+      if (node.type.name !== 'codeBlock' || String(node.attrs.language).toLowerCase() !== 'mermaid') return;
+      index += 1;
+      const source = node.textContent;
+      const key = `mermaid-${renderVersion}-${index}`;
+      decorations.push(context.pmView.Decoration.widget(pos + node.nodeSize, () => {
+        const container = document.createElement('div');
+        container.className = 'mermaid-preview';
+        void renderMermaidSource(container, source, `editor-${renderVersion}-${index}`);
+        return container;
+      }, { key, side: -1 }));
+    });
+    return context.pmView.DecorationSet.create(doc, decorations);
+  }
+
+  return {
+    wysiwygPlugins: [() => new context.pmState.Plugin({
+      key: pluginKey,
+      state: {
+        init: (_, state) => decorationsFor(state.doc),
+        apply: (transaction, decorations) => transaction.getMeta(pluginKey) === MERMAID_REFRESH_EVENT
+          ? decorationsFor(transaction.doc)
+          : decorations.map(transaction.mapping, transaction.doc),
+      },
+      props: {
+        decorations: (editorState) => pluginKey.getState(editorState),
+      },
+      view: (view) => {
+        const refresh = () => view.dispatch(view.state.tr.setMeta(pluginKey, MERMAID_REFRESH_EVENT));
+        eventEmitter.listen(MERMAID_REFRESH_EVENT, refresh);
+        return { destroy: () => eventEmitter.removeEventHandler(MERMAID_REFRESH_EVENT) };
+      },
+    })],
+  };
+}
 
 const elements = {
   postList: document.querySelector('#post-list'),
@@ -11,6 +80,7 @@ const elements = {
   navResume: document.querySelector('#nav-resume'),
   navSeries: document.querySelector('#nav-series'),
   search: document.querySelector('#post-search'),
+  postViewTabs: document.querySelector('#post-view-tabs'),
   newPost: document.querySelector('#new-post'),
   emptyNewPost: document.querySelector('#empty-new-post'),
   emptyState: document.querySelector('#empty-state'),
@@ -39,6 +109,8 @@ const elements = {
   htmlDialog: document.querySelector('#html-blocks-dialog'),
   htmlList: document.querySelector('#html-blocks-list'),
   applyHtml: document.querySelector('#apply-html-blocks'),
+  mermaidRefresh: document.querySelector('#mermaid-refresh-button'),
+  mermaidStatus: document.querySelector('#mermaid-preview-status'),
   toast: document.querySelector('#toast'),
   resumeScreen: document.querySelector('#resume-screen'),
   resumeProfile: document.querySelector('#resume-profile'),
@@ -73,16 +145,22 @@ const state = {
   resumeRevision: null,
   currentSeries: null,
   mode: 'posts',
+  postView: POST_VIEWS.all,
+  mermaidStale: false,
 };
 
 const editor = new Editor({
   el: document.querySelector('#toast-editor'),
-  height: '640px',
-  minHeight: '420px',
+  height: `${editorHeight()}px`,
+  minHeight: '760px',
   initialEditType: 'wysiwyg',
   previewStyle: 'vertical',
   language: 'ko-KR',
   usageStatistics: false,
+  plugins: [
+    [codeSyntaxHighlight, { highlighter: Prism }],
+    mermaidPreviewPlugin,
+  ],
   placeholder: '내용을 입력하세요. / 대신 툴바와 Markdown 단축키를 사용할 수 있습니다.',
   toolbarItems: [
     ['heading', 'bold', 'italic', 'strike'],
@@ -112,7 +190,7 @@ const editor = new Editor({
     change: () => {
       if (state.loadingEditor) return;
       markDirty(true);
-      scheduleMermaidPreview();
+      updateMermaidControls(true);
     },
   },
 });
@@ -139,9 +217,17 @@ fields.forEach((field) => {
 });
 
 elements.search.addEventListener('input', renderPostList);
+elements.postViewTabs.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-post-view]');
+  if (!button) return;
+  state.postView = button.dataset.postView;
+  elements.postViewTabs.querySelectorAll('button').forEach((item) => item.classList.toggle('is-active', item === button));
+  renderPostList();
+});
 elements.newPost.addEventListener('click', beginNewPost);
 elements.emptyNewPost.addEventListener('click', beginNewPost);
 elements.save.addEventListener('click', saveCurrentPost);
+elements.mermaidRefresh.addEventListener('click', () => void refreshMermaidPreviews());
 elements.htmlButton.addEventListener('click', openHtmlBlocksDialog);
 elements.applyHtml.addEventListener('click', applyHtmlBlocks);
 elements.navPosts.addEventListener('click', () => switchMode('posts'));
@@ -159,6 +245,14 @@ elements.deleteSeries.addEventListener('click', () => void deleteSeries());
 window.addEventListener('beforeunload', (event) => {
   if (!state.dirty) return;
   event.preventDefault();
+});
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(() => {
+    if (!elements.editorScreen.hidden) editor.setHeight(`${editorHeight()}px`);
+  }, 120);
 });
 
 document.addEventListener('keydown', (event) => {
@@ -212,10 +306,8 @@ async function loadPostList() {
 }
 
 function renderPostList() {
-  const query = elements.search.value.trim().toLocaleLowerCase('ko');
-  const filtered = state.posts.filter((post) =>
-    [post.title, post.description, post.slug, post.category, ...(post.tags || [])].join(' ').toLocaleLowerCase('ko').includes(query),
-  );
+  const query = elements.search.value.trim();
+  const filtered = filterPosts(state.posts, query);
   elements.postList.replaceChildren();
 
   if (!filtered.length) {
@@ -226,19 +318,42 @@ function renderPostList() {
     return;
   }
 
-  filtered.forEach((post) => {
-    const button = document.createElement('button');
-    button.className = 'post-item';
-    if (post.slug === state.currentSlug) button.classList.add('is-active');
-    button.type = 'button';
-    button.innerHTML = `
-      <span class="post-item__title"></span>
-      <span class="post-item__meta"><span>${escapeHtml(post.pubDate)}</span><span>${post.draft ? '초안' : escapeHtml(post.category || '게시됨')}</span></span>
-    `;
-    button.querySelector('.post-item__title').textContent = post.title;
-    button.addEventListener('click', () => void selectPost(post.slug));
-    elements.postList.append(button);
+  const groups = groupPosts(filtered, state.postView, state.series);
+  if (state.postView === POST_VIEWS.all) {
+    elements.postList.append(...groups[0].posts.map(createPostButton));
+    return;
+  }
+
+  groups.forEach((group) => {
+    const details = document.createElement('details');
+    details.className = 'post-group';
+    details.open = true;
+    const summary = document.createElement('summary');
+    const label = document.createElement('strong');
+    const count = document.createElement('span');
+    label.textContent = group.label;
+    count.textContent = `${group.posts.length}`;
+    summary.append(label, count);
+    const items = document.createElement('div');
+    items.className = 'post-group__items';
+    items.append(...group.posts.map(createPostButton));
+    details.append(summary, items);
+    elements.postList.append(details);
   });
+}
+
+function createPostButton(post) {
+  const button = document.createElement('button');
+  button.className = 'post-item';
+  if (post.slug === state.currentSlug) button.classList.add('is-active');
+  button.type = 'button';
+  button.innerHTML = `
+    <span class="post-item__title"></span>
+    <span class="post-item__meta"><span>${escapeHtml(post.pubDate)}</span><span>${post.draft ? '초안' : escapeHtml(post.category || '게시됨')}</span></span>
+  `;
+  button.querySelector('.post-item__title').textContent = post.title;
+  button.addEventListener('click', () => void selectPost(post.slug));
+  return button;
 }
 
 async function selectPost(slug) {
@@ -255,6 +370,7 @@ async function selectPost(slug) {
     setEditorBody(post.body);
     showEditor();
     markClean();
+    localStorage.setItem(LAST_POST_STORAGE_KEY, post.slug);
     renderPostList();
   } catch (error) {
     showToast(error.message, true);
@@ -304,7 +420,11 @@ function showEditor() {
   elements.resumeScreen.hidden = true;
   elements.seriesScreen.hidden = true;
   elements.save.disabled = false;
-  requestAnimationFrame(() => editor.setHeight(`${Math.max(520, window.innerHeight - 360)}px`));
+  requestAnimationFrame(() => editor.setHeight(`${editorHeight()}px`));
+}
+
+function editorHeight() {
+  return Math.max(760, Math.round(window.innerHeight * 0.8));
 }
 
 function updateDocumentHeader() {
@@ -328,7 +448,8 @@ function setEditorBody(body) {
   editor.setMarkdown(extracted.markdown, false);
   queueMicrotask(() => {
     state.loadingEditor = false;
-    scheduleMermaidPreview();
+    updateMermaidControls(false);
+    void refreshMermaidPreviews();
   });
   updateHtmlButton();
 }
@@ -415,6 +536,7 @@ async function saveCurrentPost() {
     state.revision = saved.revision;
     state.isNew = false;
     state.originalBody = saved.body;
+    localStorage.setItem(LAST_POST_STORAGE_KEY, saved.slug);
     elements.slug.readOnly = true;
     setEditorBody(saved.body);
     markClean();
@@ -443,33 +565,37 @@ async function uploadImage(slug, blob) {
   });
 }
 
-let mermaidTimer;
-let mermaidApi;
-function scheduleMermaidPreview() {
-  window.clearTimeout(mermaidTimer);
-  mermaidTimer = window.setTimeout(renderMermaidPreview, 350);
+function hasMermaidBlocks() {
+  return /(?:^|\n)\s{0,3}`{3,}mermaid(?:\s|$)/i.test(editor.getMarkdown());
 }
 
-async function renderMermaidPreview() {
-  const blocks = document.querySelectorAll('.toastui-editor-md-preview pre code.language-mermaid');
-  if (!blocks.length) return;
-  blocks.forEach((block) => {
-    if (block.parentElement?.dataset.mermaidPending) return;
-    const container = document.createElement('div');
-    container.className = 'mermaid';
-    container.textContent = block.textContent || '';
-    block.parentElement?.replaceWith(container);
-  });
-  try {
-    if (!mermaidApi) {
-      const { default: mermaid } = await import('mermaid');
-      mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
-      mermaidApi = mermaid;
-    }
-    await mermaidApi.run({ querySelector: '.toastui-editor-md-preview .mermaid' });
-  } catch (error) {
-    console.warn('Mermaid preview failed', error);
+function updateMermaidControls(stale) {
+  const hasMermaid = hasMermaidBlocks();
+  state.mermaidStale = hasMermaid && stale;
+  elements.mermaidRefresh.hidden = !hasMermaid;
+  elements.mermaidStatus.hidden = !state.mermaidStale;
+  elements.mermaidStatus.textContent = state.mermaidStale ? '미리보기 갱신 필요' : '';
+}
+
+async function refreshMermaidPreviews() {
+  if (!hasMermaidBlocks()) {
+    updateMermaidControls(false);
+    return;
   }
+  elements.mermaidRefresh.disabled = true;
+  elements.mermaidRefresh.textContent = 'Mermaid 렌더링 중';
+  requestWysiwygMermaidRefresh();
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  const results = await renderMermaidCodeBlocks(document, {
+    selector: '.toastui-editor-md-preview pre.lang-mermaid > code, .toastui-editor-md-preview pre > code[data-language="mermaid"], .toastui-editor-md-preview pre > code.language-mermaid',
+    scope: 'editor-markdown',
+  });
+  const failed = results.filter((result) => !result.ok).length;
+  state.mermaidStale = false;
+  elements.mermaidStatus.hidden = failed === 0;
+  elements.mermaidStatus.textContent = failed ? `${failed}개 렌더링 실패` : '';
+  elements.mermaidRefresh.disabled = false;
+  elements.mermaidRefresh.textContent = 'Mermaid 새로고침';
 }
 
 function setBusy(busy, label = '') {
@@ -537,6 +663,7 @@ async function loadSeries() {
   elements.series.innerHTML = '<option value="">없음</option>' + state.series.map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.title)}</option>`).join('');
   elements.series.value = current;
   renderSeriesList();
+  renderPostList();
 }
 
 function switchMode(mode) {
@@ -654,3 +781,11 @@ async function deleteSeries() {
 elements.seriesForm.addEventListener('input', () => { state.dirty = true; elements.saveStatus.textContent = '저장하지 않음'; elements.saveStatus.classList.add('is-dirty'); });
 
 await Promise.all([loadPostList(), loadSeries()]);
+const initialSlug = resolveInitialPostSlug(state.posts, localStorage.getItem(LAST_POST_STORAGE_KEY));
+if (initialSlug) {
+  await selectPost(initialSlug);
+} else {
+  elements.documentTitle.textContent = '작성한 글이 없습니다';
+  elements.emptyState.querySelector('h2').textContent = '아직 작성한 글이 없습니다';
+  elements.emptyState.querySelector('p').textContent = '왼쪽 위 ＋ 버튼으로 첫 글을 작성할 수 있습니다.';
+}

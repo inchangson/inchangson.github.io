@@ -26,6 +26,11 @@
           <span aria-hidden="true">⌕</span>
           <input id="post-search" type="search" placeholder="글 검색" />
         </label>
+        <div id="post-view-tabs" class="post-view-tabs" aria-label="글 목록 보기">
+          <button type="button" class="is-active" data-post-view="all">전체</button>
+          <button type="button" data-post-view="series">시리즈</button>
+          <button type="button" data-post-view="category">카테고리</button>
+        </div>
         <nav id="post-list" class="post-list" aria-label="글 목록"></nav>
         </div>
       </aside>
@@ -106,7 +111,11 @@
               <span class="eyebrow">CONTENT</span>
               <h2>본문</h2>
             </div>
-            <button id="html-blocks-button" class="button button--ghost" type="button" hidden>HTML 블록 <span id="html-block-count"></span></button>
+            <div class="editor-heading__actions">
+              <span id="mermaid-preview-status" class="preview-status" hidden></span>
+              <button id="mermaid-refresh-button" class="button button--ghost" type="button" hidden>Mermaid 새로고침</button>
+              <button id="html-blocks-button" class="button button--ghost" type="button" hidden>HTML 블록 <span id="html-block-count"></span></button>
+            </div>
           </div>
           <div id="toast-editor"></div>
           <p class="editor-help">이미지를 붙여넣거나 끌어놓을 수 있습니다. Mermaid는 <code>mermaid</code> 코드 블록으로 작성하세요.</p>

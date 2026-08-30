@@ -21,10 +21,22 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .document-nav button.is-active { color: #fff; background: #315442; }
 .icon-button { display: grid; width: 36px; height: 36px; padding: 0; place-items: center; border: 1px solid rgba(255,255,255,.18); border-radius: 9px; color: inherit; background: rgba(255,255,255,.07); font-size: 22px; cursor: pointer; }
 .icon-button:hover { background: rgba(255,255,255,.14); }
-.search { display: flex; gap: 8px; align-items: center; margin-bottom: 20px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; background: rgba(0,0,0,.13); }
+.search { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; background: rgba(0,0,0,.13); }
 .search input { width: 100%; border: 0; outline: 0; color: white; background: transparent; }
 .search input::placeholder { color: #89a094; }
+.post-view-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-bottom: 16px; padding: 3px; border-radius: 8px; background: rgba(0,0,0,.11); }
+.post-view-tabs button { padding: 7px 3px; border: 0; border-radius: 6px; color: #8fa398; background: transparent; font-size: 11px; font-weight: 750; cursor: pointer; }
+.post-view-tabs button:hover { color: #d7e1db; }
+.post-view-tabs button.is-active { color: #fff; background: #315442; }
 .post-list { display: grid; gap: 5px; }
+.post-group { border-bottom: 1px solid rgba(255,255,255,.07); }
+.post-group:last-child { border-bottom: 0; }
+.post-group summary { display: flex; gap: 8px; align-items: center; padding: 10px 7px 6px; color: #abc0b5; font-size: 11px; font-weight: 800; cursor: pointer; list-style: none; }
+.post-group summary::-webkit-details-marker { display: none; }
+.post-group summary::before { color: #718d7f; content: "▸"; transition: transform .15s ease; }
+.post-group[open] summary::before { transform: rotate(90deg); }
+.post-group summary span { margin-left: auto; color: #718d7f; font-size: 10px; }
+.post-group__items { display: grid; gap: 3px; padding-bottom: 7px; }
 .post-item { width: 100%; padding: 12px; border: 0; border-radius: 9px; color: #c7d5cd; background: transparent; text-align: left; cursor: pointer; }
 .post-item:hover { background: rgba(255,255,255,.06); }
 .post-item.is-active { color: white; background: #2a503f; box-shadow: inset 3px 0 #c7a768; }
@@ -69,6 +81,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .draft-toggle input { width: 17px; height: 17px; accent-color: #214a38; }
 .editor-heading { display: flex; align-items: end; justify-content: space-between; margin: 34px 2px 13px; }
 .editor-heading h2 { margin: 4px 0 0; font-family: Georgia, serif; font-size: 24px; font-weight: 500; }
+.editor-heading__actions { display: flex; gap: 9px; align-items: center; }
+.preview-status { color: #8a713f; font-size: 11px; font-weight: 700; }
 .editor-help { margin: 10px 2px; color: #7b877f; font-size: 12px; }
 .editor-help code { color: #455b4f; }
 
@@ -80,6 +94,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .toastui-editor-contents h1, .toastui-editor-contents h2, .toastui-editor-contents h3 { font-family: Georgia, serif; color: #193528; }
 .toastui-editor-contents pre:has(code.language-blog-details) { border: 1px dashed #b89c62; background: #f9f5e9; }
 .toastui-editor-contents code.language-blog-details { color: #7c663a; }
+.toastui-editor-contents .mermaid-preview, .toastui-editor-ww-container .mermaid-preview { min-height: 90px; margin: 10px 0 18px; overflow-x: auto; padding: 16px; border: 1px solid #d8e1da; border-radius: 9px; background: #fbfcfa; color: #66756c; text-align: center; }
+.toastui-editor-contents .mermaid-preview svg, .toastui-editor-ww-container .mermaid-preview svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.toastui-editor-contents .mermaid-preview.is-loading, .toastui-editor-ww-container .mermaid-preview.is-loading { display: grid; place-items: center; font-size: 12px; }
+.toastui-editor-contents .mermaid-preview.is-error, .toastui-editor-ww-container .mermaid-preview.is-error { min-height: 0; border-color: #d9a29b; color: #98463e; background: #fff7f6; font-size: 12px; }
+.mermaid-render-error { margin: 8px 0 18px; color: #98463e; font-size: 12px; }
+.mermaid-source-error { border-color: #d9a29b !important; }
 
 dialog { width: min(840px, calc(100vw - 60px)); max-height: calc(100vh - 70px); padding: 0; border: 0; border-radius: 14px; box-shadow: 0 30px 90px rgba(21,38,29,.25); }
 dialog::backdrop { background: rgba(18,31,24,.52); backdrop-filter: blur(3px); }
