@@ -1,0 +1,4 @@
+{
+  "title": "예외 설계: Checked Exception에서 Spring Rollback까지",
+  "description": "Java가 예외를 API 계약으로 만든 이유부터 Spring의 예외 번역과 트랜잭션 rollback 정책, 실무 예외 설계까지 이어갑니다."
+}
