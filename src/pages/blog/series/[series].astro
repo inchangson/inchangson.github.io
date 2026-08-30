@@ -7,5 +7,5 @@ export async function getStaticPaths() {
 const { entry, posts } = Astro.props;
 ---
 <BlogLayout title={`${entry.data.title} | Series`} eyebrow="Series" headerTitle={entry.data.title} description={entry.data.description}>
-  <section class="panel series-list"><ol>{posts.map((post) => <li><span>{post.data.seriesLabel || `${post.data.seriesOrder}편`}</span><div><h2><a href={`/blog/${post.slug}`}>{post.data.title}</a>{post.data.draft && <span class="draft-badge">Draft</span>}</h2><p>{post.data.description}</p></div></li>)}</ol></section>
+  <section class="panel series-list"><ol>{posts.map((post) => <li><span>{post.data.seriesLabel || `${post.data.seriesOrder}편`}</span><div><h2><a href={`/blog/${post.id}`}>{post.data.title}</a>{post.data.draft && <span class="draft-badge">Draft</span>}</h2><p>{post.data.description}</p></div></li>)}</ol></section>
 </BlogLayout>
