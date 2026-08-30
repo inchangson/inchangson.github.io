@@ -49,19 +49,7 @@ const { Content } = await render(post);
 </BlogLayout>
 
 <script>
-  const renderMermaid = async () => {
-    const blocks = document.querySelectorAll<HTMLElement>('pre[data-language="mermaid"] > code, pre > code.language-mermaid');
-    if (!blocks.length) return;
-    const { default: mermaid } = await import('mermaid');
-    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
-    blocks.forEach((block) => {
-      const container = document.createElement('div');
-      container.className = 'mermaid';
-      container.textContent = block.textContent ?? '';
-      block.parentElement?.replaceWith(container);
-    });
-    try { await mermaid.run({ querySelector: '.post__content .mermaid' }); }
-    catch (error) { console.error('Mermaid diagram rendering failed.', error); }
-  };
-  void renderMermaid();
+  import { renderMermaidCodeBlocks } from '../../lib/mermaid-client.js';
+
+  void renderMermaidCodeBlocks(document.querySelector('.post__content')!, { scope: 'blog-post' });
 </script>
