@@ -2,6 +2,7 @@
 title: "외부 API 연동을 운영 가능하게 만드는 방법"
 description: "타임아웃, 재시도, 멱등성, 장애 격리와 관찰 가능성을 중심으로 외부 API 연동 원칙을 정리한다"
 pubDate: 2026-06-11
+draft: true
 updatedDate: 2026-06-18
 category: backend
 tags:

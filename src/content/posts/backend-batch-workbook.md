@@ -2,6 +2,7 @@
 title: "Batch 기초부터 실전까지: 주문 정산 워크북"
 description: "Job, Step, Chunk, 재시작, 멱등성, Skip과 Retry를 주문 정산 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+draft: true
 category: backend
 tags:
   - backend

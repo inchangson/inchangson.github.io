@@ -2,6 +2,7 @@
 title: "Backend Test 기초부터 실전까지: 주문 시스템 워크북"
 description: "테스트 피라미드, 단위·통합·인수 테스트, Mock, Testcontainers와 실패 시나리오를 문제로 익힌다"
 pubDate: 2026-06-18
+draft: true
 category: backend
 tags:
   - backend

@@ -2,6 +2,7 @@
 title: "Jenkins 파이프라인 운영 기본기"
 description: "Jenkins Controller와 Agent의 역할, Pipeline 단계, 자격 증명과 안전한 업데이트 방법을 정리한다"
 pubDate: 2026-06-11
+draft: true
 updatedDate: 2026-06-18
 category: cicd
 tags:

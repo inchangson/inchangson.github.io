@@ -2,6 +2,7 @@
 title: "Redis 기초부터 실전까지: 캐시와 중복 방지 워크북"
 description: "자료구조, TTL, Cache Aside, Stampede, eviction, 영속화와 분산 락을 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+draft: true
 category: backend
 tags:
   - backend
