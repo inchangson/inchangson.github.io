@@ -2,6 +2,7 @@
 title: "GraphQL 기초부터 실전까지: 주문 API 워크북"
 description: "Schema, Query, Mutation, Resolver, N+1, pagination과 오류 설계를 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+draft: true
 category: backend
 tags:
   - backend

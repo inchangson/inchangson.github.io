@@ -2,6 +2,7 @@
 title: "예외 설계의 결론: 전파, 롤백, 응답을 분리하라"
 description: "예외 번역과 트랜잭션 rollback, HTTP 오류 응답, 로그와 재시도를 서로 다른 정책으로 설계하는 실무 원칙을 정리한다"
 pubDate: 2026-06-11
+draft: true
 updatedDate: 2026-08-31
 category: backend
 series: exception-design

@@ -2,6 +2,7 @@
 title: "DBMS SSL 인증서를 무중단으로 교체하는 방법"
 description: "MySQL 8.x를 기준으로 TLS 연결을 관측하고, 신뢰 체인과 인증서를 단계적으로 배포한 뒤 검증 수준을 강화하는 운영 절차를 정리한다"
 pubDate: 2026-08-27
+draft: true
 category: ops
 tags:
   - ops

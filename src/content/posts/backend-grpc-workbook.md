@@ -2,6 +2,7 @@
 title: "gRPC 기초부터 실전까지: 재고 서비스 워크북"
 description: "Protocol Buffers, Unary와 Streaming, deadline, status code, 멱등성을 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+draft: true
 category: backend
 tags:
   - backend

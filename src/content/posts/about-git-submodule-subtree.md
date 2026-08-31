@@ -2,6 +2,7 @@
 title: "Git Submodule과 Subtree 비교"
 description: "하나의 저장소에서 다른 저장소를 참조할 때 submodule과 subtree의 동작 방식과 선택 기준을 비교한다"
 pubDate: 2026-06-11
+draft: true
 updatedDate: 2026-06-18
 category: backend
 tags:

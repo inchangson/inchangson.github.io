@@ -2,6 +2,7 @@
 title: "Kafka 기초부터 실전까지: 주문 이벤트 워크북"
 description: "Topic, Partition, Consumer Group, Offset, 전달 보장과 gzip·snappy·lz4·zstd 압축을 실습과 문제로 익힌다"
 pubDate: 2026-06-18
+draft: true
 category: backend
 tags:
   - backend
