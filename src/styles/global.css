@@ -505,9 +505,24 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
+.timeline-item--featured {
+  margin-left: -10px;
+  padding: 18px 18px 18px 20px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+}
+
 .timeline-item:first-child {
   padding-top: 0;
   border-top: 0;
+}
+
+.timeline-item--featured:first-child {
+  padding: 18px 18px 18px 20px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
 }
 
 .timeline-item header {
@@ -525,6 +540,15 @@ a:hover {
 
 .timeline-item h4 {
   font-size: 1.2rem;
+}
+
+.experience-badge {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: var(--accent-strong);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
 }
 
 .timeline-item header p,
@@ -630,7 +654,64 @@ a:hover {
   .career-track .timeline {
     padding-left: 12px;
   }
+
+  .timeline-item--featured,
+  .timeline-item--featured:first-child {
+    margin-left: -6px;
+    padding: 14px;
+  }
   .series-navigation { grid-template-columns: 1fr; }
   .series-navigation a:last-child { text-align: left; }
   .series-list li { grid-template-columns: 1fr; gap: 6px; }
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .page {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  .resume-page {
+    gap: 14px;
+  }
+
+  .resume-page .panel,
+  .resume-page .resume-summary {
+    padding: 16px;
+  }
+
+  .career-track__header,
+  .timeline-item,
+  .skill-table div {
+    break-inside: avoid;
+  }
+
+  .timeline,
+  .career-track {
+    gap: 14px;
+  }
+
+  .timeline-item {
+    padding-top: 14px;
+  }
+
+  .timeline-item--featured,
+  .timeline-item--featured:first-child {
+    padding: 14px 16px;
+    background: transparent;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }

@@ -2,20 +2,11 @@
   "profile": {
     "eyebrow": "Resume",
     "name": "손인창",
-    "description": "운영 안정성과 문서화에 진심인 백엔드 개발자입니다.",
+    "description": "운영 제약 안에서 인증, 외부 연동, 레거시 구조와 병목을 개선해 온 백엔드 개발자입니다.",
     "contacts": [
-      {
-        "label": "Blog",
-        "url": "/blog"
-      },
-      {
-        "label": "inchangson21@gmail.com",
-        "url": "mailto:inchangson21@gmail.com"
-      },
-      {
-        "label": "github.com/inchangson",
-        "url": "https://github.com/inchangson"
-      }
+      { "label": "Blog", "url": "/blog" },
+      { "label": "inchangson21@gmail.com", "url": "mailto:inchangson21@gmail.com" },
+      { "label": "github.com/inchangson", "url": "https://github.com/inchangson" }
     ]
   },
   "sections": [
@@ -23,9 +14,9 @@
       "type": "prose",
       "title": "요약",
       "paragraphs": [
-        "IoT/ 모빌리티 서비스 백엔드 애플리케이션의 개발 및 운영 업무를 했습니다. 주로 레거시 시스템에 대해 기존 API 계약과 운영 일정을 준수하며 구조를 개선하는 업무를 했습니다.",
-        "현재는 기존 모빌리티 플랫폼의 확장에 따른 신규 테넌트 및 서비스 수용과 OIDC 기반의 신규 고객인증 시스템을 설계 및 개발하고 있습니다.",
-        "설계 및 작업 내역에 대한 Wiki 작성 시 내용의 경중에 맞게 문서를 구성하고 작성하는 데에 강점이 있으며, 이를 바탕으로 20명 규모 팀의 AIDD 문서 목록과 템플릿, 디렉터리 규칙을 정립하고 전파했습니다."
+        "Java/Spring 기반 IoT·모빌리티 백엔드 서비스를 개발하고 운영해 왔습니다. 기존 API와 DB 계약을 유지하면서 인증·외부 연동·레거시 구조를 개선하고, 로그와 실행 계획을 근거로 운영 병목을 진단하는 업무를 주로 담당했습니다.",
+        "현재는 OIDC/LDAP 기반 멀티테넌트 인증과 Legacy API를 수용하는 Service Delivery Gateway를 설계·개발하며, 신원·토큰·라우팅 설정의 책임 경계를 정리하고 있습니다.",
+        "설계 선택과 운영 절차를 문서로 남기는 데 강점이 있습니다. 이를 바탕으로 20명 규모 팀에서 백엔드 개발에 필요한 AIDD 문서 목록과 템플릿, 디렉터리 규칙을 정립하고 전파했습니다."
       ]
     },
     {
@@ -35,52 +26,70 @@
       "groups": [
         {
           "title": "모빌리티 플랫폼팀",
-          "summary": "고객사(현대/ 기아/타타대우) 차량 서비스의 인증, 결제와 같은 공통 플랫폼을 담당합니다.",
+          "summary": "고객사(현대/기아/타타대우) 차량 서비스의 인증, 결제와 같은 공통 플랫폼을 담당합니다.",
           "period": "2025.01 ~ 현재",
           "items": [
             {
-              "title": "OIDC 구조 기반 멀티 테넌트 고객 인증 체계 설계 및 개발",
-              "summary": "고객사마다 다른 고객 인증 Flow를 수용하는 기능 설계 및 개발",
+              "title": "OIDC/LDAP 기반 멀티테넌트 고객 인증",
+              "summary": "고객사·서비스별로 다른 인증원과 토큰 요구사항을 공통 인증 플랫폼에서 수용하는 구조 설계 및 개발",
               "period": "2025.03 ~ 현재",
+              "priority": "featured",
               "highlights": [
-                "OIDC 표준을 기반으로 다양한 인증 체계를 공통 흐름으로 통합하는 멀티테넌트 인증 구조 설계 및 개발",
-                "인증 방식별 Connector 분리와 동적 설정 관리를 통한 유연한 인증 확장 구조 구축",
-                "테넌트별 회원 관리 API 설계 및 운영성을 고려한 백오피스 관리 기능 개발"
+                "퍼블릭 서비스가 AD 자격증명을 직접 취급하지 않도록 인증 경계를 분리하고, Authorization Code + PKCE와 LDAP 인증을 결합한 흐름 설계",
+                "외부 신원을 내부 sub로 매핑하고 표준 JWT와 서비스 전용 토큰의 발급·검증 책임을 분리해 기존 토큰 경로와의 하위 호환성 확보",
+                "테넌트별 IdP registry의 관리 책임과 로그인 경로의 단기 TTL 캐시를 분리해 인증 설정의 관리·조회 경계 정립",
+                "&&신규 고객사 수용 시 공통 인증 흐름을 변경하지 않고 Connector와 테넌트 설정 추가로 변경 범위를 제한&&"
               ],
-              "tech": "Java, Spring Ecosystem, PostgreSQL, Redis"
+              "tech": "Java, Spring Ecosystem, PostgreSQL, Redis, OIDC, LDAP, JWT"
             },
             {
               "title": "Service Delivery Gateway",
               "summary": "Legacy API와 공통 고객 기능을 수용하는 시스템 진입점 설계 및 개발",
               "period": "2025.09 ~ 2025.11",
+              "priority": "featured",
               "highlights": [
-                "Legacy API 수용과 공통 세션 처리를 위한 서비스별 라우팅 구조 설계",
-                "Spring Cloud Config 기반 라우팅 정책 동적 설정 기능 개발"
+                "Legacy API를 유지하면서 세션 처리와 고객 동의 같은 공통 기능을 Gateway 계층으로 분리",
+                "GitHub 연동이 어려운 인프라 제약에서 Filesystem 기반 Config Server, Memory Cache, RabbitMQ trigger 조합으로 동적 라우팅 구조 설계",
+                "설정 조회 시 File I/O를 줄이기 위해 Memory Cache를 적용하고 Spring Cloud Gateway·Config·Bus로 라우팅 변경 전파 구조 구성",
+                "&&서비스 재빌드 없이 라우팅 정책을 반영할 수 있도록 운영 변경의 영향 범위를 설정 계층으로 제한&&"
               ],
-              "tech": "Java, Spring Cloud Ecosystem, RabbitMQ"
+              "tech": "Java, Spring Cloud Gateway, Spring Cloud Config, Spring Cloud Bus, RabbitMQ"
             },
             {
-              "title": "모빌리티 플랫폼 운영",
-              "summary": "플랫폼 운영 이슈와 변경 사항 검토",
+              "title": "쿠폰 통계 Slow Query 진단 및 개선",
+              "summary": "PostgreSQL 메모리 알람과 동시간대 통계 API 지연을 함께 분석해 조회 병목 개선",
               "period": "2025.01 ~ 현재",
+              "priority": "featured",
               "highlights": [
-                "쿠폰 발행 관련 Slow Query 개선",
-                "서비스 조합 로직을 Composite Service로 구조화하고 주요 시나리오 테스트 추가",
-                "기타 보안 취약점 조치 및 모니터링 특이사항 조치 작업"
+                "OpenSearch, 컨테이너 로그, WhaTap을 같은 시간축으로 확인해 쿠폰 통계 API의 슬로우 쿼리를 식별하고 EXPLAIN (ANALYZE, BUFFERS)로 병목 분석",
+                "복합 인덱스 적용으로 측정 환경에서 실행 시간을 34.802ms에서 14.510ms로 약 58% 단축하고 블록 접근량을 4,227개에서 387개로 약 91% 감소",
+                "Index Only Scan의 MVCC·Visibility Map 의존성과 쓰기 비용을 고려해 카운터 컬럼, 부분 인덱스, 요약 모델을 후속 대안으로 검토"
               ],
-              "tech": "Java, Spring Ecosystem, PostgreSQL, Kubernetes, WhaTap, Azure"
+              "tech": "Java, Spring, PostgreSQL, OpenSearch, WhaTap"
             },
             {
-              "title": "OEM 내비게이션 업데이트 사이트 운영",
-              "summary": "차량용 소프트웨어 다운로드 사이트의 Azure 이전 및 운영",
+              "title": "OEM 내비게이션 업데이트 사이트 운영 개선",
+              "summary": "차량용 소프트웨어 다운로드 사이트의 테스트·배포 체계 구축과 운영 이슈 진단",
               "period": "2025.03 ~ 현재",
+              "priority": "supporting",
               "highlights": [
-                "TOTP 기반 관리자 인증 기능 개발",
-                "개발계 테스트 체계 신규 구축",
-                "CI/CD 파이프라인 구축",
-                "기타 보안 취약점 조치 및 모니터링 특이사항 조치 작업"
+                "다운로드가 99%에서 실패하는 현상을 로그와 파일 경로 직접 호출로 재현해 보안 정책에 의해 차단된 경로를 식별하고 테스트 가능 상태 복구",
+                "DB 버전 변경 후 드러난 비결정적 조회 순서 의존 문제를 명시적 정렬이 포함된 쿼리와 운영 가이드 수정으로 해결",
+                "TOTP 기반 관리자 인증과 개발계 테스트 체계를 도입하고 Jenkins CI/CD 파이프라인 구축"
               ],
               "tech": "Java, Spring, JPA, MySQL, Jenkins, Azure"
+            },
+            {
+              "title": "모빌리티 플랫폼 운영 및 구조 개선",
+              "summary": "운영 변경과 공통 서비스 조합 로직의 유지보수성 개선",
+              "period": "2025.01 ~ 현재",
+              "priority": "supporting",
+              "highlights": [
+                "서비스 조합 로직을 Composite Service로 구조화하고 주요 시나리오 테스트 추가",
+                "&&조합 책임을 한 경계로 모아 신규 서비스 조합 추가 시 변경 위치와 회귀 검증 범위를 명확화&&",
+                "보안 취약점과 모니터링 특이사항을 분석하고 운영 변경 사항 검토·조치"
+              ],
+              "tech": "Java, Spring Ecosystem, PostgreSQL, Kubernetes, WhaTap, Azure"
             }
           ]
         },
@@ -90,44 +99,52 @@
           "period": "2022.05 ~ 2024.12",
           "items": [
             {
-              "title": "스마트 시티 관제 대시보드",
-              "summary": "여러 관제 모듈의 데이터를 조합하는 Dashboard API 설계·개발",
-              "period": "2024.06 ~ 2024.12",
+              "title": "시니어케어 B2C API 레거시 현대화",
+              "summary": "기존 DB/API 계약을 유지하면서 Spring Boot 레거시의 구조와 운영 가시성 개선",
+              "period": "2023.02 ~ 2024.06",
+              "priority": "featured",
               "highlights": [
-                "Event, Push, Device 모듈의 데이터를 조합하는 Dashboard API(오케스트레이션 모듈) 설계 및 개발",
-                "사용자 이벤트의 접수/조치/종료 흐름과 지도 프리셋 및 위젯 관리 기능 구현"
+                "Spring Boot 1.5/Maven 기반 코드를 Spring Boot 2.7/Gradle로 전환하고 시니어케어·호텔 혼재 구조를 도메인과 Controller-Service-Mapper-Model 계층으로 재구성",
+                "기존 SQL은 MyBatis Mapper Interface로 재사용하고 외부 API 호출을 Sender Service로 캡슐화해 DB/API 계약 변경 위험 최소화",
+                "통합 예외 처리, traceId, AOP 로깅과 connection pool·HTTP timeout 설정을 정리해 장애 추적 기반 보강",
+                "Java 파일을 268개에서 189개로, LOC를 54,120줄에서 20,864줄로 약 61.5% 줄이며 중복 코드와 혼재된 책임 정리"
+              ],
+              "tech": "Java, Spring Boot, MyBatis, PostgreSQL, Gradle, Actuator"
+            },
+            {
+              "title": "스마트 시티 관제 API 및 로그 모듈",
+              "summary": "여러 관제 모듈과 IoT 데이터를 화면 요구사항에 맞게 조합하는 API 설계 및 개발",
+              "period": "2024.06 ~ 2024.12",
+              "priority": "featured",
+              "highlights": [
+                "Event, Push, Device 모듈의 데이터를 조합하는 Dashboard API와 사용자 이벤트의 접수·조치·종료 상태 흐름 설계·개발",
+                "지도 프리셋과 위젯 관리 기능을 구현하고 기기 센서 데이터, 장애 이력, 이력 통계 조회를 로그 모듈로 분리",
+                "&&화면 요구사항과 Core 모듈 사이에 오케스트레이션 경계를 두어 관제 화면 변경이 개별 Core 모듈로 확산되는 범위를 축소&&"
               ],
               "tech": "Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka, InfluxDB"
             },
             {
-              "title": "스마트 시티 AI 챗봇",
-              "summary": "API 문서 기반 RAG와 실제 관제 API 호출을 연결하는 챗봇 설계·개발",
-              "period": "2024.06 ~ 2024.12",
+              "title": "홈IoT·시니어케어 외부 연동 및 운영 자동화",
+              "summary": "기가지니 기반 돌봄 서비스의 B2G/B2C 기능과 외부 시스템 연동 개발",
+              "period": "2022.09 ~ 2024.06",
+              "priority": "supporting",
               "highlights": [
-                "API 문서를 RAG 소스로 사용해 사용자 질의에서 API path와 parameter를 생성하고 호출 결과를 반환하는 흐름 설계 및 개발"
-              ],
-              "tech": "Python, FastAPI, LangChain"
-            },
-            {
-              "title": "AI Care B2G",
-              "summary": "공공기관 대상 돌봄 서비스의 외부 시스템 연동 기능 개발",
-              "period": "2022.09 ~ 2023.03",
-              "highlights": [
-                "외부 연동 Sender 분리 및 표준 RestTemplate 클래스 적용",
-                "ATAM TV 시청 이상 패턴 감지 및 텔레캅 출동 요청 연동 기능 개발"
-              ],
-              "tech": "Java, Spring Ecosystem, MyBatis, PostgreSQL"
-            },
-            {
-              "title": "AI Care B2C",
-              "summary": "개인 고객 대상 돌봄 서비스의 레거시 코드 및 가입 구조 개선",
-              "period": "2023.02 ~ 2024.06",
-              "highlights": [
-                "레거시 코드 전반 리팩터링 및 계층 구조 표준화",
-                "가상키 기반 테이블 재설계 및 기가지니 연동 기능 개발",
-                "엑셀 업로드 이후 홈 IoT 서버 등록 스케줄을 연계하는 상품 가입 프로세스 개선"
+                "TV 시청 이상 패턴을 텔레캅 출동 요청으로 연결하고 복약알림·일일안부·보호자 콜백 응답을 대화서버 이력으로 연동",
+                "안내방송, 서비스 사용 내역 조회와 사용자 설정 시간 기반 일일안부·미응답 재전송 기능 설계·개발",
+                "기관 가입 정보 엑셀 업로드 이후 기가지니·홈IoT 서버 등록을 배치로 연결해 복지사 수동 등록 프로세스 자동화",
+                "가상 고객 키 전환 방향에 맞춰 담당 패키지의 DB와 API 식별자 구조 변경"
               ],
               "tech": "Java, Spring Ecosystem, MyBatis, PostgreSQL, Spring Scheduling"
+            },
+            {
+              "title": "스마트 시티 API 문서 기반 RAG 챗봇",
+              "summary": "자연어 질의를 관제 API 호출로 연결하는 챗봇 설계 및 개발",
+              "period": "2024.06 ~ 2024.12",
+              "priority": "supporting",
+              "highlights": [
+                "API 문서를 RAG 소스로 사용해 사용자 질의에서 API path와 parameter를 생성하고 실제 호출 결과를 반환하는 흐름 설계·개발"
+              ],
+              "tech": "Python, FastAPI, LangChain, LangSmith"
             }
           ]
         }
@@ -137,40 +154,18 @@
       "type": "keyValue",
       "title": "기술",
       "rows": [
-        {
-          "label": "Backend",
-          "value": "Java, Spring Ecosystem, Spring Cloud Ecosystem, MyBatis, JPA, Querydsl"
-        },
-        {
-          "label": "Data",
-          "value": "PostgreSQL, MySQL, Redis, InfluxDB"
-        },
-        {
-          "label": "Quality & Observability",
-          "value": "JUnit, Spring Test, Mockito, OpenSearch, WhaTap"
-        },
-        {
-          "label": "Delivery",
-          "value": "GitHub Actions, Jenkins, Argo CD"
-        },
-        {
-          "label": "Infrastructure",
-          "value": "Azure, Docker, Kubernetes"
-        }
+        { "label": "Backend", "value": "Java, Spring Boot, Spring MVC, Spring Cloud Gateway·Config·Bus, MyBatis, JPA, Querydsl" },
+        { "label": "Data & Messaging", "value": "PostgreSQL, MySQL, Redis, InfluxDB, Kafka, RabbitMQ" },
+        { "label": "Quality & Observability", "value": "JUnit, Spring Test, Mockito, OpenSearch, WhaTap" },
+        { "label": "Delivery & Infrastructure", "value": "GitHub Actions, Jenkins, Argo CD, Azure, Docker, Kubernetes" }
       ]
     },
     {
       "type": "list",
       "title": "교육 및 수상",
       "items": [
-        {
-          "title": "KT AIVLE SCHOOL AI 개발자 트랙",
-          "detail": "2021.12 ~ 2022.05, 개인/최종 프로젝트 최우수상"
-        },
-        {
-          "title": "KT 제2회 사내 코딩 올림피아드",
-          "detail": "2025.01, 장려상"
-        }
+        { "title": "KT AIVLE SCHOOL AI 개발자 트랙", "detail": "2021.12 ~ 2022.05, 개인/최종 프로젝트 최우수상" },
+        { "title": "KT 제2회 사내 코딩 올림피아드", "detail": "2025.01, 장려상" }
       ]
     }
   ]
