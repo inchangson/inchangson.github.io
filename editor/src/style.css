@@ -92,6 +92,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .toastui-editor-ww-container, .toastui-editor-md-container { background: white !important; }
 .toastui-editor-contents { font-family: Inter, Pretendard, sans-serif; font-size: 15px; line-height: 1.75; }
 .toastui-editor-contents h1, .toastui-editor-contents h2, .toastui-editor-contents h3 { font-family: Georgia, serif; color: #193528; }
+.toastui-editor-contents code:not(pre code) { padding: .14em .38em; border: 1px solid #dce5dd; border-radius: 4px; color: #315442; background: #f0f5f1; }
+.toastui-editor-contents pre { overflow-x: auto; padding: 16px 18px; border: 1px solid #d7e0d9; border-radius: 9px; background: #f6f8f6; }
+.toastui-editor-contents pre code { padding: 0; border: 0; background: transparent; white-space: pre; }
 .toastui-editor-contents pre:has(code.language-blog-details) { border: 1px dashed #b89c62; background: #f9f5e9; }
 .toastui-editor-contents code.language-blog-details { color: #7c663a; }
 .toastui-editor-contents .mermaid-preview, .toastui-editor-ww-container .mermaid-preview { min-height: 90px; margin: 10px 0 18px; overflow-x: auto; padding: 16px; border: 1px solid #d8e1da; border-radius: 9px; background: #fbfcfa; color: #66756c; text-align: center; }

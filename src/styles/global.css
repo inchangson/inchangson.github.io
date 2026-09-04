@@ -348,6 +348,32 @@ a:hover {
   padding-left: 1.2rem;
 }
 
+.post__content code:not(pre code) {
+  padding: .14em .38em;
+  border: 1px solid #dce5dd;
+  border-radius: 4px;
+  color: var(--accent-strong);
+  background: #f0f5f1;
+  font-size: .9em;
+}
+
+.post__content pre {
+  max-width: 100%;
+  margin: 1.35rem 0;
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f4f7f5;
+}
+
+.post__content pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  white-space: pre;
+}
+
 .post__content .mermaid {
   margin: 1.5rem 0;
   overflow-x: auto;
