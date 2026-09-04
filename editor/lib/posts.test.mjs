@@ -103,3 +103,14 @@ test('저장소의 기존 글을 모두 손실 없이 parse/serialize할 수 있
     assert.deepEqual(second, first, name);
   }
 });
+
+test('Kubernetes 글의 여러 줄 코드는 fenced block으로 직렬화된다', async () => {
+  for (const slug of ['k8s-study-01-init', 'k8s-study-01-pod', 'k8s-study-01-svc']) {
+    const source = await readFile(path.resolve(`src/content/posts/${slug}.md`), 'utf8');
+    const parsed = parsePostFile(source);
+    assert.match(parsed.body, /```(?:bash|yaml|text)\n[\s\S]+?\n```/, slug);
+    assert.doesNotMatch(parsed.body, /`[^`\n]{100,}`/, slug);
+    const roundTrip = parsePostFile(serializePostFile(parsed.metadata, parsed.body));
+    assert.equal(roundTrip.body, parsed.body, slug);
+  }
+});

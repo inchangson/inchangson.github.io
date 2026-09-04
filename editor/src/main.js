@@ -16,6 +16,7 @@ import 'prismjs/components/prism-groovy.js';
 import { extractProtectedBlocks, restoreProtectedBlocks } from './protected-blocks.js';
 import { POST_VIEWS, filterPosts, groupPosts, resolveInitialPostSlug } from './post-navigation.js';
 import { renderMermaidCodeBlocks, renderMermaidSource } from '../../src/lib/mermaid-client.js';
+import { confluencePastePlugin } from './paste-normalizer.js';
 import './style.css';
 
 Prism.languages.proto = Prism.languages.protobuf;
@@ -159,6 +160,7 @@ const editor = new Editor({
   usageStatistics: false,
   plugins: [
     [codeSyntaxHighlight, { highlighter: Prism }],
+    confluencePastePlugin,
     mermaidPreviewPlugin,
   ],
   placeholder: '내용을 입력하세요. / 대신 툴바와 Markdown 단축키를 사용할 수 있습니다.',
