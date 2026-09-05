@@ -4,6 +4,7 @@ description: "Topic, Partition, Consumer Group, Offset, 전달 보장과 gzip·s
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: data-systems
 tags:
   - backend
   - kafka

@@ -3,7 +3,8 @@ title: "파일 I/O의 원자성: 보이는 순간과 장애 후 남는 순간"
 description: "short write, O_APPEND, flush와 fsync, 임시 파일과 atomic rename을 구분하고 Java NIO로 단일 파일 교체의 보장 경계를 설계한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 4
 seriesLabel: 3편

@@ -4,6 +4,7 @@ description: "Java의 Checked Exception과 Spring의 rollback 기본값이 만�
 pubDate: 2026-08-31
 draft: true
 category: backend
+subcategory: java-spring
 series: exception-design
 seriesOrder: 0
 seriesLabel: 소개

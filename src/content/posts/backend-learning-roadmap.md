@@ -4,6 +4,7 @@ description: "8주 동안 여섯 가지 백엔드 주제를 개념, 실습, 연�
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: learning
 tags:
   - backend
   - curriculum

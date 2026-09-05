@@ -11,6 +11,7 @@ const metadata = {
   pubDate: '2026-08-11',
   updatedDate: '',
   category: 'backend',
+  subcategory: '',
   tags: ['backend', 'test'],
   series: '',
   seriesOrder: undefined,

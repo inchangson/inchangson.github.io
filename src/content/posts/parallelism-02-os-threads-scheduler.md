@@ -3,7 +3,8 @@ title: "OS 스레드와 스케줄러: runnable은 언제 running이 되는가"
 description: "프로세스·스레드·Linux task의 관계부터 run queue, 선점, context switch, blocking wakeup, CPU quota, SMT와 NUMA까지 Java 플랫폼 스레드 실험으로 연결한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 2
 seriesLabel: 2편

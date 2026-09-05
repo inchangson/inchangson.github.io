@@ -5,6 +5,7 @@ pubDate: 2026-06-11
 draft: true
 updatedDate: 2026-06-18
 category: backend
+subcategory: api-integration
 tags:
   - backend
   - integration

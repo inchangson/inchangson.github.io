@@ -4,6 +4,7 @@ description: "Java가 Checked Exception을 API 계약으로 만든 이유와 thr
 pubDate: 2026-08-31
 draft: true
 category: backend
+subcategory: java-spring
 series: exception-design
 seriesOrder: 1
 seriesLabel: 1편

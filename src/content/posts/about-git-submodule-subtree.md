@@ -4,7 +4,7 @@ description: "하나의 저장소에서 다른 저장소를 참조할 때 submod
 pubDate: 2026-06-11
 draft: true
 updatedDate: 2026-06-18
-category: backend
+category: cicd
 tags:
   - backend
   - git

@@ -3,7 +3,8 @@ title: "JVM 안의 원자성: volatile에서 ConcurrentHashMap까지"
 description: "synchronized, volatile, CAS, ConcurrentHashMap이 보장하는 가시성과 원자성의 범위를 코드와 동시성 테스트로 구분한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 2
 seriesLabel: 2편

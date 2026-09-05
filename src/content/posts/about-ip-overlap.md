@@ -4,7 +4,8 @@ description: "IPv4 네트워크의 시작·끝 주소를 계산해 두 CIDR 대�
 pubDate: 2026-06-11
 draft: true
 updatedDate: 2026-06-18
-category: backend
+category: ops
+subcategory: network
 tags:
   - backend
   - network

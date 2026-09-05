@@ -4,6 +4,7 @@ description: "Spring Transaction interceptor의 예외 판단 시점과 Checked 
 pubDate: 2026-08-31
 draft: true
 category: backend
+subcategory: java-spring
 series: exception-design
 seriesOrder: 2
 seriesLabel: 2편

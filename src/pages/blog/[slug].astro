@@ -29,6 +29,7 @@ const { Content } = await render(post);
           <time>{post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
           {post.data.draft && <span class="draft-badge">Draft</span>}
           <a class="taxonomy-chip" href={`/blog/categories/${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>
+          {post.data.subcategory && <a class="taxonomy-chip taxonomy-chip--sub" href={`/blog/categories/${encodeURIComponent(post.data.category)}/${encodeURIComponent(post.data.subcategory)}`}>{post.data.subcategory}</a>}
           {post.data.tags.map((tag) => <a class="taxonomy-tag" href={`/blog/tags/${encodeURIComponent(tag)}`}>#{tag}</a>)}
         </div>
         <h1>{post.data.title}</h1>

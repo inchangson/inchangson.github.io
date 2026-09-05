@@ -56,6 +56,7 @@ export function serializePostFile(metadata, body) {
 
   if (normalized.updatedDate) ordered.updatedDate = normalized.updatedDate;
   ordered.category = normalized.category;
+  if (normalized.subcategory) ordered.subcategory = normalized.subcategory;
   ordered.tags = normalized.tags;
   if (normalized.series) {
     ordered.series = normalized.series;
@@ -74,6 +75,7 @@ export function normalizeMetadata(value, strict = false) {
   const pubDate = dateValue(value.pubDate);
   const updatedDate = dateValue(value.updatedDate, true);
   const category = stringValue(value.category);
+  const subcategory = stringValue(value.subcategory);
   const tags = Array.isArray(value.tags)
     ? [...new Set(value.tags.map(stringValue).filter(Boolean))]
     : [];
@@ -94,7 +96,7 @@ export function normalizeMetadata(value, strict = false) {
     throw new PostStoreError(400, '시리즈를 먼저 선택해 주세요.');
   }
 
-  return { title, description, pubDate, updatedDate, category, tags, series, seriesOrder, seriesLabel, draft };
+  return { title, description, pubDate, updatedDate, category, subcategory, tags, series, seriesOrder, seriesLabel, draft };
 }
 
 function stringValue(value) {
@@ -200,6 +202,20 @@ export function createPostStore(rootDir) {
     return readPost(slug);
   }
 
+  async function reassignTaxonomy({ category, subcategory = '', targetCategory, targetSubcategory = '', preserveSubcategory = false }) {
+    const posts = await listPosts();
+    const affected = posts.filter((post) => post.category === category && (!subcategory || post.subcategory === subcategory));
+    await Promise.all(affected.map(async (post) => {
+      const full = await readPost(post.slug);
+      await updatePost(post.slug, {
+        metadata: { ...full.metadata, category: targetCategory, subcategory: preserveSubcategory ? full.metadata.subcategory : targetSubcategory },
+        body: full.body,
+        revision: full.revision,
+      });
+    }));
+    return affected.length;
+  }
+
   async function saveImage(slug, { name, type, data }) {
     validateSlug(slug);
     const extension = IMAGE_TYPES.get(type);
@@ -241,5 +257,5 @@ export function createPostStore(rootDir) {
     throw new PostStoreError(409, '이미지 파일 이름 충돌을 해결할 수 없습니다.');
   }
 
-  return { listPosts, readPost, createPost, updatePost, saveImage };
+  return { listPosts, readPost, createPost, updatePost, reassignTaxonomy, saveImage };
 }

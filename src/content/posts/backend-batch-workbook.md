@@ -4,6 +4,7 @@ description: "Job, Step, Chunk, 재시작, 멱등성, Skip과 Retry를 주문 �
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: data-systems
 tags:
   - backend
   - batch

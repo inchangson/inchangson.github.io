@@ -3,7 +3,8 @@ title: "동시성은 어떻게 실제 병렬 실행이 되는가: HW에서 가�
 description: "CPU 코어와 캐시 일관성, OS 스케줄러, Java 메모리 모델, 비동기 I/O와 가상 스레드를 거쳐 동시성 모델을 선택하는 6편 시리즈 안내"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 0
 seriesLabel: 소개

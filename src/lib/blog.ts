@@ -29,3 +29,8 @@ export function taxonomyValues(posts: PostEntry[], key: 'category' | 'tags') {
   const values = key === 'category' ? posts.map((post) => post.data.category) : posts.flatMap((post) => post.data.tags);
   return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'ko'));
 }
+
+export function subcategoryValues(posts: PostEntry[], category: string) {
+  return [...new Set(posts.filter((post) => post.data.category === category).map((post) => post.data.subcategory).filter((value): value is string => Boolean(value)))]
+    .sort((a, b) => a.localeCompare(b, 'ko'));
+}

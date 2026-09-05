@@ -3,7 +3,8 @@ title: "원자성의 첫 경계: File Lock으로 동시 쓰기 지키기"
 description: "FileChannel.lock, flock, fcntl, O_APPEND의 보장 범위를 코드와 장애 실험으로 확인하고 파일 동시성에서 원자성의 경계를 찾는다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 1
 seriesLabel: 1편
