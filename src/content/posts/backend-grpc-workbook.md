@@ -4,6 +4,7 @@ description: "Protocol Buffers, Unary와 Streaming, deadline, status code, 멱�
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: api-integration
 tags:
   - backend
   - grpc

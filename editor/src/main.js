@@ -80,6 +80,7 @@ const elements = {
   navPosts: document.querySelector('#nav-posts'),
   navResume: document.querySelector('#nav-resume'),
   navSeries: document.querySelector('#nav-series'),
+  navCategories: document.querySelector('#nav-categories'),
   search: document.querySelector('#post-search'),
   postViewTabs: document.querySelector('#post-view-tabs'),
   newPost: document.querySelector('#new-post'),
@@ -97,7 +98,7 @@ const elements = {
   pubDate: document.querySelector('#pub-date'),
   updatedDate: document.querySelector('#updated-date'),
   category: document.querySelector('#category'),
-  categoryOptions: document.querySelector('#category-options'),
+  subcategory: document.querySelector('#subcategory'),
   tags: document.querySelector('#tags'),
   tagChips: document.querySelector('#tag-chips'),
   tagOptions: document.querySelector('#tag-options'),
@@ -128,6 +129,10 @@ const elements = {
   seriesDescription: document.querySelector('#series-description'),
   seriesFormTitle: document.querySelector('#series-form-title'),
   deleteSeries: document.querySelector('#delete-series'),
+  categoriesScreen: document.querySelector('#categories-screen'),
+  categoryList: document.querySelector('#category-list'),
+  newCategory: document.querySelector('#new-category'),
+  saveCategories: document.querySelector('#save-categories'),
 };
 
 const state = {
@@ -142,6 +147,9 @@ const state = {
   protectedBlocks: [],
   tags: [],
   series: [],
+  categories: [],
+  categoryRevision: null,
+  categoryMigrations: [],
   resume: null,
   resumeRevision: null,
   currentSeries: null,
@@ -204,6 +212,7 @@ const fields = [
   elements.pubDate,
   elements.updatedDate,
   elements.category,
+  elements.subcategory,
   elements.series,
   elements.seriesOrder,
   elements.seriesLabel,
@@ -232,17 +241,21 @@ elements.save.addEventListener('click', saveCurrentPost);
 elements.mermaidRefresh.addEventListener('click', () => void refreshMermaidPreviews());
 elements.htmlButton.addEventListener('click', openHtmlBlocksDialog);
 elements.applyHtml.addEventListener('click', applyHtmlBlocks);
-elements.navPosts.addEventListener('click', () => switchMode('posts'));
+elements.navPosts.addEventListener('click', () => void switchMode('posts'));
 elements.navResume.addEventListener('click', () => void switchMode('resume'));
 elements.navSeries.addEventListener('click', () => void switchMode('series'));
+elements.navCategories.addEventListener('click', () => void switchMode('categories'));
 elements.tags.addEventListener('keydown', handleTagInput);
 elements.tags.addEventListener('blur', commitTagInput);
 elements.series.addEventListener('change', updateSeriesFields);
+elements.category.addEventListener('change', () => renderSubcategoryOptions());
 elements.saveResume.addEventListener('click', () => void saveResume());
 elements.addSection.addEventListener('click', addResumeSection);
 elements.newSeries.addEventListener('click', beginNewSeries);
 elements.seriesForm.addEventListener('submit', (event) => { event.preventDefault(); void saveSeries(); });
 elements.deleteSeries.addEventListener('click', () => void deleteSeries());
+elements.newCategory.addEventListener('click', addCategory);
+elements.saveCategories.addEventListener('click', () => void saveCategories());
 
 window.addEventListener('beforeunload', (event) => {
   if (!state.dirty) return;
@@ -389,7 +402,7 @@ function beginNewPost() {
   state.revision = null;
   state.isNew = true;
   state.originalBody = '';
-  setForm('', { title: '', description: '', pubDate: localToday, updatedDate: '', category: '', tags: [], series: '', draft: true }, true);
+  setForm('', { title: '', description: '', pubDate: localToday, updatedDate: '', category: '', subcategory: '', tags: [], series: '', draft: true }, true);
   setEditorBody('');
   showEditor();
   markDirty(false);
@@ -405,6 +418,7 @@ function setForm(slug, metadata, isNew) {
   elements.pubDate.value = metadata.pubDate || '';
   elements.updatedDate.value = metadata.updatedDate || '';
   elements.category.value = metadata.category || '';
+  renderSubcategoryOptions(metadata.subcategory || '');
   state.tags = [...(metadata.tags || [])];
   elements.tags.value = '';
   renderTagChips();
@@ -495,6 +509,7 @@ function formPayload() {
     pubDate: elements.pubDate.value,
     updatedDate: elements.updatedDate.value,
     category: elements.category.value.trim(),
+    subcategory: elements.subcategory.value.trim(),
     tags: state.tags,
     series: elements.series.value,
     seriesOrder: elements.series.value ? Number(elements.seriesOrder.value) : undefined,
@@ -625,10 +640,18 @@ function escapeHtml(value) {
 }
 
 function renderTaxonomyOptions() {
-  const categories = [...new Set(state.posts.map((post) => post.category).filter(Boolean))].sort();
   const tags = [...new Set(state.posts.flatMap((post) => post.tags || []))].sort();
-  elements.categoryOptions.innerHTML = categories.map((value) => `<option value="${escapeHtml(value)}"></option>`).join('');
+  const current = elements.category.value;
+  elements.category.innerHTML = '<option value="">선택</option>' + state.categories.map((item) => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>`).join('');
+  elements.category.value = current;
+  renderSubcategoryOptions();
   elements.tagOptions.innerHTML = tags.map((value) => `<option value="${escapeHtml(value)}"></option>`).join('');
+}
+
+function renderSubcategoryOptions(selected = elements.subcategory.value) {
+  const category = state.categories.find((item) => item.name === elements.category.value);
+  elements.subcategory.innerHTML = '<option value="">없음</option>' + (category?.subcategories || []).map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
+  elements.subcategory.value = selected;
 }
 
 function handleTagInput(event) {
@@ -668,27 +691,34 @@ async function loadSeries() {
   renderPostList();
 }
 
-function switchMode(mode) {
+async function switchMode(mode) {
   if (!confirmDiscard()) return;
   markClean();
   state.mode = mode;
-  [elements.navPosts, elements.navResume, elements.navSeries].forEach((button) => button.classList.remove('is-active'));
+  [elements.navPosts, elements.navResume, elements.navSeries, elements.navCategories].forEach((button) => button.classList.remove('is-active'));
   elements[`nav${mode[0].toUpperCase()}${mode.slice(1)}`]?.classList.add('is-active');
   elements.postSidebar.hidden = mode !== 'posts';
   const hasPost = Boolean(state.currentSlug || state.isNew);
   elements.editorScreen.hidden = mode !== 'posts' || !hasPost;
   elements.resumeScreen.hidden = mode !== 'resume';
   elements.seriesScreen.hidden = mode !== 'series';
+  elements.categoriesScreen.hidden = mode !== 'categories';
   elements.save.hidden = mode !== 'posts';
-  elements.previewLink.hidden = mode === 'series';
+  elements.previewLink.hidden = mode === 'series' || mode === 'categories';
   elements.previewLink.href = mode === 'resume' ? 'http://localhost:4321/resume' : elements.previewLink.href;
-  elements.previewLink.classList.toggle('is-disabled', mode === 'series');
+  elements.previewLink.classList.toggle('is-disabled', mode === 'series' || mode === 'categories');
   elements.emptyState.hidden = mode !== 'posts' || hasPost;
   elements.documentKind.textContent = mode === 'posts' ? 'DOCUMENTS' : mode.toUpperCase();
-  elements.documentTitle.textContent = mode === 'resume' ? 'Resume 편집' : mode === 'series' ? '시리즈 관리' : (elements.title.value || '글 목록');
+  elements.documentTitle.textContent = mode === 'resume' ? 'Resume 편집' : mode === 'series' ? '시리즈 관리' : mode === 'categories' ? '카테고리 관리' : (elements.title.value || '글 목록');
   if (mode === 'resume' && !state.resume) void loadResume();
   if (mode === 'series') void loadSeries();
-  if (mode === 'posts') updateDocumentHeader();
+  if (mode === 'categories') void loadCategories();
+  if (mode === 'posts') {
+    const initialSlug = resolveInitialPostSlug(state.posts, localStorage.getItem(LAST_POST_STORAGE_KEY));
+    if (!hasPost && initialSlug) await selectPost(initialSlug);
+    else if (!hasPost) elements.emptyState.hidden = false;
+    else updateDocumentHeader();
+  }
 }
 
 const input = (label, path, value = '', multiline = false) => `<label class="field"><span>${label}</span>${multiline ? `<textarea rows="3" data-path="${path}">${escapeHtml(value)}</textarea>` : `<input data-path="${path}" value="${escapeHtml(value)}" />`}</label>`;
@@ -782,7 +812,118 @@ async function deleteSeries() {
 
 elements.seriesForm.addEventListener('input', () => { state.dirty = true; elements.saveStatus.textContent = '저장하지 않음'; elements.saveStatus.classList.add('is-dirty'); });
 
-await Promise.all([loadPostList(), loadSeries()]);
+async function loadCategories() {
+  try {
+    const result = await api('/api/categories');
+    state.categories = result.categories.map((item) => ({
+      ...item,
+      _originalName: item.name,
+      _subOriginals: [...item.subcategories],
+    }));
+    state.categoryRevision = result.revision;
+    state.categoryMigrations = [];
+    renderTaxonomyOptions();
+    renderCategoryManager();
+  } catch (error) { showToast(error.message, true); }
+}
+
+function categoryChanged() {
+  state.dirty = true;
+  elements.saveStatus.textContent = '저장하지 않음';
+  elements.saveStatus.classList.add('is-dirty');
+  renderTaxonomyOptions();
+}
+
+function renderCategoryManager() {
+  elements.categoryList.innerHTML = state.categories.map((category, categoryIndex) => `
+    <article class="category-manage-card" data-category-index="${categoryIndex}">
+      <div class="category-manage-row">
+        <label class="field"><span>카테고리 이름</span><input data-category-name value="${escapeHtml(category.name)}" required /></label>
+        <div class="category-actions"><button class="button" type="button" data-add-subcategory>하위 추가</button><button class="button button--danger" type="button" data-delete-category>삭제</button></div>
+      </div>
+      <div class="subcategory-manage-list">${category.subcategories.map((name, subcategoryIndex) => `
+        <div class="subcategory-manage-row" data-subcategory-index="${subcategoryIndex}">
+          <label class="field"><span>하위 카테고리</span><input data-subcategory-name value="${escapeHtml(name)}" required /></label>
+          <button class="button button--danger" type="button" data-delete-subcategory>삭제</button>
+        </div>`).join('') || '<small>하위 카테고리가 없습니다.</small>'}</div>
+    </article>`).join('') || '<p>아직 카테고리가 없습니다.</p>';
+}
+
+function addCategory() {
+  state.categories.push({ name: '새 카테고리', subcategories: [], _originalName: null, _subOriginals: [] });
+  renderCategoryManager(); categoryChanged();
+}
+
+elements.categoryList.addEventListener('input', (event) => {
+  const card = event.target.closest('[data-category-index]');
+  if (!card) return;
+  const category = state.categories[Number(card.dataset.categoryIndex)];
+  if (event.target.matches('[data-category-name]')) category.name = event.target.value;
+  if (event.target.matches('[data-subcategory-name]')) category.subcategories[Number(event.target.closest('[data-subcategory-index]').dataset.subcategoryIndex)] = event.target.value;
+  categoryChanged();
+});
+
+elements.categoryList.addEventListener('click', (event) => {
+  const button = event.target.closest('button');
+  const card = event.target.closest('[data-category-index]');
+  if (!button || !card) return;
+  const categoryIndex = Number(card.dataset.categoryIndex);
+  const category = state.categories[categoryIndex];
+  if (button.hasAttribute('data-add-subcategory')) {
+    category.subcategories.push('새 하위 카테고리'); category._subOriginals.push(null);
+  }
+  if (button.hasAttribute('data-delete-subcategory')) {
+    const subcategoryIndex = Number(button.closest('[data-subcategory-index]').dataset.subcategoryIndex);
+    const original = category._subOriginals[subcategoryIndex];
+    if (original && state.posts.some((post) => post.category === category._originalName && post.subcategory === original)) {
+      if (!window.confirm(`'${original}'의 글을 상위 카테고리로 이동하고 삭제할까요?`)) return;
+      state.categoryMigrations.push({ category: category._originalName, subcategory: original, targetCategory: category.name, targetSubcategory: '' });
+    }
+    category.subcategories.splice(subcategoryIndex, 1); category._subOriginals.splice(subcategoryIndex, 1);
+  }
+  if (button.hasAttribute('data-delete-category')) {
+    if (category._originalName && state.posts.some((post) => post.category === category._originalName)) {
+      const target = window.prompt(`'${category._originalName}'의 글을 이동할 다른 카테고리 이름을 입력하세요.`)?.trim();
+      if (!target || !state.categories.some((item, index) => index !== categoryIndex && item.name === target)) { showToast('유효한 이동 대상 카테고리가 필요합니다.', true); return; }
+      state.categoryMigrations.push({ category: category._originalName, targetCategory: target, preserveSubcategory: false });
+    } else if (!window.confirm(`'${category.name}' 카테고리를 삭제할까요?`)) return;
+    state.categories.splice(categoryIndex, 1);
+  }
+  renderCategoryManager(); categoryChanged();
+});
+
+async function saveCategories() {
+  try {
+    const migrations = [...state.categoryMigrations];
+    for (const category of state.categories) {
+      if (category._originalName && category._originalName !== category.name.trim()) {
+        migrations.push({ category: category._originalName, targetCategory: category.name.trim(), preserveSubcategory: true });
+      }
+      category.subcategories.forEach((name, index) => {
+        const original = category._subOriginals[index];
+        if (original && original !== name.trim()) migrations.push({
+          category: category.name.trim(), subcategory: original,
+          targetCategory: category.name.trim(), targetSubcategory: name.trim(),
+        });
+      });
+    }
+    const payload = {
+      categories: state.categories.map((item) => ({ name: item.name.trim(), subcategories: item.subcategories.map((name) => name.trim()) })),
+      revision: state.categoryRevision,
+      migrations,
+    };
+    await api('/api/categories', { method: 'PUT', body: JSON.stringify(payload) });
+    await Promise.all([loadCategories(), loadPostList()]);
+    if (state.currentSlug) {
+      const current = await api(`/api/posts/${encodeURIComponent(state.currentSlug)}`);
+      state.revision = current.revision;
+      setForm(current.slug, current.metadata, false);
+    }
+    markClean(); showToast('카테고리와 연결된 글을 저장했습니다.');
+  } catch (error) { showToast(error.message, true); }
+}
+
+await Promise.all([loadPostList(), loadSeries(), loadCategories()]);
 const initialSlug = resolveInitialPostSlug(state.posts, localStorage.getItem(LAST_POST_STORAGE_KEY));
 if (initialSlug) {
   await selectPost(initialSlug);
@@ -790,4 +931,5 @@ if (initialSlug) {
   elements.documentTitle.textContent = '작성한 글이 없습니다';
   elements.emptyState.querySelector('h2').textContent = '아직 작성한 글이 없습니다';
   elements.emptyState.querySelector('p').textContent = '왼쪽 위 ＋ 버튼으로 첫 글을 작성할 수 있습니다.';
+  elements.emptyState.hidden = false;
 }

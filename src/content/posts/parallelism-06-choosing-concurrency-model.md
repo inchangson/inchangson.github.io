@@ -3,7 +3,8 @@ title: "동시성 모델 선택: 정확성, 처리량, 지연 시간을 함께 �
 description: "CPU-bound와 blocking I/O, 비동기 생태계와 혼합 workload에서 순차 실행, bounded thread pool, fork/join, reactive, virtual thread를 선택하고 주문 API 부하·장애 실험으로 검증한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 6
 seriesLabel: 6편

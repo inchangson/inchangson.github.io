@@ -4,6 +4,7 @@ description: "자료구조, TTL, Cache Aside, Stampede, eviction, 영속화와 �
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: data-systems
 tags:
   - backend
   - redis

@@ -4,6 +4,7 @@ description: "테스트 피라미드, 단위·통합·인수 테스트, Mock, Te
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: testing
 tags:
   - backend
   - test

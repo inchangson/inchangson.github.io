@@ -4,6 +4,7 @@ description: "잘 부탁드립니다."
 pubDate: 2026-06-01
 draft: true
 category: backend
+subcategory: notes
 tags:
   - backend
   - architecture

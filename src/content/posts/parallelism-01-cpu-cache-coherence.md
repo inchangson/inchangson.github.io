@@ -3,7 +3,8 @@ title: "CPU 위의 병렬성: 캐시 라인과 메모리 순서까지"
 description: "싱글 코어의 동시성 환상에서 멀티코어 병렬성으로 내려가, SMT, 캐시 일관성, 메모리 순서, atomic 연산, false sharing과 NUMA를 Java 코드로 연결한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 1
 seriesLabel: 1편

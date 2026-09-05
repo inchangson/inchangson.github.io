@@ -2,7 +2,8 @@
 title: 쿠버네티스 교과서 - Chap 02 파드와 디플로이먼트로 컨테이너 실행하기
 description: pod에 대한 기본적인 개념을 정리한 내용입니다.
 pubDate: 2025-02-25
-category: backend
+category: ops
+subcategory: kubernetes
 tags:
   - kubernetes
 draft: true

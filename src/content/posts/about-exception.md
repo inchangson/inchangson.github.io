@@ -5,6 +5,7 @@ pubDate: 2026-06-11
 draft: true
 updatedDate: 2026-08-31
 category: backend
+subcategory: java-spring
 series: exception-design
 seriesOrder: 3
 seriesLabel: 3편

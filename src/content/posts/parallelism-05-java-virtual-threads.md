@@ -3,7 +3,8 @@ title: "Java 가상 스레드: 동시 작업을 늘리면 병렬성도 늘어나
 description: "Java 26의 virtual thread가 carrier에 mount·unmount되는 과정부터 blocking I/O, scheduler 병렬도, pinning, 자원 제한, 취소와 운영 관측까지 검증한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 5
 seriesLabel: 5편

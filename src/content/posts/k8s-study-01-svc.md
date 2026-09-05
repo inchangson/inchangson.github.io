@@ -3,7 +3,8 @@ title: 쿠버네티스 교과서 - Chap 03 서비스에 파드 연결하기
 description: 서비스에 대한 기본적인 개념을 정리한 내용입니다.
 pubDate: 2026-09-04
 updatedDate: 2025-02-03
-category: backend
+category: ops
+subcategory: kubernetes
 tags:
   - kubernetes
   - network

@@ -178,6 +178,11 @@ a:hover {
   padding-top: 12px;
   border-top: 1px solid var(--border);
 }
+.blog-sidebar .blog-sidebar__subcategories { gap: 2px; margin: 2px 0 5px 10px; padding-left: 8px; border-left: 1px solid var(--border); }
+.blog-sidebar .blog-sidebar__subcategories a { padding-block: 5px; font-size: .8rem; font-weight: 500; }
+.subcategory-directory { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.subcategory-directory a { display: flex; gap: 10px; padding: 8px 11px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: .85rem; font-weight: 650; }
+.subcategory-directory span { color: var(--muted); }
 
 .category-groups {
   display: grid;

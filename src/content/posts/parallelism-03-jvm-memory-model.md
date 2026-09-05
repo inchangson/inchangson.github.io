@@ -3,7 +3,8 @@ title: "Java Memory Model: 소스 순서가 아니라 관찰 가능한 결과를
 description: "source order, bytecode, JIT, CPU 실행을 JMM의 관찰 가능 결과와 분리하고 happens-before, volatile, final, VarHandle, CAS와 안전한 공개를 코드로 검증한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 3
 seriesLabel: 3편

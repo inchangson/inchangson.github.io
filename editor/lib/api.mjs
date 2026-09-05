@@ -1,5 +1,6 @@
 import { MAX_IMAGE_BYTES, PostStoreError, createPostStore } from './posts.mjs';
 import { createDocumentStore } from './documents.mjs';
+import { createCategoryStore } from './categories.mjs';
 
 const JSON_LIMIT = MAX_IMAGE_BYTES * 1.5 + 1024 * 1024;
 
@@ -33,6 +34,7 @@ function localRequestOnly(request) {
 export function localEditorApi(rootDir) {
   const store = createPostStore(rootDir);
   const documents = createDocumentStore(rootDir);
+  const categories = createCategoryStore(rootDir);
 
   async function validatePostSeries(payload, currentSlug) {
     const seriesId = String(payload?.metadata?.series || '').trim();
@@ -43,6 +45,15 @@ export function localEditorApi(rootDir) {
     if (posts.some((post) => post.slug !== currentSlug && post.series === seriesId && post.seriesOrder === order)) {
       throw new PostStoreError(409, '같은 시리즈에서 이미 사용 중인 순서입니다.');
     }
+  }
+
+  async function validatePostTaxonomy(payload) {
+    const category = String(payload?.metadata?.category || '').trim();
+    const subcategory = String(payload?.metadata?.subcategory || '').trim();
+    const catalog = (await categories.read()).categories;
+    const parent = catalog.find((item) => item.name === category);
+    if (!parent) throw new PostStoreError(400, '존재하지 않는 카테고리입니다. 카테고리 관리에서 먼저 만들어 주세요.');
+    if (subcategory && !parent.subcategories.includes(subcategory)) throw new PostStoreError(400, '선택한 카테고리에 존재하지 않는 하위 카테고리입니다.');
   }
 
   return {
@@ -58,6 +69,15 @@ export function localEditorApi(rootDir) {
 
           if (request.method === 'GET' && url.pathname === '/api/posts') {
             return sendJson(response, 200, { posts: await store.listPosts() });
+          }
+          if (request.method === 'GET' && url.pathname === '/api/categories') {
+            return sendJson(response, 200, await categories.read());
+          }
+          if (request.method === 'PUT' && url.pathname === '/api/categories') {
+            const payload = await readJson(request);
+            const migrations = Array.isArray(payload.migrations) ? payload.migrations : [];
+            for (const migration of migrations) await store.reassignTaxonomy(migration);
+            return sendJson(response, 200, await categories.update(payload));
           }
           if (request.method === 'GET' && url.pathname === '/api/resume') {
             return sendJson(response, 200, await documents.readResume());
@@ -80,6 +100,7 @@ export function localEditorApi(rootDir) {
           }
           if (request.method === 'POST' && url.pathname === '/api/posts') {
             const payload = await readJson(request);
+            await validatePostTaxonomy(payload);
             await validatePostSeries(payload);
             return sendJson(response, 201, await store.createPost(payload));
           }
@@ -88,6 +109,7 @@ export function localEditorApi(rootDir) {
           }
           if (request.method === 'PUT' && parts.length === 3 && parts[0] === 'api' && parts[1] === 'posts') {
             const payload = await readJson(request);
+            await validatePostTaxonomy(payload);
             await validatePostSeries(payload, parts[2]);
             return sendJson(response, 200, await store.updatePost(parts[2], payload));
           }

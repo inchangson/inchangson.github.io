@@ -9,6 +9,7 @@ const { post } = Astro.props;
     <time>{post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
     {post.data.draft && <span class="draft-badge">Draft</span>}
     <a class="taxonomy-chip" href={`/blog/categories/${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>
+    {post.data.subcategory && <a class="taxonomy-chip taxonomy-chip--sub" href={`/blog/categories/${encodeURIComponent(post.data.category)}/${encodeURIComponent(post.data.subcategory)}`}>{post.data.subcategory}</a>}
   </div>
   <h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2>
   <p>{post.data.description}</p>

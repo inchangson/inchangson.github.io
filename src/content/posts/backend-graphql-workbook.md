@@ -4,6 +4,7 @@ description: "Schema, Query, Mutation, Resolver, N+1, pagination과 오류 설�
 pubDate: 2026-06-18
 draft: true
 category: backend
+subcategory: api-integration
 tags:
   - backend
   - graphql

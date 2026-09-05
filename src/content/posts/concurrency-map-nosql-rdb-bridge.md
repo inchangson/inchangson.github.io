@@ -3,7 +3,8 @@ title: "ConcurrentHashMap에 네트워크를 붙이면 DB가 될까?"
 description: "동시성 컬렉션에 API, 영속성, 복제와 질의를 하나씩 더하는 사고 실험으로 ConcurrentHashMap, NoSQL, RDBMS의 공통 본질과 결정적 차이를 구분한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 3
 seriesLabel: 브리지

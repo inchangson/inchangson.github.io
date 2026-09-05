@@ -3,7 +3,8 @@ title: "DBMS WAL과 복구: 커밋은 어떻게 장애를 넘어 살아남는가
 description: "PostgreSQL의 WAL 선행 기록, 커밋 레코드 flush, checkpoint와 REDO, MVCC 가시성을 따라가며 ACID의 원자성과 내구성이 실제로 성립하는 경계를 확인한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 7
 seriesLabel: 6편

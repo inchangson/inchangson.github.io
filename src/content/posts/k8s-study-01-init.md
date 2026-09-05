@@ -3,7 +3,8 @@ title: 쿠버네티스 교과서 - Chap 01 실습 환경 만들기
 description: 쿠버네티스에 대한 기본적인 개념을 정리한 내용입니다.
 pubDate: 2026-09-04
 updatedDate: 2025-02-06
-category: backend
+category: ops
+subcategory: kubernetes
 tags:
   - kubernetes
 draft: true

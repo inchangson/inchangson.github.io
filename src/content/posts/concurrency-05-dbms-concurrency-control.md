@@ -3,7 +3,8 @@ title: "DBMS 동시성 제어: SQL 한 문장에서 Serializable까지"
 description: "PostgreSQL의 MVCC와 행 잠금, 격리 수준, 제약조건과 재시도로 lost update와 write skew를 막고 업무 불변식을 지키는 방법"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 6
 seriesLabel: 5편

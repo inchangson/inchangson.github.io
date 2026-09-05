@@ -1,0 +1,20 @@
+---
+import BlogLayout from '../../../../layouts/BlogLayout.astro';
+import PostCard from '../../../../components/PostCard.astro';
+import { getBlogPosts, type PostEntry } from '../../../../lib/blog';
+interface Props { category: string; subcategory: string; posts: PostEntry[] }
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  const paths = new Map();
+  posts.filter((post) => post.data.subcategory).forEach((post) => {
+    const key = `${post.data.category}\u0000${post.data.subcategory}`;
+    if (!paths.has(key)) paths.set(key, { category: post.data.category, subcategory: post.data.subcategory, posts: [] });
+    paths.get(key).posts.push(post);
+  });
+  return [...paths.values()].map((item) => ({ params: { category: item.category, subcategory: item.subcategory }, props: item }));
+}
+const { category, subcategory, posts } = Astro.props as Props;
+---
+<BlogLayout title={`${subcategory} | ${category}`} eyebrow={category} headerTitle={subcategory} description={`${posts.length}개의 글`} activeCategory={category} activeSubcategory={subcategory}>
+  <section class="panel list">{posts.map((post) => <PostCard post={post} />)}</section>
+</BlogLayout>

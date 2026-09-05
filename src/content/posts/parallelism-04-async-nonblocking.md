@@ -3,7 +3,8 @@ title: "비동기와 논블로킹: 기다리지 않는 코드는 병렬 코드�
 description: "동기·비동기, 블로킹·논블로킹, 동시성·병렬성을 독립된 축으로 분리하고 Java NIO Selector, CompletableFuture, Flow의 실행·과부하·실패 경계를 코드와 부하 실험으로 검증한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: parallelism
 series: concurrency-parallelism
 seriesOrder: 4
 seriesLabel: 4편

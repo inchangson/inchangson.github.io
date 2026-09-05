@@ -13,7 +13,7 @@ export function filterPosts(posts, query) {
   const normalized = String(query || '').trim().toLocaleLowerCase('ko');
   if (!normalized) return [...posts];
   return posts.filter((post) =>
-    [post.title, post.description, post.slug, post.category, ...(post.tags || [])]
+    [post.title, post.description, post.slug, post.category, post.subcategory, ...(post.tags || [])]
       .join(' ')
       .toLocaleLowerCase('ko')
       .includes(normalized),
@@ -25,7 +25,9 @@ export function groupPosts(posts, view, series) {
 
   const groups = new Map();
   posts.forEach((post) => {
-    const id = view === POST_VIEWS.series ? post.series || '__unassigned__' : post.category || '__uncategorized__';
+    const id = view === POST_VIEWS.series
+      ? post.series || '__unassigned__'
+      : post.category ? `${post.category}\u0000${post.subcategory || ''}` : '__uncategorized__';
     if (!groups.has(id)) groups.set(id, []);
     groups.get(id).push(post);
   });
@@ -51,7 +53,7 @@ export function groupPosts(posts, view, series) {
   return [...groups.entries()]
     .map(([id, items]) => ({
       id,
-      label: id === '__uncategorized__' ? '카테고리 없음' : id,
+      label: id === '__uncategorized__' ? '카테고리 없음' : id.split('\u0000').filter(Boolean).join(' › '),
       posts: [...items].sort((a, b) => b.pubDate.localeCompare(a.pubDate) || a.title.localeCompare(b.title, 'ko')),
     }))
     .sort((a, b) => {

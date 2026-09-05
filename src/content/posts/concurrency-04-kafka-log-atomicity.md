@@ -3,7 +3,8 @@ title: "파일 append에서 Kafka 복제 로그로: 원자성의 경계"
 description: "파티션 순서와 오프셋, ISR 복제, 멱등적 프로듀서, Kafka 트랜잭션의 보장 범위를 코드와 장애 실험으로 확인한다"
 pubDate: 2026-08-27
 draft: true
-category: backend
+category: concurrency
+subcategory: atomicity
 series: concurrency-atomicity
 seriesOrder: 5
 seriesLabel: 4편

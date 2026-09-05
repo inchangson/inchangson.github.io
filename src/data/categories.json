@@ -1,0 +1,23 @@
+[
+  {
+    "name": "backend",
+    "subcategories": [
+      "api-integration",
+      "data-systems",
+      "java-spring",
+      "security",
+      "testing",
+      "learning",
+      "notes"
+    ]
+  },
+  {
+    "name": "concurrency",
+    "subcategories": ["atomicity", "parallelism"]
+  },
+  { "name": "cicd", "subcategories": [] },
+  {
+    "name": "ops",
+    "subcategories": ["network", "kubernetes"]
+  }
+]

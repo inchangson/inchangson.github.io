@@ -10,6 +10,7 @@ interface Props {
   eyebrow?: string;
   showHero?: boolean;
   activeCategory?: string;
+  activeSubcategory?: string;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   eyebrow,
   showHero = true,
   activeCategory,
+  activeSubcategory,
 } = Astro.props;
 const posts = await getBlogPosts();
 const categories = taxonomyValues(posts, 'category');
@@ -51,6 +53,13 @@ const isCurrent = (href: string) => pathname === href;
                     <span>{category}</span>
                     <span>{posts.filter((post) => post.data.category === category).length}</span>
                   </a>
+                  {posts.some((post) => post.data.category === category && post.data.subcategory) && <ul class="blog-sidebar__subcategories">
+                    {[...new Set(posts.filter((post) => post.data.category === category).map((post) => post.data.subcategory).filter(Boolean))].sort().map((subcategory) => <li>
+                      <a href={`${href}/${encodeURIComponent(subcategory!)}`} aria-current={activeCategory === category && activeSubcategory === subcategory ? 'page' : undefined}>
+                        <span>{subcategory}</span><span>{posts.filter((post) => post.data.category === category && post.data.subcategory === subcategory).length}</span>
+                      </a>
+                    </li>)}
+                  </ul>}
                 </li>
               );
             })}

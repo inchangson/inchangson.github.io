@@ -20,6 +20,7 @@
           <button id="nav-posts" class="is-active" type="button">글</button>
           <button id="nav-resume" type="button">Resume</button>
           <button id="nav-series" type="button">시리즈</button>
+          <button id="nav-categories" type="button">카테고리</button>
         </div>
         <div id="post-sidebar">
         <label class="search">
@@ -48,7 +49,7 @@
           </div>
         </header>
 
-        <div id="empty-state" class="empty-state">
+        <div id="empty-state" class="empty-state" hidden>
           <div class="empty-state__mark">✦</div>
           <h2>작성할 글을 선택하세요</h2>
           <p>기존 글을 열거나 새 문서를 만들어 바로 작성할 수 있습니다.</p>
@@ -79,8 +80,11 @@
             </label>
             <label class="field">
               <span>카테고리</span>
-              <input id="category" type="text" list="category-options" placeholder="backend" required />
-              <datalist id="category-options"></datalist>
+              <select id="category" required><option value="">선택</option></select>
+            </label>
+            <label class="field">
+              <span>하위 카테고리</span>
+              <select id="subcategory"><option value="">없음</option></select>
             </label>
             <label class="field field--tags">
               <span>태그</span>
@@ -140,6 +144,14 @@
               <label class="field"><span>설명</span><textarea id="series-description" rows="4" required></textarea></label>
               <div class="inline-actions"><button id="delete-series" class="button button--danger" type="button">삭제</button><button class="button button--primary" type="submit">저장</button></div>
             </form>
+          </div>
+        </section>
+
+        <section id="categories-screen" class="editor-screen structured-screen" hidden>
+          <div class="structured-card">
+            <div class="editor-heading"><div><span class="eyebrow">TAXONOMY</span><h2>카테고리 관리</h2></div><div class="inline-actions"><button id="new-category" class="button" type="button">새 카테고리</button><button id="save-categories" class="button button--primary" type="button">변경 저장</button></div></div>
+            <p class="management-help">이름을 바꾸면 연결된 글도 함께 변경됩니다. 사용 중인 카테고리를 삭제할 때는 이동할 카테고리를 입력받습니다.</p>
+            <div id="category-list" class="category-manage-list"></div>
           </div>
         </section>
       </main>

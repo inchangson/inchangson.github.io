@@ -1,13 +1,17 @@
 ---
 import BlogLayout from '../../../layouts/BlogLayout.astro';
 import PostCard from '../../../components/PostCard.astro';
-import { getBlogPosts, taxonomyValues } from '../../../lib/blog';
+import { getBlogPosts, taxonomyValues, subcategoryValues } from '../../../lib/blog';
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
   return taxonomyValues(posts, 'category').map((category) => ({ params: { category }, props: { category, posts: posts.filter((post) => post.data.category === category) } }));
 }
 const { category, posts } = Astro.props;
+const subcategories = subcategoryValues(posts, category);
 ---
 <BlogLayout title={`${category} | Categories`} eyebrow="Category" headerTitle={category} description={`${posts.length}개의 글`}>
+  {subcategories.length > 0 && <nav class="subcategory-directory" aria-label="하위 카테고리">
+    {subcategories.map((subcategory) => <a href={`/blog/categories/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}`}>{subcategory}<span>{posts.filter((post) => post.data.subcategory === subcategory).length}</span></a>)}
+  </nav>}
   <section class="panel list">{posts.map((post) => <PostCard post={post} />)}</section>
 </BlogLayout>

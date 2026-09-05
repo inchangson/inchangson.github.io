@@ -6,6 +6,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; min-width: 1080px; min-height: 100vh; }
 button, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
@@ -16,7 +17,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .brand h1 { margin: 5px 0 0; font-family: Georgia, serif; font-size: 24px; font-weight: 500; letter-spacing: -.02em; }
 .eyebrow { color: #799184; font-size: 10px; font-weight: 800; letter-spacing: .17em; }
 .sidebar .eyebrow { color: #8eaa9b; }
-.document-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 18px; padding: 4px; border-radius: 9px; background: rgba(0,0,0,.14); }
+.document-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 18px; padding: 4px; border-radius: 9px; background: rgba(0,0,0,.14); }
 .document-nav button { padding: 8px 5px; border: 0; border-radius: 6px; color: #9bb0a5; background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; }
 .document-nav button.is-active { color: #fff; background: #315442; }
 .icon-button { display: grid; width: 36px; height: 36px; padding: 0; place-items: center; border: 1px solid rgba(255,255,255,.18); border-radius: 9px; color: inherit; background: rgba(255,255,255,.07); font-size: 22px; cursor: pointer; }
@@ -149,6 +150,14 @@ dialog::backdrop { background: rgba(18,31,24,.52); backdrop-filter: blur(3px); }
 .manage-list span { color: #78857d; font-size: 11px; }
 #series-form { display: grid; gap: 16px; }
 #series-form[hidden] { display: none; }
+.management-help { margin: -8px 0 20px; color: #718078; font-size: 13px; }
+.category-manage-list { display: grid; gap: 14px; }
+.category-manage-card { padding: 16px; border: 1px solid #dfe6df; border-radius: 10px; background: #fafbf9; }
+.category-manage-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.subcategory-manage-list { display: grid; gap: 8px; margin: 12px 0 0 22px; padding-left: 14px; border-left: 2px solid #dce5de; }
+.subcategory-manage-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.category-actions { display: flex; gap: 7px; }
+.category-actions button { min-height: 38px; }
 
 @media (max-width: 1250px) {
   .editor-screen { width: calc(100% - 48px); }
