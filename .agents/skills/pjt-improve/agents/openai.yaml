@@ -1,0 +1,6 @@
+interface:
+  display_name: "PJT Improve"
+  short_description: "프로젝트 근거로 블로그 글과 이력서를 순차 개선"
+  default_prompt: "Use $pjt-improve with <source-project-path> to create evidence-based draft posts and update the matching resume project."
+policy:
+  allow_implicit_invocation: true
