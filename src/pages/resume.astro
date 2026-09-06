@@ -2,6 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import resume from '../data/resume.json';
+
+const isFeatured = (item: unknown) =>
+  typeof item === 'object' &&
+  item !== null &&
+  'priority' in item &&
+  item.priority === 'featured';
 ---
 
 <BaseLayout title={`Resume | ${resume.profile.name}`} description={resume.profile.description}>
@@ -24,8 +30,8 @@ import resume from '../data/resume.json';
             <div class="career-track">
               <header class="career-track__header"><div><h3>{group.title}</h3><p>{group.summary}</p></div><span>{group.period}</span></header>
               <div class="timeline">{group.items?.map((item) => (
-                <article class:list={['timeline-item', item.priority === 'featured' && 'timeline-item--featured']}>
-                  <header><div>{item.priority === 'featured' && <span class="experience-badge">대표 경험</span>}<h4>{item.title}</h4><p>{item.summary}</p></div><span>{item.period}</span></header>
+                <article class:list={['timeline-item', isFeatured(item) && 'timeline-item--featured']}>
+                  <header><div>{isFeatured(item) && <span class="experience-badge">대표 경험</span>}<h4>{item.title}</h4><p>{item.summary}</p></div><span>{item.period}</span></header>
                   {item.highlights?.length > 0 && <ul>{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>}
                   {item.tech && <p class="tech-line">{item.tech}</p>}
                 </article>
