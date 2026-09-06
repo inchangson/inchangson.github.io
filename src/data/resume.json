@@ -51,10 +51,10 @@
             },
             {
               "title": "OEM 내비게이션 업데이트 사이트 운영·개선",
-              "summary": "월 7천여 건의 차량용 소프트웨어 다운로드를 처리하는 여러 고객 사이트 운영·개선",
+              "summary": "여러 고객 사이트의 CI/CD 파이프라인을 구축하고, 운영 배포를 VM 단위로 분리하며 대상 VM 관리 ID 기반 인증 구조로 보강",
               "period": "2025.03 ~ 현재",
-              "highlights": ["Azure 이전 후 개발계와 Jenkins·GitHub Actions 배포 파이프라인을 운영하고 OEM별 배포 절차 정비", "TOTP DB 인증, IP/CIDR 허용목록, AES-GCM 암호화를 적용해 관리자 인증과 설정 정보 보호 보강", "다운로드가 99%에서 실패하는 현상을 재현해 특정 파일 경로의 보안 차단을 원인으로 규명하고 운영 장애 해소", "MySQL 조회에 명시적 정렬을 적용해 비결정적 순서 의존 문제를 해결하고 실제 동작에 맞게 운영 가이드 현행화"],
-              "tech": "Java, Spring, JPA, MySQL, Jenkins, GitHub Actions, Apache Web Server, Azure Application Gateway"
+              "highlights": ["사이트별 운영 CD의 실행 대상을 한 VM으로 제한하고 입력 검증·Preflight·fail-fast 원격 실행을 적용해 배포 변경 범위와 실패 지점을 명확화", "Azure 접근 주체를 Jenkins에서 대상 WAS VM의 UAMI로 이전해 스토리지 고정 키와 DB·JWT 비밀값이 Jenkins를 통과하던 경로 제거", "관리 ID CLI 옵션 오류와 프록시·CA 인증서 검증 실패를 CLI·IMDS·TLS·RBAC 단계로 분리 진단해 CD 문제 해결"],
+              "tech": "Jenkins, Azure Managed Identity, Azure Blob Storage, Azure Key Vault, Bash, Apache Tomcat"
             }
           ]
         },
