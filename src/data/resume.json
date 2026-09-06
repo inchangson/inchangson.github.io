@@ -44,9 +44,9 @@
             },
             {
               "title": "모빌리티 플랫폼 성능 개선",
-              "summary": "운영 지표와 실행 계획을 결합한 쿠폰 통계 API 병목 분석",
+              "summary": "운영 관측으로 식별한 쿠폰 통계 API 병목을 기존 도메인 값 재사용과 PostgreSQL 복합 인덱스로 개선",
               "period": "2025.01 ~ 현재",
-              "highlights": ["PostgreSQL 메모리 알람과 같은 시간대의 로그·APM을 분석해 쿠폰 통계 API의 Slow Query를 병목 후보로 식별", "EXPLAIN (ANALYZE, BUFFERS) 실행 계획을 분석하고 복합 인덱스 적용을 검토해 운영 환경 인덱스 반영", "1회 측정에서 실행 시간 34.802ms→14.510ms, 블록 접근량 4,227→387을 확인하고 측정 조건과 후속 검증 항목을 별도로 기록"],
+              "highlights": ["PostgreSQL 메모리 알람 시간대의 로그·APM 상관관계를 분석해 쿠폰 통계 조회를 Slow Query 후보로 식별", "전체 발급 수의 원장 COUNT를 기존 묶음 수량 조회로 대체하고, 사용 수 COUNT DISTINCT에 (묶음 식별자, 쿠폰 식별자) 복합 인덱스를 운영 반영", "단일 EXPLAIN (ANALYZE, BUFFERS) 비교에서 Sequential Scan·Sort가 Heap Fetches 0의 Index Only Scan으로 바뀌고 실행 시간 34.802ms→14.510ms, 실행 단계 블록 4,227→387을 확인"],
               "tech": "Java, Spring Boot, JPA, PostgreSQL, OpenSearch, WhaTap"
             },
             {
