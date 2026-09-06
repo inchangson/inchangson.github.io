@@ -29,11 +29,11 @@
           "period": "2025.01 ~ 현재",
           "items": [
             {
-              "title": "OAuth 2.1 기반 고객 인증",
-              "summary": "기존 자체 토큰과 분리된 신규 서비스용 OAuth 2.1·LDAP 인증 경로 설계·개발",
-              "period": "2025.01 ~ 현재",
-              "highlights": ["기존 자체 토큰 API와 분리된 Authorization Code + PKCE 경로를 구현하고, 등록 client·redirect URI 검증과 LDAP bind를 연결", "외부 LDAP 신원을 내부 sub로 JIT 매핑하고 DB 인가 세션의 조건부 상태 전이로 authorization code의 중복 발급·재사용 방지", "RS256 JWT와 kid 기반 JWKS를 제공하고 refresh token의 hash·idle/absolute 만료·revoke 상태를 DB에서 관리", "client·redirect URI·PKCE, LDAP 로그인, JIT 신원 매핑, JWT/JWKS, refresh·revoke 흐름을 단위 테스트와 PostgreSQL 통합 테스트로 검증"],
-              "tech": "Java, Spring Boot, Spring Security, PostgreSQL, OAuth 2.1, PKCE, LDAP, JWT/JWKS"
+              "title": "OAuth 2.1 지향 멀티테넌트 고객 인증",
+              "summary": "신규 서비스의 표준 인가 경로와 서비스·테넌트별 정책을 조합하는 OAuth 2.1 지향 멀티테넌트 고객 인증 플랫폼 설계·핵심 구현",
+              "period": "2026.04 ~ 현재",
+              "highlights": ["기존 자체 token API와 분리된 Authorization Code + PKCE 경로를 구현하고, 인증원 변경에도 authorize·token 계약이 유지되도록 login·signup·recovery 경계를 설계", "서비스별 Strategy Step을 Registry와 설정 기반 Service Locator로 조합하고, 12개 read-only 무결성 규칙과 severity·query timeout·PostgreSQL advisory lock으로 설정 오류를 검증", "one-time authorization code와 refresh token rotation·만료·revoke, client-service binding을 DB 상태 전이와 검증으로 구현", "서버 세션 기반 가입 OTP와 verified phone을 신뢰 복구 연락처로 연결하고, 계정 복구의 exact-one 바인딩·row lock/revalidation·단일 트랜잭션·post-commit SMS를 구현", "포털/BFF·외부 SMS·개발 PostgreSQL을 연결한 개발계 E2E와 단위·통합 테스트로 정상 흐름 및 cooldown·재사용·경합·모호성 등 실패 시나리오를 검증"],
+              "tech": "Java, Spring Boot, JDBC, PostgreSQL, OAuth 2.0/OAuth 2.1 Draft, PKCE, JWT, Thymeleaf"
             },
             {
               "title": "Service Delivery Gateway",
