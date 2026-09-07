@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2 - Cognitive Commit Doc</title>
+  <style>
+    :root { --bg:#0b1020; --card:#121a33; --line:#2d3a66; --text:#e8eeff; --muted:#b8c4f0; --ok:#3ddc97; --warn:#ffd166; --risk:#ff6b6b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; }
+    h1,h2,h3 { margin:0 0 10px; }
+    .meta { color:var(--muted); font-size:14px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; margin-right:6px; border:1px solid var(--line); }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .risk { color:var(--risk); }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { border:1px solid var(--line); padding:8px; vertical-align:top; text-align:left; }
+    th { background:#1a2550; }
+    .small { font-size:13px; color:var(--muted); }
+    .timeline li { margin-bottom:8px; }
+    .heatmap { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+    .cell { border-radius:10px; padding:10px; border:1px solid var(--line); }
+  a{color:#9ecbff} pre{white-space:pre-wrap;overflow-wrap:anywhere} td{overflow-wrap:anywhere} @media(max-width:700px){.grid,.heatmap{grid-template-columns:1fr}.card{overflow-x:auto}}
+</style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "dark" });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <h1>Commit 2 - test: reproduce legacy partner outcome and exception paths</h1>
+      <p class="meta">SHA: 3ca2b9d83833f63095339bc3c04c9d52050397f6 · Author: inchangson · Date: 2026-09-07</p>
+      <p class="small">추천 제목: <strong>레거시 결과 재현</strong></p>
+    </section>
+
+    <section class="card grid">
+      <article class="card">
+        <h3>핵심 목적</h3>
+        <p>HTTP와 업무 성공의 차이를 관찰한다</p>
+      </article>
+      <article class="card">
+        <h3>영향 범위</h3>
+        <p>Java 8 데모·4개 테스트</p>
+      </article>
+      <article class="card">
+        <h3>리스크</h3>
+        <p>원본 바깥 catch·void는 생략</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>시퀀스/컴포넌트 다이어그램</h2>
+      <div class="mermaid">
+flowchart LR
+ A["Local Stub"] --> B["HTTP Map과 판정"]
+      </div>
+      <p class="small">다이어그램 요약: Local Stub에서 HTTP Map과 판정까지의 관찰 경계를 보여준다.</p>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 1 - 변경 영향 히트맵</h2>
+      <div class="heatmap">
+        <div class="cell">Java: 11개</div><div class="cell">Markdown: 2개</div><div class="cell">Profile HTML: 0개</div><div class="cell">설정: 5개</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 2 - 의사결정 타임라인</h2>
+      <ol class="timeline">
+        <li>확인 질문: 레거시 결과 재현</li><li>방법: HTTP와 업무 성공의 차이를 관찰한다</li><li>한계: 원본 바깥 catch·void는 생략</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 3 - 전/후 책임 매트릭스</h2>
+      <table>
+        <thead><tr><th>컴포넌트</th><th>변경 전</th><th>변경 후</th><th>변경 이유</th></tr></thead>
+        <tbody>
+          <tr><td>Local Stub</td><td>가정 또는 분산된 근거</td><td>HTTP Map과 판정</td><td>HTTP와 업무 성공의 차이를 관찰한다</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>추천 커밋 본문</h2>
+      <pre>배경/문제
+레거시 결과 재현의 근거가 필요하다.
+
+변경 사항
+HTTP와 업무 성공의 차이를 관찰한다. Java 8 데모·4개 테스트.
+
+영향/리스크
+원본 바깥 catch·void는 생략. 해당 lesson과 git show 3ca2b9d를 함께 읽는다.</pre>
+    </section>
+
+    <section class="card">
+      <h2>파일/클래스 상세표</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>파일 경로</th>
+            <th>클래스/모듈</th>
+            <th>역할</th>
+            <th>수정/추가 사유</th>
+            <th>핵심 변경 내용</th>
+            <th>검토 포인트</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="../../../../lab/b2g-resttemplate-lab/.gitignore">lab/b2g-resttemplate-lab/.gitignore</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>근거·결과·Lesson Learned 기록</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/Dockerfile">lab/b2g-resttemplate-lab/Dockerfile</a></td><td>N/A</td><td>고정 Temurin 8 이미지와 테스트</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>고정 Temurin 8 이미지와 테스트</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/README.md">lab/b2g-resttemplate-lab/README.md</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>근거·결과·Lesson Learned 기록</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/docker-compose.yml">lab/b2g-resttemplate-lab/docker-compose.yml</a></td><td>N/A</td><td>로컬 포트와 실행 네트워크</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>로컬 포트와 실행 네트워크</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/lessons/01-http-and-business-outcome.md">lab/b2g-resttemplate-lab/lessons/01-http-and-business-outcome.md</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>근거·결과·Lesson Learned 기록</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/pom.xml">lab/b2g-resttemplate-lab/pom.xml</a></td><td>N/A</td><td>Java 8·Boot 1.5.12·HttpClient 4.5.5 빌드</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>Java 8·Boot 1.5.12·HttpClient 4.5.5 빌드</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/DemoApplication.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/DemoApplication.java</a></td><td>DemoApplication</td><td>독립 Spring Boot 실행 진입점</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>독립 Spring Boot 실행 진입점</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/config/LegacyClientConfiguration.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/config/LegacyClientConfiguration.java</a></td><td>LegacyClientConfiguration</td><td>기존 풀·공유 factory·RestTemplate 구성</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>기존 풀·공유 factory·RestTemplate 구성</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyAtamSender.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyAtamSender.java</a></td><td>LegacyAtamSender</td><td>축소 계약의 HTTP·업무 코드 판정</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>축소 계약의 HTTP·업무 코드 판정</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyCallLog.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyCallLog.java</a></td><td>LegacyCallLog</td><td>데모 로그의 파트너·단계 모델</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>데모 로그의 파트너·단계 모델</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyHttpConnectionUtils.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyHttpConnectionUtils.java</a></td><td>LegacyHttpConnectionUtils</td><td>공유 factory 변경·close 헤더·HTTP 예외 Map</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>공유 factory 변경·close 헤더·HTTP 예외 Map</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyLogRecorder.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyLogRecorder.java</a></td><td>LegacyLogRecorder</td><td>메모리 요청·응답 로그 수집</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>메모리 요청·응답 로그 수집</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyTelecopSender.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyTelecopSender.java</a></td><td>LegacyTelecopSender</td><td>축소 계약의 HTTP 200 판정·순차 로그</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>축소 계약의 HTTP 200 판정·순차 로그</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LoopbackOnlyDestination.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LoopbackOnlyDestination.java</a></td><td>LoopbackOnlyDestination</td><td>HTTP 이전 loopback 목적지 검사</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>HTTP 이전 loopback 목적지 검사</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/stub/PartnerStubServer.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/stub/PartnerStubServer.java</a></td><td>PartnerStubServer</td><td>로컬 오류·지연 응답과 원격 포트 집계</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>로컬 오류·지연 응답과 원격 포트 집계</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/web/LegacyLabController.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/web/LegacyLabController.java</a></td><td>LegacyLabController</td><td>임의 URL 없는 로컬 behavior API</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>임의 URL 없는 로컬 behavior API</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/resources/application.properties">lab/b2g-resttemplate-lab/src/main/resources/application.properties</a></td><td>N/A</td><td>데모 포트·풀 한도</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>데모 포트·풀 한도</td><td>원본 바깥 catch·void는 생략</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/test/java/com/example/b2glab/LegacyBehaviorTest.java">lab/b2g-resttemplate-lab/src/test/java/com/example/b2glab/LegacyBehaviorTest.java</a></td><td>LegacyBehaviorTest</td><td>거절·500·timeout·목적지 테스트</td><td>HTTP와 업무 성공의 차이를 관찰한다</td><td>거절·500·timeout·목적지 테스트</td><td>원본 바깥 catch·void는 생략</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>리뷰 체크리스트</h2>
+      <ul>
+        <li>해당 lesson의 결과를 커밋 코드와 대조한다.</li><li>원본 바깥 catch·void는 생략를 표현에 반영한다.</li><li>실제 운영 URL·개인정보가 없는지 확인한다.</li><li>화면 검증은 미완료 상태다.</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
