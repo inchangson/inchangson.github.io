@@ -73,14 +73,24 @@ flowchart LR
 ## 산출물
 
 - [프로덕션 코드 근거 지도](./source-map.md)
+- [25개 핵심 변경과 실패 경로 상세 이력](./history.md)
+- [Java 8 실험과 결과](../../lab/b2g-resttemplate-lab/README.md)
 - `lab/`: Java 8 `DemoApplication`과 로컬 partner stub
 - `lab/lessons/`: 확인 항목별 가설·실험·결과·Lesson Learned
 - `docs/current-work/docs-b2g-resttemplate-retrospective/cognitive/`: 구현 커밋별 인지부하 완화 문서
 - `src/content/posts/`: 실험이 끝난 뒤 작성하는 공개용 사례형 글
 
-## 참고 자료
+## 읽는 순서와 검증 상태
+
+1. [Sender 책임 회고](../../src/content/posts/b2g-external-api-01-sender-boundary.md)
+2. [공유 factory와 timeout](../../src/content/posts/b2g-external-api-02-shared-factory.md)
+3. [풀·연결 재사용과 실제 프로파일](../../src/content/posts/b2g-external-api-03-pool-reuse.md)
+4. [업무 결과·실패 로그](../../src/content/posts/b2g-external-api-04-outcome-log.md)
+
+네 글은 `draft: true`이며 `npm run dev`에서 읽을 수 있다. Java 8 기능 테스트 10개와 프로파일 workload 2개는 통과했다. 실제 flame graph HTML은 생성했으나 연결된 브라우저가 없어 화면 확인은 미완료다. 사용자의 당시 맥락 검토와 화면 확인 뒤 공개 여부를 결정한다. 운영 성과 문구는 아직 수정하지 않았다.
+
+## 공식 참고 자료
 
 - [Spring Boot 1.5.12 dependency versions](https://docs.spring.io/spring-boot/docs/1.5.12.RELEASE/reference/html/appendix-dependency-versions.html)
 - [Spring Framework 4.3.16 RestTemplate](https://docs.spring.io/spring-framework/docs/4.3.16.RELEASE/javadoc-api/org/springframework/web/client/RestTemplate.html)
 - [Apache HttpClient 4.5 connection management](https://hc.apache.org/httpcomponents-client-4.5.x/current/tutorial/html/connmgmt.html)
-
