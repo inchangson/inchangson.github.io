@@ -1,0 +1,6 @@
+services:
+  lab:
+    build: .
+    ports: ["18080:18080"]
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xms256m -Xmx256m"
