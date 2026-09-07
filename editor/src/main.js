@@ -155,6 +155,7 @@ const state = {
   currentSeries: null,
   mode: 'posts',
   postView: POST_VIEWS.all,
+  collapsedPostGroups: new Set(),
   mermaidStale: false,
 };
 
@@ -342,7 +343,12 @@ function renderPostList() {
   groups.forEach((group) => {
     const details = document.createElement('details');
     details.className = 'post-group';
-    details.open = true;
+    const groupStateKey = `${state.postView}\u0000${group.id}`;
+    details.open = !state.collapsedPostGroups.has(groupStateKey);
+    details.addEventListener('toggle', () => {
+      if (details.open) state.collapsedPostGroups.delete(groupStateKey);
+      else state.collapsedPostGroups.add(groupStateKey);
+    });
     const summary = document.createElement('summary');
     const label = document.createElement('strong');
     const count = document.createElement('span');
