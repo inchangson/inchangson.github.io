@@ -22,7 +22,8 @@ public class LegacyClientConfiguration {
     }
     @Bean
     public RestTemplate legacyRestTemplate(PoolingHttpClientConnectionManager manager) {
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().setConnectionManager(manager).build());
+        // Lab-only safety: never follow a redirect outside the local stub.
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().disableRedirectHandling().setConnectionManager(manager).build());
         RestTemplate template = new RestTemplate(factory);
         template.setMessageConverters(Arrays.asList(new StringHttpMessageConverter(StandardCharsets.UTF_8), new MappingJackson2HttpMessageConverter(), new FormHttpMessageConverter()));
         return template;
