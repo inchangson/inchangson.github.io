@@ -45,5 +45,6 @@ curl -X POST 'http://127.0.0.1:18080/lab/legacy/telecop/delay-300?timeoutMs=50'
 | 2 | 새 RestTemplate이면 timeout도 독립적인가 | [결과·Lesson Learned](./lessons/02-shared-request-factory-timeout.md) |
 | 3 | 풀 Bean이 있으면 연결을 재사용하는가 | [결과·Lesson Learned](./lessons/03-pool-and-connection-close.md) |
 | 4 | timeout도 같은 결과·로그 규격으로 남는가 | [결과·Lesson Learned](./lessons/04-explicit-result-and-log.md) |
+| 5 | 호출 중 스레드는 어디서 기다리는가 | [실제 프로파일·미완료 검증](./lessons/05-wall-clock-profile.md) |
 
 수치는 운영 성과가 아니라 구조와 실패 경로를 이해하기 위한 로컬 재현 결과다.
