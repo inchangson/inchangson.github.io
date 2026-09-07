@@ -40,5 +40,6 @@ curl -X POST 'http://127.0.0.1:18080/lab/legacy/telecop/delay-300?timeoutMs=50'
 | 순서 | 질문 | 기록 |
 |---:|---|---|
 | 1 | HTTP 성공과 업무 성공은 같은가 | [결과·Lesson Learned](./lessons/01-http-and-business-outcome.md) |
+| 2 | 새 RestTemplate이면 timeout도 독립적인가 | [결과·Lesson Learned](./lessons/02-shared-request-factory-timeout.md) |
 
 수치는 운영 성과가 아니라 구조와 실패 경로를 이해하기 위한 로컬 재현 결과다.

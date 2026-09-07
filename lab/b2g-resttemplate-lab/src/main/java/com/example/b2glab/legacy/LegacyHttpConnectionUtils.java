@@ -17,14 +17,14 @@ public class LegacyHttpConnectionUtils {
         ResponseEntity<String> response; int status; String body; Map<String, String> result = new HashMap<>();
         try {
             if (timeoutMillis == DEFAULT_TIMEOUT) response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-            else { response = dynamicTemplate(timeoutMillis).exchange(url, HttpMethod.POST, entity, String.class); restoreDefaultTimeout(); }
+            else { response = dynamicTemplateForExperiment(timeoutMillis).exchange(url, HttpMethod.POST, entity, String.class); restoreDefaultTimeout(); }
             status = response.getStatusCodeValue(); body = response.getBody();
         } catch (HttpStatusCodeException exception) {
             status = exception.getStatusCode().value(); body = exception.getResponseBodyAsString(); result.put("exceptionMessage", exception.getMessage());
         }
         result.put("statusCode", Integer.toString(status)); result.put("result", body); return result;
     }
-    private RestTemplate dynamicTemplate(int timeoutMillis) {
+    public RestTemplate dynamicTemplateForExperiment(int timeoutMillis) {
         HttpComponentsClientHttpRequestFactory factory = sharedFactory(); factory.setConnectTimeout(timeoutMillis); factory.setReadTimeout(timeoutMillis); return new RestTemplate(factory);
     }
     private void restoreDefaultTimeout() { HttpComponentsClientHttpRequestFactory factory = sharedFactory(); factory.setConnectTimeout(DEFAULT_TIMEOUT); factory.setReadTimeout(DEFAULT_TIMEOUT); }
