@@ -75,6 +75,7 @@ flowchart LR
 - [프로덕션 코드 근거 지도](./source-map.md)
 - [25개 핵심 변경과 실패 경로 상세 이력](./history.md)
 - [Java 8 실험과 결과](../../lab/b2g-resttemplate-lab/README.md)
+- [커밋별 복습 HTML 인덱스](../current-work/docs-b2g-resttemplate-retrospective/cognitive/README.md)
 - `lab/`: Java 8 `DemoApplication`과 로컬 partner stub
 - `lab/lessons/`: 확인 항목별 가설·실험·결과·Lesson Learned
 - `docs/current-work/docs-b2g-resttemplate-retrospective/cognitive/`: 구현 커밋별 인지부하 완화 문서

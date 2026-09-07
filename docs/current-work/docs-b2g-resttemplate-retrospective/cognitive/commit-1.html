@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>1 - Cognitive Commit Doc</title>
+  <style>
+    :root { --bg:#0b1020; --card:#121a33; --line:#2d3a66; --text:#e8eeff; --muted:#b8c4f0; --ok:#3ddc97; --warn:#ffd166; --risk:#ff6b6b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; }
+    h1,h2,h3 { margin:0 0 10px; }
+    .meta { color:var(--muted); font-size:14px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; margin-right:6px; border:1px solid var(--line); }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .risk { color:var(--risk); }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { border:1px solid var(--line); padding:8px; vertical-align:top; text-align:left; }
+    th { background:#1a2550; }
+    .small { font-size:13px; color:var(--muted); }
+    .timeline li { margin-bottom:8px; }
+    .heatmap { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+    .cell { border-radius:10px; padding:10px; border:1px solid var(--line); }
+  a{color:#9ecbff} pre{white-space:pre-wrap;overflow-wrap:anywhere} td{overflow-wrap:anywhere} @media(max-width:700px){.grid,.heatmap{grid-template-columns:1fr}.card{overflow-x:auto}}
+</style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "dark" });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <h1>Commit 1 - docs: define B2G external call retrospective scope</h1>
+      <p class="meta">SHA: 1b404fa315e9035627d6ab2f8a87e16af8bda70c · Author: inchangson · Date: 2026-09-07</p>
+      <p class="small">추천 제목: <strong>조사 범위 고정</strong></p>
+    </section>
+
+    <section class="card grid">
+      <article class="card">
+        <h3>핵심 목적</h3>
+        <p>개인·팀·회고 제안을 구분한다</p>
+      </article>
+      <article class="card">
+        <h3>영향 범위</h3>
+        <p>문서 2개</p>
+      </article>
+      <article class="card">
+        <h3>리스크</h3>
+        <p>운영 수치 미확인</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>시퀀스/컴포넌트 다이어그램</h2>
+      <div class="mermaid">
+flowchart LR
+ A["Git 범위"] --> B["회고 질문"]
+      </div>
+      <p class="small">다이어그램 요약: Git 범위에서 회고 질문까지의 관찰 경계를 보여준다.</p>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 1 - 변경 영향 히트맵</h2>
+      <div class="heatmap">
+        <div class="cell">Java: 0개</div><div class="cell">Markdown: 2개</div><div class="cell">Profile HTML: 0개</div><div class="cell">설정: 0개</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 2 - 의사결정 타임라인</h2>
+      <ol class="timeline">
+        <li>확인 질문: 조사 범위 고정</li><li>방법: 개인·팀·회고 제안을 구분한다</li><li>한계: 운영 수치 미확인</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 3 - 전/후 책임 매트릭스</h2>
+      <table>
+        <thead><tr><th>컴포넌트</th><th>변경 전</th><th>변경 후</th><th>변경 이유</th></tr></thead>
+        <tbody>
+          <tr><td>Git 범위</td><td>가정 또는 분산된 근거</td><td>회고 질문</td><td>개인·팀·회고 제안을 구분한다</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>추천 커밋 본문</h2>
+      <pre>배경/문제
+조사 범위 고정의 근거가 필요하다.
+
+변경 사항
+개인·팀·회고 제안을 구분한다. 문서 2개.
+
+영향/리스크
+운영 수치 미확인. 해당 lesson과 git show 1b404fa를 함께 읽는다.</pre>
+    </section>
+
+    <section class="card">
+      <h2>파일/클래스 상세표</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>파일 경로</th>
+            <th>클래스/모듈</th>
+            <th>역할</th>
+            <th>수정/추가 사유</th>
+            <th>핵심 변경 내용</th>
+            <th>검토 포인트</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="../../../../docs/b2g-resttemplate-retrospective/README.md">docs/b2g-resttemplate-retrospective/README.md</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>개인·팀·회고 제안을 구분한다</td><td>근거·결과·Lesson Learned 기록</td><td>운영 수치 미확인</td></tr>
+<tr><td><a href="../../../../docs/b2g-resttemplate-retrospective/source-map.md">docs/b2g-resttemplate-retrospective/source-map.md</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>개인·팀·회고 제안을 구분한다</td><td>근거·결과·Lesson Learned 기록</td><td>운영 수치 미확인</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>리뷰 체크리스트</h2>
+      <ul>
+        <li>해당 lesson의 결과를 커밋 코드와 대조한다.</li><li>운영 수치 미확인를 표현에 반영한다.</li><li>실제 운영 URL·개인정보가 없는지 확인한다.</li><li>화면 검증은 미완료 상태다.</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
