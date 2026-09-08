@@ -2,6 +2,7 @@
 title: "ATAM·Telecop 호출을 Sender로 옮기면 무엇이 달라질까"
 description: "B2G 실제 커밋에서 발신 책임 분리와 로그 공통화의 범위를 다시 읽는다"
 pubDate: 2026-09-07
+updatedDate: 2026-09-08
 draft: true
 category: backend
 subcategory: api-integration
@@ -69,6 +70,77 @@ ATAM Sender에는 부가정보 DB 갱신도 남아 있었다. 따라서 당시 �
 Java 8 Lab (`lab/b2g-resttemplate-lab/README.md`)은 실제 제어 흐름을 축소하고 주소·데이터를 로컬 스텁으로 교체했다. 같은 200 업무 거절 응답에 Telecop 데모는 true, ATAM 데모는 false를 반환했다.
 
 비교용 데모는 원본 Sender 전체를 복제하지 않았다. Telecop 바깥 catch와 ATAM의 void·DB 처리 경계는 생략했다. 특히 데모의 예외 전파를 운영 API까지의 전파로 읽으면 안 된다.
+
+## Service와 Sender 사이에 남겨야 할 판단
+
+예를 들어 시니어 정보를 수정한다고 하자. 이 작업에는 로컬 정보 변경, 기관별 연동 대상 판정, 파트너별 등록·수정 타입 결정, HTTP 요청, 업무 결과 확인이 들어갈 수 있다. 이들을 한 메서드에서 처리하면 파트너 필드 하나를 바꾸는 수정과 업무 순서를 바꾸는 수정이 같은 코드를 건드린다.
+
+Sender를 분리할 때 먼저 정할 것은 클래스 이름보다 변경 이유다. 기관 정책에 따른 실행 여부와 부분 실패 후 처리 정책은 업무의 의미다. 외부 필드 이름, 인증·암호화 규약, 업무 응답 코드의 해석은 공급자 계약에 가깝다. 실제 B2G에서는 대상 판정 일부가 Sender 안으로 이동했고 ATAM 부가정보 저장도 남아 있으므로, 다음 표는 **회고 시점에 제안하는 경계**로 읽는다.
+
+| 바뀌는 요구 | 우선 검토할 위치 | 이유 |
+|---|---|---|
+| 특정 기관에 연동을 적용할지 변경 | Business Service·정책 객체 | 어떤 업무에 외부 호출이 필요한지 결정 |
+| 외부 요청의 필드·등록 타입 변경 | 파트너 Sender | 공급자의 계약 변화 |
+| timeout과 연결 수 변경 | HTTP client 구성 | 통신 자원·대기 정책 |
+| 원격 성공 뒤 DB 실패의 재처리 | 업무 처리·상태 관리 | 이미 생긴 부작용을 조정 |
+| 인증 값 마스킹·호출 추적 | 공통 관찰 경로와 Sender | 통신 공통 항목과 공급자별 민감 필드를 함께 처리 |
+
+여기서 공통 HTTP utility가 파트너의 모든 업무 코드를 해석하게 만들면 새로운 문제가 생긴다. 파트너마다 성공 코드와 오류 형식이 다를 때 utility가 공급자 이름으로 분기해야 한다. 공통화할 것은 전송의 반복이고, 서로 다른 계약까지 억지로 동일하게 만들 필요는 없다.
+
+## 작은 데모로 책임 차이를 읽기
+
+두 Sender는 같은 로컬 응답을 받아도 다르게 판단한다. 아래는 현재 Demo의 핵심 반환식이다. 생성자와 로그 호출만 생략했다.
+
+```java
+// LegacyTelecopSender.send()
+return "200".equals(result.get("statusCode"));
+
+// LegacyAtamSender.send()
+return "200".equals(result.get("statusCode"))
+        && "SUCCESS".equals(body.path("resultCode").asText());
+```
+
+스텁이 HTTP 200과 `{"resultCode":"REJECTED"}`를 반환하면 첫 식은 true, 두 번째는 false다. “HTTP가 성공했다”와 “상대가 업무를 승인했다”를 어느 계층에서 구분하는지가 반환값에 드러난다. 이것은 실제 Telecop이 같은 응답 필드를 사용했다는 뜻이 아니다. **같은 합성 입력을 넣어 판정 전략의 차이를 비교한 실험**이다.
+
+HTTP utility만 테스트하면 이 차이를 놓친다. 반대로 Sender만 mock으로 바꾸면 실제 HTTP 오류·timeout이 어느 예외로 돌아오는지 놓친다. 그래서 이 Lab은 로컬 HTTP 서버를 켜고 Sender와 공통 utility를 함께 통과시킨다.
+
+### 이 저장소에서 열어볼 근거
+
+아래 경로는 블로그 저장소 기준이다. 링크는 실험 당시 커밋으로 고정해, 이후 파일이 바뀌어도 이 글의 근거를 다시 볼 수 있게 했다.
+
+| 경로 | 확인할 부분 |
+|---|---|
+| [LegacyTelecopSender.java](https://github.com/inchangson/inchangson.github.io/blob/6fe3c578d608df417f3f2f4eb144323e8edc079c/lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyTelecopSender.java) | `send`의 요청 로그 → HTTP → 응답 로그 → 200 판정 |
+| [LegacyAtamSender.java](https://github.com/inchangson/inchangson.github.io/blob/6fe3c578d608df417f3f2f4eb144323e8edc079c/lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/legacy/LegacyAtamSender.java) | `resultCode`를 추가 해석하는 위치 |
+| [LegacyBehaviorTest.java](https://github.com/inchangson/inchangson.github.io/blob/6fe3c578d608df417f3f2f4eb144323e8edc079c/lab/b2g-resttemplate-lab/src/test/java/com/example/b2glab/LegacyBehaviorTest.java) | `http200BusinessFailureHasDifferentPartnerMeaning` |
+| [history.md](https://github.com/inchangson/inchangson.github.io/blob/6fe3c578d608df417f3f2f4eb144323e8edc079c/docs/b2g-resttemplate-retrospective/history.md) | 실제 SA01 변경 순서와 직접·팀 기여 |
+| [source-map.md](https://github.com/inchangson/inchangson.github.io/blob/6fe3c578d608df417f3f2f4eb144323e8edc079c/docs/b2g-resttemplate-retrospective/source-map.md) | 데모에 남긴 구조와 생략한 원본 경계 |
+
+Java 파일의 공통 디렉터리는 `lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/`이고, 테스트는 `lab/b2g-resttemplate-lab/src/test/java/com/example/b2glab/`에 있다. SA01 원본이 없어도 여기서 실험을 다시 실행할 수 있다.
+
+```bash
+# inchangson.github.io 저장소 루트에서 시작
+cd lab/b2g-resttemplate-lab
+docker compose build
+docker run --rm --network none --entrypoint mvn b2g-resttemplate-lab-lab \
+  -o -Dtest=LegacyBehaviorTest test
+```
+
+이미지를 빌드할 때 의존성을 내려받고, 위 테스트 실행은 외부 네트워크가 없는 컨테이너에서 한다. 기대 결과는 4개 테스트 통과다. 실제 요청 목적지는 컨테이너 내부 스텁이다.
+
+## 면접에서 이어질 질문
+
+### “클래스를 나눈 것 말고 어떤 효과가 있었나요?”
+
+“외부 규약을 수정할 위치와 업무 호출 순서를 검토할 위치를 구분했습니다. Telecop 발신 함수 적용과 ATAM 요청·응답 로그 공통화가 직접 변경 근거입니다. 다만 수정 시간이나 장애율 감소는 측정하지 않아 숫자로 말하지 않습니다. 구조적 효과는 공급자별 규약과 반복 전송 코드를 찾는 경계가 생긴 것입니다.”
+
+### “공통 Sender 하나로 만들지 않은 이유는 무엇인가요?”
+
+“HTTP 전송은 같아도 파트너의 파라미터와 성공 코드가 다릅니다. 전송 구현은 공유하되 계약 해석은 파트너별로 유지하는 편이 변경 이유와 맞습니다. 공통 인터페이스를 두는 것과 하나의 클래스에서 모든 파트너 규약을 분기하는 것은 다른 선택입니다.”
+
+### “다시 구현한다면 무엇부터 고치겠어요?”
+
+“먼저 호출자가 어떤 결과를 받아야 하는지와 실패 시 업무 정책을 고정하겠습니다. false가 대상 아님, 업무 거절, 응답 불명 중 무엇인지 구분돼야 합니다. 그다음 성공·실패 경로의 계약 테스트를 만들고 공유 factory의 요청 중 변경을 없애겠습니다. 모두 회고 제안이며 과거에 구현한 범위와 구분합니다.”
 
 ## 회고와 면접 표현
 
