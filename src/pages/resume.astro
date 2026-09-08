@@ -40,6 +40,18 @@ const isFeatured = (item: unknown) =>
           ))}
         </section>
       );
+      if (section.type === 'caseStudies') return (
+        <section class="panel stack">
+          <h2>{section.title}</h2>
+          {section.cases?.map((experience) => (
+            <article class="resume-experience">
+              <header><div><h3>{experience.title}</h3><p>{experience.summary}</p></div><span>{experience.period}</span></header>
+              <dl>{experience.facts.map((fact) => <div><dt>{fact.label}</dt><dd>{fact.detail}</dd></div>)}</dl>
+              <nav class="experience-sources" aria-label={`${experience.title} 관련 글`}>{experience.sources.map((source) => <a href={source.url}>{source.label}</a>)}</nav>
+            </article>
+          ))}
+        </section>
+      );
       if (section.type === 'list') return (
         <section class="panel stack">
           <div><h2>{section.title}</h2>{section.note && <p class="section-note">{section.note}</p>}</div>
