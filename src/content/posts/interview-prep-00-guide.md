@@ -1,14 +1,15 @@
 ---
-title: "이력서의 한 문장을 어디까지 설명할 수 있을까"
-description: "대표 경험을 1분 답변으로 정리하고, 구현과 측정 근거를 따라 꼬리 질문을 준비하는 순서"
+title: 이력서의 한 문장을 어디까지 설명할 수 있을까
+description: 대표 경험을 1분 답변으로 정리하고, 구현과 측정 근거를 따라 꼬리 질문을 준비하는 순서
 pubDate: 2026-09-08
 category: backend
-subcategory: interview
+tags:
+  - interview
+  - backend
 series: interview-preparation
 seriesOrder: 0
-seriesLabel: "시작하기"
-tags: [interview, backend]
-draft: false
+seriesLabel: 시작하기
+draft: true
 ---
 
 이력서에는 결과를 짧게 쓰고, 면접에서는 그 결과를 만든 선택을 설명해야 한다. 이 시리즈는 실제 구현에서 시작해 다른 선택지와 실패 상황까지 질문을 이어 간다. 답변 예시는 암기용 문장보다 내 경험을 확인하는 기준으로 쓴다.

@@ -1,14 +1,18 @@
 ---
 title: "면접 준비 2: Gateway에서 무엇을 바꿨고 성능은 어디까지 확인했나요"
-description: "요청 변환의 계약과 WebFlux 실행 방식, Config Server 부하 실험 수치와 한계를 꼬리 질문으로 정리한다."
+description: 요청 변환의 계약과 WebFlux 실행 방식, Config Server 부하 실험 수치와 한계를 꼬리 질문으로 정리한다.
 pubDate: 2026-09-08
-draft: false
 category: backend
 subcategory: testing
+tags:
+  - interview
+  - gateway
+  - webflux
+  - load-test
 series: interview-preparation
 seriesOrder: 2
-seriesLabel: "2편"
-tags: [interview, gateway, webflux, load-test]
+seriesLabel: 2편
+draft: true
 ---
 
 Gateway의 요청 변환 구현과 Config Server의 부하 실험은 서로 다른 근거다. 요청 필터를 구현했다는 설명에 설정 서버의 RPS를 붙여 전체 Gateway 성능을 입증한 것처럼 답하지 않도록 나눠 준비했다.
