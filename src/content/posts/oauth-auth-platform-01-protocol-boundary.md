@@ -111,6 +111,8 @@ token endpoint는 단순히 code가 존재하는지만 보지 않는다. 다음�
 
 이 선택을 “유일한 답”으로 말할 수는 없다. Spring Security도 [FilterChain, SecurityContext, AuthenticationManager/Provider](https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html)를 명시적으로 설명하고 있고, SAS는 [issuer별 컴포넌트 registry를 이용한 멀티테넌시](https://docs.spring.io/spring-authorization-server/reference/guides/how-to-multitenancy.html)를 안내한다. Keycloak 역시 [Service Provider Interface](https://www.keycloak.org/docs/latest/server_development/index.html)로 확장 지점을 제공한다.
 
+아래는 독립 실험 전 정리했던 비교 질문이다. 이후 실제 SAS 1.5.8과 PostgreSQL로 검증한 결과는 [5편: SAS 확장점과 비기능 실험](/blog/oauth-auth-platform-05-sas-extension-experiment)에 이어서 정리했다. 당시 판단과 사후 실험 결과를 구분해서 읽을 수 있다.
+
 현재 다시 한다면 최소한 다음 PoC를 먼저 비교한다.
 
 - 기존 테넌트·서비스 설정을 SAS의 registered client/issuer 모델에 매핑할 수 있는가
