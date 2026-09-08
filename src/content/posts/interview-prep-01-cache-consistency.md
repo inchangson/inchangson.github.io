@@ -1,14 +1,18 @@
 ---
 title: "면접 준비 1: 로컬 캐시를 썼다면 다른 서버는 어떻게 맞추나요"
-description: "실제 ConcurrentHashMap 구현에서 출발해 캐시 선택, 동시성, 무효화, 다중 서버 설정 반영을 질문과 답변으로 정리한다."
+description: 실제 ConcurrentHashMap 구현에서 출발해 캐시 선택, 동시성, 무효화, 다중 서버 설정 반영을 질문과 답변으로 정리한다.
 pubDate: 2026-09-08
-draft: false
 category: backend
 subcategory: java-spring
+tags:
+  - interview
+  - cache
+  - concurrency
+  - spring-cloud-config
 series: interview-preparation
 seriesOrder: 1
-seriesLabel: "1편"
-tags: [interview, cache, concurrency, spring-cloud-config]
+seriesLabel: 1편
+draft: true
 ---
 
 면접에서는 먼저 구현한 범위를 짧게 답하고, 추가 질문이 나오면 선택의 비용과 확인한 한계를 설명한다. 아래 답변은 Gateway 설정 관리 코드와 후속 로컬 실험에 근거한다. 운영 성능 개선 수치로 제시할 자료는 아니다.

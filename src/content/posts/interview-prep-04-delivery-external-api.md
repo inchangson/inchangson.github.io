@@ -1,14 +1,18 @@
 ---
 title: "운영 면접 준비: VM 배포와 외부 API의 실패 처리"
-description: "VM 단위 배포, 관리 ID, HTTP 연결 풀과 재시도에 관한 질문을 구현 범위와 실험 결과로 답한다"
+description: VM 단위 배포, 관리 ID, HTTP 연결 풀과 재시도에 관한 질문을 구현 범위와 실험 결과로 답한다
 pubDate: 2026-09-08
-draft: false
 category: ops
-subcategory: cicd
+tags:
+  - interview
+  - deployment
+  - azure
+  - resttemplate
+  - timeout
 series: interview-preparation
 seriesOrder: 4
-seriesLabel: "4편"
-tags: [interview, deployment, azure, resttemplate, timeout]
+seriesLabel: 4편
+draft: true
 ---
 
 배포 경험과 외부 API 경험에서 공통으로 받기 쉬운 질문은 “실패했을 때 어디까지 영향을 받나요?”다. 아래 답변은 당시 운영 변경과 이후 로컬 재현 실험을 구분한다. 배포 시간 단축률이나 외부 API 응답시간 개선율은 측정한 근거가 없다.

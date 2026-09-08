@@ -1,14 +1,19 @@
 ---
 title: "인증 면접 준비: 일회용 코드, OTP, 트랜잭션"
-description: "인증 구현에서 동시 요청과 외부 SMS 실패를 어떻게 처리했는지 코드와 공식 문서로 답한다"
+description: 인증 구현에서 동시 요청과 외부 SMS 실패를 어떻게 처리했는지 코드와 공식 문서로 답한다
 pubDate: 2026-09-08
-draft: false
 category: backend
 subcategory: security
+tags:
+  - interview
+  - oauth
+  - concurrency
+  - postgresql
+  - transaction
 series: interview-preparation
 seriesOrder: 3
-seriesLabel: "3편"
-tags: [interview, oauth, concurrency, postgresql, transaction]
+seriesLabel: 3편
+draft: true
 ---
 
 이 경험은 자체 회원 인증과 OAuth 인가 경로를 구현하고, 포털/BFF와 실제 SMS, 개발 PostgreSQL을 연결해 검증한 작업이다. 운영 트래픽이나 장애 감소 수치는 없다. 면접에서는 처리량보다 **동시에 요청해도 지켜야 하는 조건**을 먼저 설명한다.
