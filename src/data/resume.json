@@ -37,10 +37,10 @@
             },
             {
               "title": "Service Delivery Gateway",
-              "summary": "Legacy API와 공통 고객 기능을 수용하는 시스템 진입점 설계·개발",
-              "period": "2025.09 ~ 2025.11",
-              "highlights": ["Legacy API 수용과 공통 세션 처리를 위한 서비스별 라우팅 구조 설계", "Spring Cloud Config 기반 라우팅 정책 동적 설정 기능 개발"],
-              "tech": "Java, Spring Boot, Spring Cloud Gateway/Config, Redis"
+              "summary": "서비스별로 다른 Legacy API 계약과 라우팅 정책을 Gateway 계층에서 흡수하는 시스템 진입점 설계·개발",
+              "period": "2025.09 ~ 2025.12",
+              "highlights": ["Spring Cloud Gateway·WebFlux의 요청 데코레이터를 이용해 query parameter를 JSON body로 변환하고, 복수 값 보존과 서비스별 제외 항목을 설정할 수 있는 필터 구현", "Gateway 애플리케이션에 내장돼 있던 route·predicate·filter 정의를 Spring Cloud Config로 일원화하고, Actuator 주기 갱신과 Spring Cloud Bus·RabbitMQ를 연결해 재빌드 없이 설정을 반영하는 경로 구성", "Skaffold와 Helm으로 로컬·개발 환경의 빌드·배포 설정을 분리하고 Redis·RabbitMQ 접속 정보와 Config Server 주소를 Kubernetes Secret·환경 변수로 주입", "Jenkins에서 Gradle bootJar 빌드, 컨테이너 이미지 생성·Nexus 배포, 개발계 CD 호출까지 이어지는 파이프라인 구성"],
+              "tech": "Java 17, Spring Boot, Spring Cloud Gateway/Config/Bus, WebFlux, Redis, RabbitMQ, Helm, Skaffold, Jenkins, Kubernetes"
             },
             {
               "title": "모빌리티 플랫폼 성능 개선",
