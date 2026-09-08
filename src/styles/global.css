@@ -591,6 +591,53 @@ a:hover {
   margin: 0;
 }
 
+.experience-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 14px;
+  font-size: 0.92rem;
+}
+
+.resume-experience + .resume-experience {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+.resume-experience header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+}
+
+.resume-experience h3,
+.resume-experience p,
+.resume-experience dd {
+  margin: 0;
+}
+
+.resume-experience header p,
+.resume-experience header span {
+  color: var(--muted);
+}
+
+.resume-experience dl {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.resume-experience dl > div {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.resume-experience dt {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
 .tech-line {
   margin: 12px 0 0;
   color: var(--muted);
@@ -676,6 +723,8 @@ a:hover {
   }
 
   .career-track__header,
+  .resume-experience header,
+  .resume-experience dl > div,
   .timeline-item header,
   .skill-table div {
     grid-template-columns: 1fr;
@@ -721,6 +770,7 @@ a:hover {
   }
 
   .career-track__header,
+  .resume-experience,
   .timeline-item,
   .skill-table div {
     break-inside: avoid;

@@ -2,11 +2,20 @@
   "profile": {
     "eyebrow": "Resume",
     "name": "손인창",
-    "description": "Java와 Spring Boot 기반으로 IoT·모빌리티 서비스를 개발하고 운영해 온 백엔드 개발자입니다. 현재는 모빌리티 서비스의 고객 인증을 설계하고 개발하고 있습니다.",
+    "description": "Java와 Spring Boot로 IoT와 모빌리티 서비스를 개발해 온 백엔드 개발자입니다. 현재는 모빌리티 서비스의 고객 인증을 설계하고 구현하고 있습니다.",
     "contacts": [
-      { "label": "Blog", "url": "/blog" },
-      { "label": "inchangson21@gmail.com", "url": "mailto:inchangson21@gmail.com" },
-      { "label": "github.com/inchangson", "url": "https://github.com/inchangson" }
+      {
+        "label": "Blog",
+        "url": "/blog"
+      },
+      {
+        "label": "inchangson21@gmail.com",
+        "url": "mailto:inchangson21@gmail.com"
+      },
+      {
+        "label": "github.com/inchangson",
+        "url": "https://github.com/inchangson"
+      }
     ]
   },
   "sections": [
@@ -14,8 +23,8 @@
       "type": "prose",
       "title": "요약",
       "paragraphs": [
-        "기술을 도입할 때 팀이 익히고 유지보수하는 데 드는 비용과 실제 운영 환경을 함께 고려합니다.",
-        "설계 이유와 운영 절차를 기록해, 저와 동료가 나중에 다시 이해하고 수정할 수 있도록 합니다. 담당자의 기억에 의존하는 일을 줄이려는 습관입니다."
+        "기술을 선택할 때 운영 환경과 팀의 유지보수 부담을 먼저 살피는 편입니다.",
+        "설계 이유와 운영 절차를 기록해 두고, 변경 전에는 기존 API와 배포에 미칠 영향을 확인하려고 합니다."
       ]
     },
     {
@@ -25,104 +34,230 @@
       "groups": [
         {
           "title": "모빌리티 플랫폼",
-          "summary": "차량 서비스의 인증과 공통 플랫폼 기능 설계·개발·운영",
+          "summary": "고객 인증, Gateway, 서비스 운영",
           "period": "2025.01 ~ 현재",
           "items": [
             {
-              "title": "OAuth 2.1 지향 멀티테넌트 고객 인증",
-              "summary": "신규 서비스의 표준 인가 경로와 서비스·테넌트별 정책을 조합하는 OAuth 2.1 지향 멀티테넌트 고객 인증 플랫폼 설계·핵심 구현",
+              "title": "멀티테넌트 고객 인증",
+              "summary": "서비스별 인증 정책을 설정으로 조합하는 고객 인증 플랫폼 설계와 핵심 구현",
               "period": "2026.04 ~ 현재",
-              "highlights": ["기존 자체 token API와 분리된 Authorization Code + PKCE 경로를 구현하고, 인증원 변경에도 authorize·token 계약이 유지되도록 login·signup·recovery 경계를 설계", "서비스별 Strategy Step을 Registry와 설정 기반 Service Locator로 조합하고, 12개 read-only 무결성 규칙과 severity·query timeout·PostgreSQL advisory lock으로 설정 오류를 검증", "one-time authorization code와 refresh token rotation·만료·revoke, client-service binding을 DB 상태 전이와 검증으로 구현", "서버 세션 기반 가입 OTP와 verified phone을 신뢰 복구 연락처로 연결하고, 계정 복구의 exact-one 바인딩·row lock/revalidation·단일 트랜잭션·post-commit SMS를 구현", "포털/BFF·외부 SMS·개발 PostgreSQL을 연결한 개발계 E2E와 단위·통합 테스트로 정상 흐름 및 cooldown·재사용·경합·모호성 등 실패 시나리오를 검증"],
-              "tech": "Java, Spring Boot, JDBC, PostgreSQL, OAuth 2.0/OAuth 2.1 Draft, PKCE, JWT, Thymeleaf"
+              "highlights": [
+                "기존 토큰 API를 유지하면서 Authorization Code + PKCE와 일회용 인가 코드 구현",
+                "가입 OTP, 계정 복구, 설정 무결성 검사 구현. 실제 SMS와 포털을 연결해 개발계 검증"
+              ],
+              "tech": "Java, Spring Boot, PostgreSQL, OAuth 2.0, PKCE, JWT"
             },
             {
               "title": "Service Delivery Gateway",
-              "summary": "서비스별로 다른 Legacy API 계약과 라우팅 정책을 Gateway 계층에서 흡수하는 시스템 진입점 설계·개발",
+              "summary": "기존 서비스의 요청 형식을 변환하고 라우팅 설정을 외부에서 관리하는 Gateway 개발",
               "period": "2025.09 ~ 2025.12",
-              "highlights": ["Spring Cloud Gateway·WebFlux의 요청 데코레이터를 이용해 query parameter를 JSON body로 변환하고, 복수 값 보존과 서비스별 제외 항목을 설정할 수 있는 필터 구현", "Gateway 애플리케이션에 내장돼 있던 route·predicate·filter 정의를 Spring Cloud Config로 일원화하고, Actuator 주기 갱신과 Spring Cloud Bus·RabbitMQ를 연결해 재빌드 없이 설정을 반영하는 경로 구성", "Skaffold와 Helm으로 로컬·개발 환경의 빌드·배포 설정을 분리하고 Redis·RabbitMQ 접속 정보와 Config Server 주소를 Kubernetes Secret·환경 변수로 주입", "Jenkins에서 Gradle bootJar 빌드, 컨테이너 이미지 생성·Nexus 배포, 개발계 CD 호출까지 이어지는 파이프라인 구성"],
-              "tech": "Java 17, Spring Boot, Spring Cloud Gateway/Config/Bus, WebFlux, Redis, RabbitMQ, Helm, Skaffold, Jenkins, Kubernetes"
+              "highlights": [
+                "WebFlux 필터로 query parameter를 JSON body로 변환하고 서비스별 예외 처리",
+                "Spring Cloud Config와 Bus로 설정 갱신 경로 구성. Helm과 Jenkins로 개발계 배포 자동화"
+              ],
+              "tech": "Java, Spring Cloud Gateway/Config/Bus, WebFlux, RabbitMQ, Kubernetes, Jenkins"
             },
             {
-              "title": "모빌리티 플랫폼 성능 개선",
-              "summary": "운영 관측으로 식별한 쿠폰 통계 API 병목을 기존 도메인 값 재사용과 PostgreSQL 복합 인덱스로 개선",
+              "title": "쿠폰 통계 쿼리 개선",
+              "summary": "저장된 수량을 재사용하고 복합 인덱스를 운영에 반영",
               "period": "2025.01 ~ 현재",
-              "highlights": ["PostgreSQL 메모리 알람 시간대의 로그·APM 상관관계를 분석해 쿠폰 통계 조회를 Slow Query 후보로 식별", "전체 발급 수의 원장 COUNT를 기존 묶음 수량 조회로 대체하고, 사용 수 COUNT DISTINCT에 (묶음 식별자, 쿠폰 식별자) 복합 인덱스를 운영 반영", "단일 EXPLAIN (ANALYZE, BUFFERS) 비교에서 Sequential Scan·Sort가 Heap Fetches 0의 Index Only Scan으로 바뀌고 실행 시간 34.802ms→14.510ms, 실행 단계 블록 4,227→387을 확인"],
-              "tech": "Java, Spring Boot, JPA, PostgreSQL, OpenSearch, WhaTap"
+              "highlights": [],
+              "tech": "PostgreSQL, WhaTap"
             },
             {
-              "title": "OEM 내비게이션 업데이트 사이트 운영·개선",
-              "summary": "여러 고객 사이트의 CI/CD 파이프라인을 구축하고, 운영 배포를 VM 단위로 분리하며 대상 VM 관리 ID 기반 인증 구조로 보강",
+              "title": "OEM 내비게이션 업데이트 사이트",
+              "summary": "여러 고객 사이트 운영과 CI/CD 구축",
               "period": "2025.03 ~ 현재",
-              "highlights": ["사이트별 운영 CD의 실행 대상을 한 VM으로 제한하고 입력 검증·Preflight·fail-fast 원격 실행을 적용해 배포 변경 범위와 실패 지점을 명확화", "Azure 접근 주체를 Jenkins에서 대상 WAS VM의 UAMI로 이전해 스토리지 고정 키와 DB·JWT 비밀값이 Jenkins를 통과하던 경로 제거", "관리 ID CLI 옵션 오류와 프록시·CA 인증서 검증 실패를 CLI·IMDS·TLS·RBAC 단계로 분리 진단해 CD 문제 해결"],
-              "tech": "Jenkins, Azure Managed Identity, Azure Blob Storage, Azure Key Vault, Bash, Apache Tomcat"
+              "highlights": [
+                "운영 배포를 VM 한 대씩 실행하도록 분리하고 원격 스크립트 실패를 Jenkins에 반영",
+                "대상 VM이 Azure 관리 ID로 비밀값을 직접 조회하도록 변경"
+              ],
+              "tech": "Jenkins, Azure Managed Identity, Blob Storage, Key Vault, Bash, Tomcat"
             }
           ]
         },
         {
           "title": "IoT 플랫폼 개발",
-          "summary": "IoT 장비와 서비스를 연결하는 API, 배치, 외부 시스템 연동 개발",
+          "summary": "관제와 돌봄 서비스의 API 및 외부 연동",
           "period": "2022.05 ~ 2024.12",
           "items": [
             {
               "title": "스마트 시티 관제 대시보드",
-              "summary": "여러 관제 모듈의 데이터를 조합하는 Dashboard API 설계·개발",
+              "summary": "관제 모듈의 데이터를 모아 대시보드에 제공하는 API 개발",
               "period": "2024.06 ~ 2024.12",
-              "highlights": ["Event, Push, Device 모듈의 데이터를 조합하는 Dashboard API(오케스트레이션 모듈) 설계·개발", "사용자 이벤트의 접수·조치·종료 흐름과 지도 프리셋 및 위젯 관리 기능 구현"],
+              "highlights": [
+                "이벤트 접수부터 종료까지의 처리 흐름, 지도 프리셋, 위젯 관리 구현"
+              ],
               "tech": "Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka"
             },
             {
               "title": "스마트 시티 AI 챗봇",
-              "summary": "API 문서 기반 RAG와 실제 관제 API 호출을 연결하는 챗봇 설계·개발",
+              "summary": "API 문서를 검색해 관제 API를 호출하는 챗봇 개발",
               "period": "2024.06 ~ 2024.12",
-              "highlights": ["API 문서를 RAG 소스로 사용해 사용자 질의에서 API path와 parameter를 생성하고 호출 결과를 반환하는 흐름 설계·개발"],
+              "highlights": [
+                "사용자 질문에서 API 경로와 매개변수를 생성하고 호출 결과를 반환하는 흐름 구현"
+              ],
               "tech": "Python, FastAPI, LangChain"
             },
             {
               "title": "AI Care B2G",
-              "summary": "공공기관 대상 돌봄 서비스의 외부 연동과 가입 흐름 개선",
+              "summary": "공공기관 돌봄 서비스의 외부 연동과 가입 기능 개발",
               "period": "2022.09 ~ 2024.06",
-              "highlights": ["PARTNER_B·PartnerA 호출을 공통 Sender와 RestTemplate으로 통합하고 연동 로그·예외 규격을 표준화", "기관·사용자 중복 등록을 방지하고 엑셀 업로드부터 기가지니·홈 IoT 등록까지 이어지는 가입 흐름 구현", "동시 배치 실행 시 중복 처리를 막기 위해 Lock을 적용하고 실패 건의 재처리 경로 보강"],
-              "tech": "Java, Spring Boot, Spring MVC, MyBatis, PostgreSQL, Spring Scheduling"
+              "highlights": [
+                "PartnerA Sender와 공통 호출 구현, PARTNER_B 요청과 응답 로그 공통화",
+                "엑셀 업로드부터 기가지니와 홈 IoT 등록까지 가입 흐름 구현. 배치 중복 실행 방지"
+              ],
+              "tech": "Java, Spring Boot, RestTemplate, MyBatis, PostgreSQL"
             },
             {
               "title": "AI Care B2C 차세대 API 구축",
-              "summary": "개인 고객 대상 돌봄 서비스의 차세대 API와 외부 연동 기능 개발",
+              "summary": "개인 고객 돌봄 서비스의 API와 외부 연동 개발",
               "period": "2023.02 ~ 2024.06",
-              "highlights": ["일일안부 질문·응답과 미응답 시 보호자 콜백 흐름을 구현하고 전송·응답 실패 경로 보강", "G서버·대화서버 연동을 통해 안부 응답과 서비스 이력을 처리하고 외부 출동 서비스 출동 요청 기능 개발", "TV 시청 패턴 기반 이상 징후 처리와 말벗서비스 API를 구현하고 외부 연동 오류의 예외 처리·재시도 보강"],
-              "tech": "Java, Spring Boot, Spring MVC, MyBatis, PostgreSQL, Spring Scheduling"
+              "highlights": [
+                "일일안부 응답, 미응답 보호자 콜백, 외부 출동 서비스 출동 요청 구현",
+                "TV 시청 패턴의 이상 징후 처리와 말벗서비스 API 개발"
+              ],
+              "tech": "Java, Spring Boot, MyBatis, PostgreSQL"
             }
           ]
         }
       ]
     },
     {
-      "type": "list",
-      "title": "개발 방식",
-      "items": [
-        { "title": "", "detail": "기능 출시에서 끝내지 않고 배포 이후의 설정 변경, 기능 확장, 장애 대응까지 고려해 구조와 운영 절차를 함께 설계합니다." },
-        { "title": "", "detail": "설계 변경 전에는 API 계약, DB 영향, 운영 배포 순서부터 확인합니다." },
-        { "title": "", "detail": "레거시는 한 번에 교체하기보다 기존 계약과 운영 일정을 지키면서 검증 가능한 단위로 개선합니다." },
-        { "title": "", "detail": "문제의 배경과 원인, 선택지, 운영 영향을 문서화해 다음 담당자가 같은 탐색을 반복하지 않도록 합니다." }
-      ]
-    },
-    {
       "type": "keyValue",
       "title": "기술",
       "rows": [
-        { "label": "Backend", "value": "Java, Spring Boot, Spring MVC, Spring Security, Spring Cloud Gateway/Config, MyBatis, JPA, Querydsl" },
-        { "label": "Data", "value": "PostgreSQL, MySQL, Redis, InfluxDB, SQL 실행 계획 분석" },
-        { "label": "Integration", "value": "REST API, OAuth2/OIDC, LDAP, JWT, Kafka, RabbitMQ, Batch/Scheduling" },
-        { "label": "Quality & Observability", "value": "JUnit, Testcontainers, k6, Actuator, Micrometer, Prometheus, WhaTap" },
-        { "label": "Delivery", "value": "GitHub Actions, Jenkins, Docker, Kubernetes 환경의 서비스 운영 경험" },
-        { "label": "AI & Automation", "value": "GitHub Copilot CLI, Codex, Claude Code, AGENTS.md, MCP, LangChain" }
+        {
+          "label": "Backend",
+          "value": "Java, Spring Boot, Spring MVC, Spring Cloud Gateway, MyBatis, JPA"
+        },
+        {
+          "label": "Data",
+          "value": "PostgreSQL, MySQL, Redis"
+        },
+        {
+          "label": "Integration",
+          "value": "REST API, OAuth 2.0, Kafka, RabbitMQ"
+        },
+        {
+          "label": "Test & Monitoring",
+          "value": "JUnit, Testcontainers, k6, WhaTap, Prometheus"
+        },
+        {
+          "label": "Delivery",
+          "value": "Jenkins, Docker, Kubernetes, Azure"
+        }
       ]
     },
     {
       "type": "list",
       "title": "교육 및 수상",
       "items": [
-        { "title": "KT AIVLE SCHOOL AI 개발자 트랙", "detail": "2021.12 ~ 2022.05, 개인/최종 프로젝트 최우수상" },
-        { "title": "KT 제2회 사내 코딩 올림피아드", "detail": "2025.01, 장려상" }
+        {
+          "title": "KT AIVLE SCHOOL AI 개발자 트랙",
+          "detail": "2021.12 ~ 2022.05, 개인/최종 프로젝트 최우수상"
+        },
+        {
+          "title": "KT 제2회 사내 코딩 올림피아드",
+          "detail": "2025.01, 장려상"
+        }
+      ]
+    },
+    {
+      "type": "caseStudies",
+      "title": "대표 경험",
+      "cases": [
+        {
+          "title": "고객 인증과 계정 복구",
+          "summary": "OTP 인증 이후에도 계정 소유 관계를 다시 확인하도록 설계",
+          "period": "2026.04 ~ 현재",
+          "facts": [
+            {
+              "label": "규모",
+              "detail": "여러 서비스와 테넌트를 지원하는 인증 플랫폼. 포털, 외부 SMS, PostgreSQL을 연결한 개발계에서 검증"
+            },
+            {
+              "label": "문제",
+              "detail": "복구 상태를 서버 메모리에 두면 서버마다 OTP와 시도 횟수가 달라지고, 재시작 시 기록이 사라짐"
+            },
+            {
+              "label": "기술 과제",
+              "detail": "공유 DB의 행 잠금과 원자적 발송 횟수 갱신 적용. 비밀번호 변경 직전에 휴대폰과 계정의 연결을 재확인"
+            },
+            {
+              "label": "결과",
+              "detail": "동시 요청, 토큰 재사용, 중복 계정 거부와 전체 롤백을 테스트로 확인. 운영 성과는 아직 측정 전"
+            }
+          ],
+          "sources": [
+            {
+              "label": "인증과 동시성 면접 준비",
+              "url": "/blog/interview-prep-03-auth-concurrency"
+            }
+          ]
+        },
+        {
+          "title": "Gateway 설정 관리",
+          "summary": "설정 해석은 Spring에 맡기고 결과를 메모리에 캐싱",
+          "period": "2025.09 ~ 2025.12",
+          "facts": [
+            {
+              "label": "규모",
+              "detail": "플랫폼 구성 자료는 20개 서비스, 38 Pod. 실험은 Config Server 한 프로세스와 최대 38개 HTTP worker로 모사"
+            },
+            {
+              "label": "문제",
+              "detail": "Gateway 설정이 실행 파일 안에 있어 변경 시 재빌드가 필요했고, 외부화 후에는 반복 조회의 설정 재구성 비용이 남음"
+            },
+            {
+              "label": "기술 과제",
+              "detail": "Spring의 설정 병합을 재사용하고 파일 수정 시각을 키로 캐싱. 서버별 캐시와 갱신 신호를 구분"
+            },
+            {
+              "label": "결과",
+              "detail": "2026.09 후속 로컬 실험에서 반복 조회 1,900건, p95 11.223ms 확인. 같은 수정 시각의 오래된 응답도 재현했으며 운영 개선 배수는 미측정"
+            }
+          ],
+          "sources": [
+            {
+              "label": "캐시 설계와 일관성",
+              "url": "/blog/interview-prep-01-cache-consistency"
+            },
+            {
+              "label": "Gateway 성능 검증",
+              "url": "/blog/interview-prep-02-gateway-performance"
+            }
+          ]
+        },
+        {
+          "title": "OEM 사이트 배포 개선",
+          "summary": "배포 대상을 한 VM으로 제한하고 비밀값 조회를 대상 VM으로 이동",
+          "period": "2025.03 ~ 현재",
+          "facts": [
+            {
+              "label": "규모",
+              "detail": "복수의 WAS VM으로 운영하는 여러 고객 사이트. 사이트마다 애플리케이션과 배포 설정이 다름"
+            },
+            {
+              "label": "문제",
+              "detail": "한 번의 배포가 여러 VM을 변경하고, 스토리지 고정 키와 DB 비밀번호가 Jenkins를 거쳐 전달됨"
+            },
+            {
+              "label": "기술 과제",
+              "detail": "VM별 실행과 오류 코드 전달 구현. 대상 VM의 관리 ID 인증을 적용하며 CLI 옵션, 프록시, 인증서 오류를 나눠 해결"
+            },
+            {
+              "label": "결과",
+              "detail": "배포 한 번의 변경 대상을 VM 한 대로 제한하고 Jenkins의 비밀값 전달 경로 제거. 배포 시간과 장애율은 미측정"
+            }
+          ],
+          "sources": [
+            {
+              "label": "배포와 외부 연동 면접 준비",
+              "url": "/blog/interview-prep-04-delivery-external-api"
+            }
+          ]
+        }
       ]
     }
   ]
