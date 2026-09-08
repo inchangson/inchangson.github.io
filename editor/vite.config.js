@@ -8,6 +8,10 @@ const projectRoot = path.resolve(editorDir, '..');
 
 export default defineConfig({
   root: editorDir,
+  // Keep the editor's optimized dependencies separate from Astro's Vite cache.
+  // Sharing node_modules/.vite lets either dev server invalidate dependency URLs
+  // that are still loaded in the other server's browser tab (504 Outdated Optimize Dep).
+  cacheDir: path.join(projectRoot, 'node_modules/.vite-editor'),
   publicDir: path.join(projectRoot, 'public'),
   plugins: [localEditorApi(projectRoot)],
   server: {

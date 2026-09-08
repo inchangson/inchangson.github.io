@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>5 - Cognitive Commit Doc</title>
+  <style>
+    :root { --bg:#0b1020; --card:#121a33; --line:#2d3a66; --text:#e8eeff; --muted:#b8c4f0; --ok:#3ddc97; --warn:#ffd166; --risk:#ff6b6b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; }
+    h1,h2,h3 { margin:0 0 10px; }
+    .meta { color:var(--muted); font-size:14px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; margin-right:6px; border:1px solid var(--line); }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .risk { color:var(--risk); }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { border:1px solid var(--line); padding:8px; vertical-align:top; text-align:left; }
+    th { background:#1a2550; }
+    .small { font-size:13px; color:var(--muted); }
+    .timeline li { margin-bottom:8px; }
+    .heatmap { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+    .cell { border-radius:10px; padding:10px; border:1px solid var(--line); }
+  a{color:#9ecbff} pre{white-space:pre-wrap;overflow-wrap:anywhere} td{overflow-wrap:anywhere} @media(max-width:700px){.grid,.heatmap{grid-template-columns:1fr}.card{overflow-x:auto}}
+</style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "dark" });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <h1>Commit 5 - feat: model explicit partner outcomes with fixed client settings</h1>
+      <p class="meta">SHA: 913c4f8c357758d63845064f6eb26db02a1d1918 · Author: inchangson · Date: 2026-09-07</p>
+      <p class="small">추천 제목: <strong>명시적 결과와 로그</strong></p>
+    </section>
+
+    <section class="card grid">
+      <article class="card">
+        <h3>핵심 목적</h3>
+        <p>UNKNOWN과 REJECTED를 구분한다</p>
+      </article>
+      <article class="card">
+        <h3>영향 범위</h3>
+        <p>고정 client·10개 테스트</p>
+      </article>
+      <article class="card">
+        <h3>리스크</h3>
+        <p>메모리 로그의 내구성 없음</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>시퀀스/컴포넌트 다이어그램</h2>
+      <div class="mermaid">
+flowchart LR
+ A["전송 분류"] --> B["업무 판정과 완료 로그"]
+      </div>
+      <p class="small">다이어그램 요약: 전송 분류에서 업무 판정과 완료 로그까지의 관찰 경계를 보여준다.</p>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 1 - 변경 영향 히트맵</h2>
+      <div class="heatmap">
+        <div class="cell">Java: 4개</div><div class="cell">Markdown: 2개</div><div class="cell">Profile HTML: 0개</div><div class="cell">설정: 0개</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 2 - 의사결정 타임라인</h2>
+      <ol class="timeline">
+        <li>확인 질문: 명시적 결과와 로그</li><li>방법: UNKNOWN과 REJECTED를 구분한다</li><li>한계: 메모리 로그의 내구성 없음</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>추가 시각화 3 - 전/후 책임 매트릭스</h2>
+      <table>
+        <thead><tr><th>컴포넌트</th><th>변경 전</th><th>변경 후</th><th>변경 이유</th></tr></thead>
+        <tbody>
+          <tr><td>전송 분류</td><td>가정 또는 분산된 근거</td><td>업무 판정과 완료 로그</td><td>UNKNOWN과 REJECTED를 구분한다</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>추천 커밋 본문</h2>
+      <pre>배경/문제
+명시적 결과와 로그의 근거가 필요하다.
+
+변경 사항
+UNKNOWN과 REJECTED를 구분한다. 고정 client·10개 테스트.
+
+영향/리스크
+메모리 로그의 내구성 없음. 해당 lesson과 git show 913c4f8를 함께 읽는다.</pre>
+    </section>
+
+    <section class="card">
+      <h2>파일/클래스 상세표</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>파일 경로</th>
+            <th>클래스/모듈</th>
+            <th>역할</th>
+            <th>수정/추가 사유</th>
+            <th>핵심 변경 내용</th>
+            <th>검토 포인트</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="../../../../lab/b2g-resttemplate-lab/README.md">lab/b2g-resttemplate-lab/README.md</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>UNKNOWN과 REJECTED를 구분한다</td><td>근거·결과·Lesson Learned 기록</td><td>메모리 로그의 내구성 없음</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/lessons/04-explicit-result-and-log.md">lab/b2g-resttemplate-lab/lessons/04-explicit-result-and-log.md</a></td><td>N/A</td><td>근거·결과·Lesson Learned 기록</td><td>UNKNOWN과 REJECTED를 구분한다</td><td>근거·결과·Lesson Learned 기록</td><td>메모리 로그의 내구성 없음</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/improved/CallResult.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/improved/CallResult.java</a></td><td>CallResult</td><td>전송·업무·HTTP 상태·callId 결과 모델</td><td>UNKNOWN과 REJECTED를 구분한다</td><td>전송·업무·HTTP 상태·callId 결과 모델</td><td>메모리 로그의 내구성 없음</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/improved/FixedPartnerClient.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/improved/FixedPartnerClient.java</a></td><td>FixedPartnerClient</td><td>pool/connect/read 설정 고정·retry와 redirect 차단</td><td>UNKNOWN과 REJECTED를 구분한다</td><td>pool/connect/read 설정 고정·retry와 redirect 차단</td><td>메모리 로그의 내구성 없음</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/improved/ObservedPartnerSender.java">lab/b2g-resttemplate-lab/src/main/java/com/example/b2glab/improved/ObservedPartnerSender.java</a></td><td>ObservedPartnerSender</td><td>업무 코드 해석·예외 분류·finally 완료 로그</td><td>UNKNOWN과 REJECTED를 구분한다</td><td>업무 코드 해석·예외 분류·finally 완료 로그</td><td>메모리 로그의 내구성 없음</td></tr>
+<tr><td><a href="../../../../lab/b2g-resttemplate-lab/src/test/java/com/example/b2glab/ImprovedBehaviorTest.java">lab/b2g-resttemplate-lab/src/test/java/com/example/b2glab/ImprovedBehaviorTest.java</a></td><td>ImprovedBehaviorTest</td><td>실패 행렬·독립 client·풀 고갈 검증</td><td>UNKNOWN과 REJECTED를 구분한다</td><td>실패 행렬·독립 client·풀 고갈 검증</td><td>메모리 로그의 내구성 없음</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>리뷰 체크리스트</h2>
+      <ul>
+        <li>해당 lesson의 결과를 커밋 코드와 대조한다.</li><li>메모리 로그의 내구성 없음를 표현에 반영한다.</li><li>실제 운영 URL·개인정보가 없는지 확인한다.</li><li>화면 검증은 미완료 상태다.</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
