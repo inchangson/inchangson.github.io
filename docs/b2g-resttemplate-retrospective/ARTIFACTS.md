@@ -47,6 +47,8 @@ flowchart LR
 
 ## 블로그 연재 바로가기
 
+시작점: [외부 연동 개선 경험을 코드와 실험으로 설명하려면](../../src/content/posts/b2g-external-api-00-interview-guide.md). 저장소만으로 실행하고 면접 답변까지 연결하는 안내다.
+
 | 순서 | 핵심 질문 | 초안 경로 |
 |---:|---|---|
 | 1 | Sender로 책임을 옮기면 무엇이 달라지는가 | [`b2g-external-api-01-sender-boundary.md`](../../src/content/posts/b2g-external-api-01-sender-boundary.md) |
