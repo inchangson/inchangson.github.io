@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-09-08T00:02:26.301713+09:00",
+  "topology": {
+    "applications": 20,
+    "service_replicas": 36,
+    "batch_replicas": 2,
+    "total_pods": 38,
+    "config_server_instances": 1
+  },
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6",
+    "processor": "arm"
+  },
+  "parameters": {
+    "requests_per_pod": 50,
+    "concurrency": 38
+  },
+  "scenarios": [
+    {
+      "name": "cold_start_38_pods",
+      "requests": 38,
+      "concurrency": 38,
+      "success": 38,
+      "errors": 0,
+      "throughput_rps": 525.12,
+      "latency_ms": {
+        "min": 56.711,
+        "mean": 64.038,
+        "p50": 65.555,
+        "p95": 69.207,
+        "p99": 69.624,
+        "max": 69.624
+      },
+      "response_bytes": 222176,
+      "wall_seconds": 0.072
+    },
+    {
+      "name": "warm_cache_38_pods",
+      "requests": 1900,
+      "concurrency": 38,
+      "success": 1900,
+      "errors": 0,
+      "throughput_rps": 5945.42,
+      "latency_ms": {
+        "min": 1.07,
+        "mean": 6.167,
+        "p50": 5.205,
+        "p95": 11.223,
+        "p99": 29.886,
+        "max": 34.604
+      },
+      "response_bytes": 11108800,
+      "wall_seconds": 0.32
+    },
+    {
+      "name": "bus_refresh_burst_38_pods",
+      "requests": 38,
+      "concurrency": 38,
+      "success": 38,
+      "errors": 0,
+      "throughput_rps": 6410.8,
+      "latency_ms": {
+        "min": 0.742,
+        "mean": 1.764,
+        "p50": 1.825,
+        "p95": 3.018,
+        "p99": 3.326,
+        "max": 3.326
+      },
+      "response_bytes": 222176,
+      "wall_seconds": 0.006
+    },
+    {
+      "name": "sqlite_mock_api_baseline",
+      "requests": 1900,
+      "concurrency": 38,
+      "success": 1900,
+      "errors": 0,
+      "throughput_rps": 1400.17,
+      "latency_ms": {
+        "min": 12.902,
+        "mean": 26.931,
+        "p50": 26.414,
+        "p95": 32.325,
+        "p99": 35.001,
+        "max": 328.618
+      },
+      "response_bytes": 5802400,
+      "wall_seconds": 1.357
+    }
+  ],
+  "invalidation": {
+    "before": {
+      "state": "20260908-000224",
+      "version": 1
+    },
+    "content_changed_same_mtime": {
+      "state": "20260908-000224",
+      "version": 1
+    },
+    "mtime_advanced": {
+      "state": "20260908-000226",
+      "version": 2
+    },
+    "stale_reproduced": true,
+    "refresh_after_mtime_change": true
+  }
+}
