@@ -478,6 +478,39 @@ a:hover {
   margin-top: 12px;
 }
 
+.summary-points {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.career-company {
+  display: grid;
+  gap: 24px;
+}
+
+.career-company__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+}
+
+.career-company__header h3,
+.career-company__header p,
+.career-project__header h5,
+.career-project__header p {
+  margin: 0;
+}
+
+.career-company__header h3 { font-size: 1.5rem; }
+.career-company__header p,
+.career-company__header span,
+.career-project__header p { color: var(--muted); }
+.career-project__header h5 { font-size: 1.2rem; }
+.career-project { display: grid; gap: 16px; }
+.career-project + .career-project { margin-top: 12px; }
+
 .contact-list {
   display: grid;
   gap: 8px;
@@ -507,12 +540,12 @@ a:hover {
   align-items: start;
 }
 
-.career-track__header h3,
+.career-track__header h4,
 .career-track__header p {
   margin: 0;
 }
 
-.career-track__header h3 {
+.career-track__header h4 {
   font-size: 1.35rem;
 }
 
@@ -564,13 +597,13 @@ a:hover {
   margin-bottom: 12px;
 }
 
-.timeline-item h4,
+.timeline-item h6,
 .timeline-item p {
   margin: 0;
 }
 
-.timeline-item h4 {
-  font-size: 1.2rem;
+.timeline-item h6 {
+  font-size: 1.05rem;
 }
 
 .experience-badge {
@@ -589,6 +622,43 @@ a:hover {
 
 .timeline-item ul {
   margin: 0;
+}
+
+.resume-experience + .resume-experience {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+.resume-experience header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+}
+
+.resume-experience h3,
+.resume-experience p {
+  margin: 0;
+}
+
+.resume-experience header p,
+.resume-experience header span {
+  color: var(--muted);
+}
+
+.experience-details {
+  display: grid;
+  gap: 18px;
+  margin: 16px 0 0;
+}
+
+.experience-details h4 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  color: var(--accent-strong);
+}
+
+.experience-details p + p {
+  margin-top: 10px;
 }
 
 .tech-line {
@@ -675,7 +745,9 @@ a:hover {
     flex-direction: column;
   }
 
+  .career-company__header,
   .career-track__header,
+  .resume-experience header,
   .timeline-item header,
   .skill-table div {
     grid-template-columns: 1fr;
@@ -720,10 +792,22 @@ a:hover {
     padding: 16px;
   }
 
+  .career-company__header,
   .career-track__header,
+  .career-project__header,
+  .resume-experience header,
+  .experience-details > section,
   .timeline-item,
   .skill-table div {
     break-inside: avoid;
+  }
+
+  .career-company__header,
+  .career-track__header,
+  .career-project__header,
+  .resume-experience header,
+  .experience-details h4 {
+    break-after: avoid;
   }
 
   .timeline,

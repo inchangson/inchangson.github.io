@@ -1,0 +1,4 @@
+{
+  "title": "Service Delivery Gateway 구현과 운영 경계",
+  "description": "sp-gw 소스와 커밋을 따라 요청 변환, 설정 갱신, 배포를 설명하고 면접 질문과 검증 과제를 정리합니다."
+}

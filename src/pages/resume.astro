@@ -17,7 +17,7 @@ const isFeatured = (item: unknown) =>
     {resume.sections.map((section, index) => {
       if (section.type === 'prose') return (
         <section class:list={[index === 0 ? 'resume-summary' : 'panel', 'stack']}>
-          <div><h2>{section.title}</h2>{section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}</div>
+          <div><h2>{section.title}</h2><ul class="summary-points">{section.paragraphs?.map((paragraph) => <li>{paragraph}</li>)}</ul></div>
           {index === 0 && resume.profile.contacts.length > 0 && (
             <address class="contact-list">{resume.profile.contacts.map((contact) => <a href={contact.url}>{contact.label}</a>)}</address>
           )}
@@ -25,30 +25,49 @@ const isFeatured = (item: unknown) =>
       );
       if (section.type === 'timeline') return (
         <section class="panel stack">
-          <div><h2>{section.title}</h2>{section.note && <p class="section-note">{section.note}</p>}</div>
-          {section.groups?.map((group) => (
-            <div class="career-track">
-              <header class="career-track__header"><div><h3>{group.title}</h3><p>{group.summary}</p></div><span>{group.period}</span></header>
-              <div class="timeline">{group.items?.map((item) => (
-                <article class:list={['timeline-item', isFeatured(item) && 'timeline-item--featured']}>
-                  <header><div>{isFeatured(item) && <span class="experience-badge">대표 경험</span>}<h4>{item.title}</h4><p>{item.summary}</p></div><span>{item.period}</span></header>
-                  {item.highlights?.length > 0 && <ul>{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>}
-                  {item.tech && <p class="tech-line">{item.tech}</p>}
-                </article>
-              ))}</div>
-            </div>
+          <h2>{section.title}</h2>
+          <div class="career-company">
+            <header class="career-company__header"><div><h3>{section.company?.name}</h3><p>{section.company?.role}</p></div><span>{section.company?.period}</span></header>
+            {section.groups?.map((group) => (
+              <div class="career-track">
+                <header class="career-track__header"><div><h4>{group.title}</h4><p>{group.summary}</p></div><span>{group.period}</span></header>
+                {group.projects.map((project) => (
+                  <div class="career-project">
+                    <header class="career-project__header"><h5>{project.title}</h5><p>{project.summary}</p></header>
+                    <div class="timeline">{project.items.map((item) => (
+                      <article class:list={['timeline-item', isFeatured(item) && 'timeline-item--featured']}>
+                        <header><div>{isFeatured(item) && <span class="experience-badge">대표 경험</span>}<h6>{item.title}</h6><p>{item.summary}</p></div><span>{item.period}</span></header>
+                        {item.highlights?.length > 0 && <ul>{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>}
+                        {item.tech && <p class="tech-line">{item.tech}</p>}
+                      </article>
+                    ))}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+      if (section.type === 'caseStudies') return (
+        <section class="panel stack">
+          <h2>{section.title}</h2>
+          {section.cases?.map((experience) => (
+            <article class="resume-experience">
+              <header><div><h3>{experience.title}</h3><p>{experience.summary}</p></div><span>{experience.period}</span></header>
+              <div class="experience-details">{experience.sections.map((detail) => <section><h4>{detail.title}</h4>{detail.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</section>)}</div>
+            </article>
           ))}
         </section>
       );
       if (section.type === 'list') return (
         <section class="panel stack">
-          <div><h2>{section.title}</h2>{section.note && <p class="section-note">{section.note}</p>}</div>
+          <h2>{section.title}</h2>
           <ul>{section.items?.map((item) => <li>{item.title && <strong>{item.title}</strong>}{item.title && item.detail ? ', ' : ''}{item.detail}</li>)}</ul>
         </section>
       );
       return (
         <section class="panel stack">
-          <div><h2>{section.title}</h2>{section.note && <p class="section-note">{section.note}</p>}</div>
+          <h2>{section.title}</h2>
           <div class="skill-table">{section.rows?.map((row) => <div><strong>{row.label}</strong><span>{row.value}</span></div>)}</div>
         </section>
       );

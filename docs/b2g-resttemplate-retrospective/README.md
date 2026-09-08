@@ -80,6 +80,8 @@ flowchart LR
 
 ## 읽는 순서와 검증 상태
 
+먼저 [블로그 면접 준비 안내](../../src/content/posts/b2g-external-api-00-interview-guide.md)를 읽는다. 네 편 모두 개념 설명, Demo 소스 링크, 실행할 테스트, 면접 후속 질문·답변을 포함한다.
+
 1. [Sender 책임 회고](../../src/content/posts/b2g-external-api-01-sender-boundary.md)
 2. [공유 factory와 timeout](../../src/content/posts/b2g-external-api-02-shared-factory.md)
 3. [풀·연결 재사용과 실제 프로파일](../../src/content/posts/b2g-external-api-03-pool-reuse.md)
