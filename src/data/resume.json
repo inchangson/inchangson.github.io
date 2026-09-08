@@ -23,105 +23,154 @@
       "type": "prose",
       "title": "요약",
       "paragraphs": [
-        "기술을 선택할 때 운영 환경과 팀의 유지보수 부담을 먼저 살피는 편입니다.",
-        "설계 이유와 운영 절차를 기록해 두고, 변경 전에는 기존 API와 배포에 미칠 영향을 확인하려고 합니다."
+        "고객 인증의 요구사항 분석, 설계, 핵심 기능 구현을 주도했습니다. 기존 토큰 API와의 호환성을 유지하며 OAuth 인가, 자체 회원가입, 계정 복구를 구현했습니다.",
+        "서비스별 요구사항에 맞춰 공통 플랫폼을 설계합니다. 인증 정책을 Step 단위로 분리해 설정으로 조합하고, Gateway의 요청 변환과 라우팅 설정을 공통화했습니다.",
+        "설계 의도와 운영 절차를 문서로 정리하고, 팀의 AIDD 문서 표준화를 주도했습니다.",
+        "IoT와 모빌리티 서비스의 기능 개발과 운영을 함께 맡았습니다. 외부 시스템 연동, 알람 원인 분석, 보안 취약점 조치와 인프라 업데이트, 사내 정책 변경에 따른 배포 절차 개선을 수행했습니다."
       ]
     },
     {
       "type": "timeline",
       "title": "경력",
-      "note": "KT, 백엔드 개발자, 2022.05 ~ 현재",
       "groups": [
         {
-          "title": "모빌리티 플랫폼",
-          "summary": "고객 인증, Gateway, 서비스 운영",
+          "title": "모빌리티플랫폼팀",
+          "summary": "IVI 플랫폼과 내비게이션 업데이트 사이트 개발 및 운영",
           "period": "2025.01 ~ 현재",
-          "items": [
+          "projects": [
             {
-              "title": "멀티테넌트 고객 인증",
-              "summary": "서비스별 인증 정책을 설정으로 조합하는 고객 인증 플랫폼 설계와 핵심 구현",
-              "period": "2026.04 ~ 현재",
-              "highlights": [
-                "기존 토큰 API를 유지하면서 Authorization Code + PKCE와 일회용 인가 코드 구현",
-                "가입 OTP, 계정 복구, 설정 무결성 검사 구현. 실제 SMS와 포털을 연결해 개발계 검증"
-              ],
-              "tech": "Java, Spring Boot, PostgreSQL, OAuth 2.0, PKCE, JWT"
+              "title": "IVI 플랫폼",
+              "summary": "현대 WebOS, 기아 WebOS, 제네시스 기가지니, 타타대우 정비에이전트",
+              "items": [
+                {
+                  "title": "멀티테넌트 고객 인증",
+                  "summary": "서비스별 인증 정책을 설정으로 조합하는 고객 인증 플랫폼 설계와 핵심 구현",
+                  "period": "2026.04 ~ 현재",
+                  "highlights": [
+                    "요구사항 분석, 설계와 핵심 기능 구현 주도. 기존 토큰 API를 유지하면서 Authorization Code + PKCE와 일회용 인가 코드 교환 경로 추가",
+                    "redirect 검증, PKCE, scope 결정, 로그인 경로, 토큰 발급을 Step 인터페이스로 추상화하고, Registry와 클라이언트별 DB 설정으로 정책 조합",
+                    "인증원을 인가 및 토큰 교환 규약과 분리해 로그인 방식이 바뀌어도 클라이언트의 authorize/token 연동 유지",
+                    "지원하지 않는 Step ID, 테넌트와 서비스 참조 오류, 가입 정책 불일치 등을 검사하는 12개 읽기 전용 무결성 규칙 구현"
+                  ],
+                  "tech": "Java, Spring Boot, PostgreSQL, OAuth 2.0, PKCE, JWT"
+                },
+                {
+                  "title": "자체 회원가입 및 계정 복구 체계 도입",
+                  "summary": "휴대폰 인증을 이용한 자체 회원가입, 아이디 찾기와 비밀번호 재설정 설계 및 구현",
+                  "period": "2026.08 ~ 현재",
+                  "highlights": [
+                    "가입 세션에 OTP 검증 상태를 저장하고, 최종 가입 시 서버에서 검증한 번호만 계정에 반영. 계정 생성과 세션 소비를 한 트랜잭션으로 처리",
+                    "복구 상태와 발송 제한을 공유 DB로 옮기고 행 잠금과 원자적 횟수 갱신으로 동시 요청 제어",
+                    "비밀번호 변경 직전에 테넌트, 휴대폰 번호, 계정의 연결을 잠그고 재확인"
+                  ],
+                  "tech": "Java, Spring Boot, PostgreSQL, SMS, OTP"
+                },
+                {
+                  "title": "Service Delivery Gateway",
+                  "summary": "기존 서비스의 요청 형식을 변환하고 라우팅 설정을 외부에서 관리하는 Gateway 개발",
+                  "period": "2025.09 ~ 2025.12",
+                  "highlights": [
+                    "WebFlux 필터로 query parameter를 JSON body로 변환하고 서비스별 예외 처리",
+                    "Spring Cloud Config와 Bus로 설정 갱신 경로 구성"
+                  ],
+                  "tech": "Java, Spring Cloud Gateway/Config/Bus, WebFlux, RabbitMQ, Kubernetes, Jenkins"
+                },
+                {
+                  "title": "IVI 플랫폼 운영 및 개선",
+                  "summary": "서비스 알람 대응, 보안 및 인프라 유지보수와 운영 쿼리 개선",
+                  "period": "2025.01 ~ 현재",
+                  "highlights": [
+                    "알람 원인 분석, 보안 취약점 제거와 인프라 업데이트, 사내 정책 변경에 따른 배포 파이프라인 개선 수행",
+                    "쿠폰 통계 조회에서 저장된 수량을 재사용하도록 쿼리를 변경하고 복합 인덱스를 운영에 반영"
+                  ],
+                  "tech": "PostgreSQL, WhaTap"
+                }
+              ]
             },
             {
-              "title": "Service Delivery Gateway",
-              "summary": "기존 서비스의 요청 형식을 변환하고 라우팅 설정을 외부에서 관리하는 Gateway 개발",
-              "period": "2025.09 ~ 2025.12",
-              "highlights": [
-                "WebFlux 필터로 query parameter를 JSON body로 변환하고 서비스별 예외 처리",
-                "Spring Cloud Config와 Bus로 설정 갱신 경로 구성. Helm과 Jenkins로 개발계 배포 자동화"
-              ],
-              "tech": "Java, Spring Cloud Gateway/Config/Bus, WebFlux, RabbitMQ, Kubernetes, Jenkins"
-            },
-            {
-              "title": "쿠폰 통계 쿼리 개선",
-              "summary": "저장된 수량을 재사용하고 복합 인덱스를 운영에 반영",
-              "period": "2025.01 ~ 현재",
-              "highlights": [],
-              "tech": "PostgreSQL, WhaTap"
-            },
-            {
-              "title": "OEM 내비게이션 업데이트 사이트",
-              "summary": "여러 고객 사이트 운영과 CI/CD 구축",
-              "period": "2025.03 ~ 현재",
-              "highlights": [
-                "운영 배포를 VM 한 대씩 실행하도록 분리하고 원격 스크립트 실패를 Jenkins에 반영",
-                "대상 VM이 Azure 관리 ID로 비밀값을 직접 조회하도록 변경"
-              ],
-              "tech": "Jenkins, Azure Managed Identity, Blob Storage, Key Vault, Bash, Tomcat"
+              "title": "내비게이션 업데이트 사이트",
+              "summary": "현대상용차, 타타대우, 포드링컨",
+              "items": [
+                {
+                  "title": "사이트 운영 및 배포 개선",
+                  "summary": "현대상용차, 타타대우, 포드링컨 내비게이션 업데이트 사이트 운영과 CI/CD 구축",
+                  "period": "2025.03 ~ 현재",
+                  "highlights": [
+                    "여러 고객 사이트 운영과 사이트별 애플리케이션과 배포 설정 관리",
+                    "Jenkins 운영 배포를 VM 한 대씩 실행하도록 분리하고 원격 스크립트 실패를 파이프라인에 전달",
+                    "사내 정책 변경에 맞춰 대상 VM별 사용자 할당 관리 ID(UAMI)로 Blob Storage와 Key Vault에 접근하도록 개선. Jenkins를 통한 고정 키와 비밀값 전달 경로 제거"
+                  ],
+                  "tech": "Jenkins, Azure Managed Identity, Blob Storage, Key Vault, Bash, Tomcat"
+                }
+              ]
             }
           ]
         },
         {
-          "title": "IoT 플랫폼 개발",
-          "summary": "관제와 돌봄 서비스의 API 및 외부 연동",
+          "title": "IoT 플랫폼팀",
+          "summary": "스마트시티 플랫폼과 홈케어 플랫폼 개발",
           "period": "2022.05 ~ 2024.12",
-          "items": [
+          "projects": [
             {
-              "title": "스마트 시티 관제 대시보드",
-              "summary": "관제 모듈의 데이터를 모아 대시보드에 제공하는 API 개발",
-              "period": "2024.06 ~ 2024.12",
-              "highlights": [
-                "이벤트 접수부터 종료까지의 처리 흐름, 지도 프리셋, 위젯 관리 구현"
-              ],
-              "tech": "Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka"
+              "title": "스마트시티 플랫폼",
+              "summary": "관제 대시보드, AI 챗봇",
+              "items": [
+                {
+                  "title": "관제 대시보드",
+                  "summary": "관제 모듈의 데이터를 모아 대시보드에 제공하는 API 개발",
+                  "period": "2024.06 ~ 2024.12",
+                  "highlights": [
+                    "이벤트 접수부터 종료까지의 처리 흐름, 지도 프리셋, 위젯 관리 구현"
+                  ],
+                  "tech": "Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka"
+                },
+                {
+                  "title": "스마트시티 AI 챗봇",
+                  "summary": "API 문서를 검색해 관제 API를 호출하는 챗봇 개발",
+                  "period": "2024.06 ~ 2024.12",
+                  "highlights": [
+                    "사용자 질문에서 API 경로와 매개변수를 생성하고 호출 결과를 반환하는 흐름 구현",
+                    "LangSmith를 도입하고 주요 chain별 평가 데이터셋을 별도로 구축해 단계별 동작 검증",
+                    "운영 중 실행 trace를 수집하고 chain별 입력과 출력을 추적할 수 있도록 LLMOps 구성"
+                  ],
+                  "tech": "Python, FastAPI, LangChain, LangSmith"
+                }
+              ]
             },
             {
-              "title": "스마트 시티 AI 챗봇",
-              "summary": "API 문서를 검색해 관제 API를 호출하는 챗봇 개발",
-              "period": "2024.06 ~ 2024.12",
-              "highlights": [
-                "사용자 질문에서 API 경로와 매개변수를 생성하고 호출 결과를 반환하는 흐름 구현"
-              ],
-              "tech": "Python, FastAPI, LangChain"
-            },
-            {
-              "title": "AI Care B2G",
-              "summary": "공공기관 돌봄 서비스의 외부 연동과 가입 기능 개발",
-              "period": "2022.09 ~ 2024.06",
-              "highlights": [
-                "PartnerA Sender와 공통 호출 구현, PARTNER_B 요청과 응답 로그 공통화",
-                "엑셀 업로드부터 기가지니와 홈 IoT 등록까지 가입 흐름 구현. 배치 중복 실행 방지"
-              ],
-              "tech": "Java, Spring Boot, RestTemplate, MyBatis, PostgreSQL"
-            },
-            {
-              "title": "AI Care B2C 차세대 API 구축",
-              "summary": "개인 고객 돌봄 서비스의 API와 외부 연동 개발",
-              "period": "2023.02 ~ 2024.06",
-              "highlights": [
-                "일일안부 응답, 미응답 보호자 콜백, 외부 출동 서비스 출동 요청 구현",
-                "TV 시청 패턴의 이상 징후 처리와 말벗서비스 API 개발"
-              ],
-              "tech": "Java, Spring Boot, MyBatis, PostgreSQL"
+              "title": "홈케어 플랫폼",
+              "summary": "AI Care B2B, B2C",
+              "items": [
+                {
+                  "title": "AI Care B2B",
+                  "summary": "공공기관 돌봄 서비스의 외부 연동과 가입 기능 개발",
+                  "period": "2022.09 ~ 2024.06",
+                  "highlights": [
+                    "PartnerA Sender와 공통 호출 구현, PARTNER_B 요청과 응답 로그 공통화",
+                    "엑셀 업로드부터 기가지니와 홈 IoT 등록까지 가입 흐름 구현. 배치 중복 실행 방지"
+                  ],
+                  "tech": "Java, Spring Boot, RestTemplate, MyBatis, PostgreSQL"
+                },
+                {
+                  "title": "AI Care B2C 차세대 API 구축",
+                  "summary": "개인 고객 돌봄 서비스의 API와 외부 연동 개발",
+                  "period": "2023.02 ~ 2024.06",
+                  "highlights": [
+                    "일일안부 응답, 미응답 보호자 콜백, 외부 출동 서비스 출동 요청 구현",
+                    "TV 시청 패턴의 이상 징후 처리와 말벗서비스 API 개발"
+                  ],
+                  "tech": "Java, Spring Boot, MyBatis, PostgreSQL"
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "company": {
+        "name": "KT",
+        "role": "백엔드 개발자",
+        "period": "2022.05 ~ 현재"
+      }
     },
     {
       "type": "keyValue",
@@ -141,7 +190,7 @@
         },
         {
           "label": "Test & Monitoring",
-          "value": "JUnit, Testcontainers, k6, WhaTap, Prometheus"
+          "value": "JUnit, Testcontainers, k6, WhaTap, Prometheus, LangSmith"
         },
         {
           "label": "Delivery",
@@ -168,93 +217,67 @@
       "title": "대표 경험",
       "cases": [
         {
-          "title": "고객 인증과 계정 복구",
-          "summary": "OTP 인증 이후에도 계정 소유 관계를 다시 확인하도록 설계",
+          "title": "서비스별 인증 정책을 조합하는 멀티테넌트 고객 인증",
+          "summary": "기존 연동을 유지하면서 인증 방식과 서비스별 정책을 바꿀 수 있도록 설계",
           "period": "2026.04 ~ 현재",
-          "facts": [
+          "sections": [
             {
-              "label": "규모",
-              "detail": "여러 서비스와 테넌트를 지원하는 인증 플랫폼. 포털, 외부 SMS, PostgreSQL을 연결한 개발계에서 검증"
+              "title": "도입 배경과 담당 역할",
+              "paragraphs": [
+                "기존에는 단말, 사용자 프로필, 내부 식별자별 토큰 발급 API가 있어 클라이언트가 내부 인증 규약을 알아야 했습니다. 신규 서비스마다 내부 인증 규약에 맞춰 연동하는 작업을 반복하지 않도록, 고객 인증 플랫폼의 요구사항 분석, 설계, 핵심 기능 구현과 검증을 주도했습니다."
+              ]
             },
             {
-              "label": "문제",
-              "detail": "복구 상태를 서버 메모리에 두면 서버마다 OTP와 시도 횟수가 달라지고, 재시작 시 기록이 사라짐"
+              "title": "인가 규약과 인증 절차 분리",
+              "paragraphs": [
+                "기존 API는 유지하고 신규 클라이언트에 Authorization Code + PKCE 경로를 제공했습니다. 로그인에서 사용자를 확인하는 절차와 인가 코드 및 토큰 교환 절차를 분리했습니다. 자체 회원가입을 도입할 때도 클라이언트의 authorize/token 연동 규약을 유지했습니다."
+              ]
             },
             {
-              "label": "기술 과제",
-              "detail": "공유 DB의 행 잠금과 원자적 발송 횟수 갱신 적용. 비밀번호 변경 직전에 휴대폰과 계정의 연결을 재확인"
+              "title": "Step 기반 정책 확장",
+              "paragraphs": [
+                "redirect 검증, PKCE 검증, scope 결정, 세션 저장, 로그인 목적지, client 인증과 토큰 발급을 각각 Step 인터페이스와 Strategy 구현으로 나눴습니다. Registry에 구현체를 등록하고 클라이언트별 DB 설정으로 사용할 정책을 선택하도록 했습니다. 서비스별 정책은 필요한 Step을 추가하거나 선택해 적용할 수 있습니다.",
+                "잘못된 설정 조합을 확인할 수 있도록 검증 규칙을 추가했습니다. 지원하지 않는 Step ID, 테넌트와 서비스의 연결 오류, 가입 정책과 화면 설정 불일치 등을 확인하는 12개 읽기 전용 무결성 규칙을 구현하고, 규칙별 오류 격리와 조회 timeout을 적용했습니다."
+              ]
             },
             {
-              "label": "결과",
-              "detail": "동시 요청, 토큰 재사용, 중복 계정 거부와 전체 롤백을 테스트로 확인. 운영 성과는 아직 측정 전"
-            }
-          ],
-          "sources": [
-            {
-              "label": "인증과 동시성 면접 준비",
-              "url": "/blog/interview-prep-03-auth-concurrency"
-            }
-          ]
-        },
-        {
-          "title": "Gateway 설정 관리",
-          "summary": "설정 해석은 Spring에 맡기고 결과를 메모리에 캐싱",
-          "period": "2025.09 ~ 2025.12",
-          "facts": [
-            {
-              "label": "규모",
-              "detail": "플랫폼 구성 자료는 20개 서비스, 38 Pod. 실험은 Config Server 한 프로세스와 최대 38개 HTTP worker로 모사"
-            },
-            {
-              "label": "문제",
-              "detail": "Gateway 설정이 실행 파일 안에 있어 변경 시 재빌드가 필요했고, 외부화 후에는 반복 조회의 설정 재구성 비용이 남음"
-            },
-            {
-              "label": "기술 과제",
-              "detail": "Spring의 설정 병합을 재사용하고 파일 수정 시각을 키로 캐싱. 서버별 캐시와 갱신 신호를 구분"
-            },
-            {
-              "label": "결과",
-              "detail": "2026.09 후속 로컬 실험에서 반복 조회 1,900건, p95 11.223ms 확인. 같은 수정 시각의 오래된 응답도 재현했으며 운영 개선 배수는 미측정"
-            }
-          ],
-          "sources": [
-            {
-              "label": "캐시 설계와 일관성",
-              "url": "/blog/interview-prep-01-cache-consistency"
-            },
-            {
-              "label": "Gateway 성능 검증",
-              "url": "/blog/interview-prep-02-gateway-performance"
+              "title": "인가 코드 재사용 방지와 검증",
+              "paragraphs": [
+                "인가 코드에 연결된 client, 테넌트, redirect와 PKCE를 검증하고, 조건부 갱신으로 코드를 한 번만 소비하도록 구현했습니다. 단위 테스트와 통합 테스트로 잘못된 정책 조합, 코드 재사용, refresh token rotation을 확인했습니다."
+              ]
             }
           ]
         },
         {
-          "title": "OEM 사이트 배포 개선",
-          "summary": "배포 대상을 한 VM으로 제한하고 비밀값 조회를 대상 VM으로 이동",
-          "period": "2025.03 ~ 현재",
-          "facts": [
+          "title": "자체 회원가입과 계정 복구의 동시 요청 처리",
+          "summary": "계정 생성과 비밀번호 변경 시 서버에 저장된 OTP 검증 상태 확인",
+          "period": "2026.08 ~ 현재",
+          "sections": [
             {
-              "label": "규모",
-              "detail": "복수의 WAS VM으로 운영하는 여러 고객 사이트. 사이트마다 애플리케이션과 배포 설정이 다름"
+              "title": "자체 회원가입 도입과 휴대폰 인증",
+              "paragraphs": [
+                "자체 회원가입을 도입하면서 가입 때 인증한 휴대폰 번호를 아이디 찾기와 비밀번호 재설정의 근거로 사용하도록 설계했습니다. 계정 생성과 변경 시 브라우저가 제출한 번호뿐 아니라 서버에 저장된 OTP 검증 상태를 다시 확인하도록 했습니다."
+              ]
             },
             {
-              "label": "문제",
-              "detail": "한 번의 배포가 여러 VM을 변경하고, 스토리지 고정 키와 DB 비밀번호가 Jenkins를 거쳐 전달됨"
+              "title": "가입 완료와 외부 SMS 실패 처리",
+              "paragraphs": [
+                "OTP 해시, 만료 시각, 발송 횟수, 실패 횟수, 검증된 번호를 서버의 가입 세션에 저장했습니다. 최종 제출에서는 세션을 잠그고 검증 상태를 다시 확인한 뒤, 해당 번호로 계정을 만들고 세션을 같은 트랜잭션에서 소비했습니다. 중복 아이디는 DB unique 제약으로 막고 세션 소비가 실패하면 계정 생성도 롤백하도록 했습니다.",
+                "SMS는 DB 트랜잭션 밖에서 발송하므로 상태 준비 후 발송이 실패할 수 있습니다. 발송 실패 시 현재 상태가 해당 발송을 준비할 때의 상태와 같을 때만 되돌렸습니다. 이렇게 해서 실패 처리가 늦어져도 다른 요청이 갱신한 상태를 덮어쓰지 않도록 했습니다."
+              ]
             },
             {
-              "label": "기술 과제",
-              "detail": "VM별 실행과 오류 코드 전달 구현. 대상 VM의 관리 ID 인증을 적용하며 CLI 옵션, 프록시, 인증서 오류를 나눠 해결"
+              "title": "다중 인스턴스의 복구 요청 제어",
+              "paragraphs": [
+                "복구 세션과 발송 제한을 서버 메모리에서 공유 PostgreSQL로 옮겼습니다. 행 잠금으로 OTP 대조와 실패 횟수 갱신을 묶고, 별도 발송 제한 키에 원자적 upsert를 적용해 복구 세션을 새로 만들어도 발송 상한을 우회하지 못하도록 했습니다.",
+                "비밀번호 변경 직전에는 테넌트, 휴대폰 번호, 계정의 연결과 활성 비밀번호가 정확히 하나인지 잠금 상태에서 재확인했습니다. 비밀번호 갱신, 로그인 잠금 해제, 복구 세션 완료를 한 트랜잭션으로 처리해 부분 성공과 reset token 재사용을 막았습니다."
+              ]
             },
             {
-              "label": "결과",
-              "detail": "배포 한 번의 변경 대상을 VM 한 대로 제한하고 Jenkins의 비밀값 전달 경로 제거. 배포 시간과 장애율은 미측정"
-            }
-          ],
-          "sources": [
-            {
-              "label": "배포와 외부 연동 면접 준비",
-              "url": "/blog/interview-prep-04-delivery-external-api"
+              "title": "검증 범위",
+              "paragraphs": [
+                "동시 요청, 미인증 가입, 중복 계정, 계정 연결 불일치, 토큰 재사용과 중간 실패 시 전체 롤백을 테스트했습니다."
+              ]
             }
           ]
         }
