@@ -1,4 +1,4 @@
 {
-  "title": "파일 기반 Gateway 설정 관리",
-  "description": "Spring Cloud Config의 Native Repository를 확장하고, 작은 설정을 프로세스 메모리에 캐시하며, RabbitMQ Bus로 변경을 전파하기까지의 선택과 한계를 소스에서 다시 읽습니다."
+  "title": "Gateway 설정 관리: 확장 경계에서 부하 실험까지",
+  "description": "Spring Cloud Config composition, 파일 캐시, RabbitMQ Bus와 20개 application·38 client 부하 실험을 근거와 면접 질문으로 연결합니다."
 }
