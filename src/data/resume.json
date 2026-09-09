@@ -61,7 +61,7 @@
                   "highlights": [
                     "Native Repository를 composition으로 감싸 기존 설정 해석을 재사용하고, 파일 수정 시각에 따른 메모리 캐시로 동일 설정 재구성을 생략",
                     "라우팅 설정을 외부화하고 Spring Cloud Config, RabbitMQ Bus와 주기적 self-refresh를 연결해 설정 갱신 경로 구성",
-                    "라우트별 WebFlux 필터로 query parameter를 JSON body로 변환하고 예외 항목과 복수 값 계약 처리"
+                    "Spring Cloud Gateway를 활용해 레거시 API 연동을 위한 요청 변환 기능 구현"
                   ],
                   "tech": "Java, Spring Cloud Gateway/Config/Bus, WebFlux, RabbitMQ, Kubernetes, Jenkins"
                 },
