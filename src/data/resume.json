@@ -122,8 +122,8 @@
                   "period": "2024.06 ~ 2024.12",
                   "highlights": [
                     "사용자 질문에서 API 경로와 매개변수를 생성하고 호출 결과를 반환하는 흐름 구현",
-                    "chain별 평가 데이터셋을 별도로 구축해 단계별 동작 검증",
-                    "운영 중 실행 trace를 수집하고 chain별 입력과 출력을 추적할 수 있도록 LLMOps 구성"
+                    "chain별 평가 데이터셋을 구축하고 관리해 단계별 동작과 FAISS, BM25 기반 하이브리드 검색 결과 검증",
+                    "LangSmith로 실행 trace를 수집하고 chain별 입력과 출력을 추적하는 검증 환경 구성"
                   ],
                   "tech": "Python, FastAPI, LangChain, LangSmith"
                 }
@@ -187,7 +187,7 @@
         },
         {
           "label": "Auth & Messaging",
-          "value": "OAuth 2.0(PKCE), JWT, Kafka, RabbitMQ"
+          "value": "OAuth 2.1, JWT, Kafka, RabbitMQ"
         },
         {
           "label": "AI Application",
