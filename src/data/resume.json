@@ -90,7 +90,7 @@
                     "운영 배포의 변경 범위를 서버 단위로 제한하고 실패 감지를 보강해, 서버별 결과를 확인하며 후속 배포를 진행할 수 있도록 개선",
                     "사내 보안 정책 변경에 대응해 배포 인증을 Azure 관리 ID 기반으로 전환하고, Jenkins에서 스토리지 고정 키와 애플리케이션 비밀값을 전달하던 경로 제거"
                   ],
-                  "tech": "Jenkins, Azure Managed Identity, Azure Blob Storage, Azure Key Vault, Bash, Tomcat"
+                  "tech": "GitHub Actions, Jenkins, Azure, Apache HTTP Server, Tomcat"
                 }
               ]
             }
@@ -122,7 +122,7 @@
                   "period": "2024.06 ~ 2024.12",
                   "highlights": [
                     "사용자 질문에서 API 경로와 매개변수를 생성하고 호출 결과를 반환하는 흐름 구현",
-                    "LangSmith를 도입하고 주요 chain별 평가 데이터셋을 별도로 구축해 단계별 동작 검증",
+                    "chain별 평가 데이터셋을 별도로 구축해 단계별 동작 검증",
                     "운영 중 실행 trace를 수집하고 chain별 입력과 출력을 추적할 수 있도록 LLMOps 구성"
                   ],
                   "tech": "Python, FastAPI, LangChain, LangSmith"
