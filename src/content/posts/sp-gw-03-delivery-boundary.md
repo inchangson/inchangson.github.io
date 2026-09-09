@@ -105,4 +105,4 @@ CD 호출 성공과 실제 서비스 준비 완료를 연결하는 확인 단계
 4. `src/main/resources/application.yaml`: 프로세스에서 읽는 설정
 5. `cicd/Jenkinsfile_development`, `Dockerfile.development`: JAR에서 이미지, CD 호출까지
 
-Skaffold·Helm, 외부 설정, 개발계 CI와 profile 관리의 변경 이력을 확인했다. [공개 근거 안내](../../docs/sp-gw-interview/source-map.md)에 검증 범위를 정리했다.
+Skaffold·Helm, 외부 설정, 개발계 CI와 profile 관리의 변경 이력을 확인했다. [공개 근거 안내](https://github.com/inchangson/inchangson.github.io/blob/master/docs/sp-gw-interview/source-map.md)에 검증 범위를 정리했다.
