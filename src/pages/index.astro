@@ -5,7 +5,10 @@ import PostCard from '../components/PostCard.astro';
 import { getBlogPosts } from '../lib/blog';
 
 // Temporarily send homepage visitors to the resume while blog drafts are prepared.
-return Astro.redirect('/resume', 302);
+return new Response(
+  '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>이력서로 이동</title><meta http-equiv="refresh" content="0;url=/resume"><meta name="robots" content="noindex"></head><body><a href="/resume">이력서로 이동</a></body></html>',
+  { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+);
 
 const posts = (await getBlogPosts()).slice(0, 3);
 ---
