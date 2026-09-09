@@ -13,6 +13,7 @@ export default defineConfig({
   // that are still loaded in the other server's browser tab (504 Outdated Optimize Dep).
   cacheDir: path.join(projectRoot, 'node_modules/.vite-editor'),
   publicDir: path.join(projectRoot, 'public'),
+  optimizeDeps: { include: ['mermaid'] },
   plugins: [localEditorApi(projectRoot)],
   server: {
     host: '127.0.0.1',

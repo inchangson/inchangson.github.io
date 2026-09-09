@@ -25,14 +25,12 @@ Prism.languages.shell = Prism.languages.bash;
 
 const LAST_POST_STORAGE_KEY = 'blog-editor:last-post-slug';
 const MERMAID_REFRESH_EVENT = 'refreshMermaidPreviews';
-let requestWysiwygMermaidRefresh = () => {};
+let requestWysiwygMermaidRefresh = async () => [];
 
 function mermaidPreviewPlugin(context) {
-  const { eventEmitter } = context;
   const pluginKey = new context.pmState.PluginKey('mermaidPreview');
   let renderVersion = 0;
-  eventEmitter.addEventType(MERMAID_REFRESH_EVENT);
-  requestWysiwygMermaidRefresh = () => eventEmitter.emit(MERMAID_REFRESH_EVENT);
+  let renderTasks = [];
 
   function decorationsFor(doc) {
     renderVersion += 1;
@@ -46,7 +44,7 @@ function mermaidPreviewPlugin(context) {
       decorations.push(context.pmView.Decoration.widget(pos + node.nodeSize, () => {
         const container = document.createElement('div');
         container.className = 'mermaid-preview';
-        void renderMermaidSource(container, source, `editor-${renderVersion}-${index}`);
+        renderTasks.push(renderMermaidSource(container, source, key));
         return container;
       }, { key, side: -1 }));
     });
@@ -66,9 +64,12 @@ function mermaidPreviewPlugin(context) {
         decorations: (editorState) => pluginKey.getState(editorState),
       },
       view: (view) => {
-        const refresh = () => view.dispatch(view.state.tr.setMeta(pluginKey, MERMAID_REFRESH_EVENT));
-        eventEmitter.listen(MERMAID_REFRESH_EVENT, refresh);
-        return { destroy: () => eventEmitter.removeEventHandler(MERMAID_REFRESH_EVENT) };
+        requestWysiwygMermaidRefresh = () => {
+          renderTasks = [];
+          view.dispatch(view.state.tr.setMeta(pluginKey, MERMAID_REFRESH_EVENT));
+          return Promise.all(renderTasks);
+        };
+        return { destroy: () => { requestWysiwygMermaidRefresh = async () => []; } };
       },
     })],
   };
@@ -203,6 +204,7 @@ const editor = new Editor({
       markDirty(true);
       updateMermaidControls(true);
     },
+    changeMode: () => queueMicrotask(() => void refreshMermaidPreviews()),
   },
 });
 
@@ -589,7 +591,7 @@ async function uploadImage(slug, blob) {
 }
 
 function hasMermaidBlocks() {
-  return /(?:^|\n)\s{0,3}`{3,}mermaid(?:\s|$)/i.test(editor.getMarkdown());
+  return /(?:^|\n)\s{0,3}(?:`{3,}|~{3,})mermaid(?:\s|$)/i.test(editor.getMarkdown());
 }
 
 function updateMermaidControls(stale) {
@@ -600,25 +602,47 @@ function updateMermaidControls(stale) {
   elements.mermaidStatus.textContent = state.mermaidStale ? '미리보기 갱신 필요' : '';
 }
 
+let mermaidRefreshVersion = 0;
 async function refreshMermaidPreviews() {
+  const version = ++mermaidRefreshVersion;
+  const markdown = editor.getMarkdown();
+  elements.mermaidRefresh.disabled = false;
+  elements.mermaidRefresh.textContent = 'Mermaid 새로고침';
   if (!hasMermaidBlocks()) {
     updateMermaidControls(false);
     return;
   }
   elements.mermaidRefresh.disabled = true;
   elements.mermaidRefresh.textContent = 'Mermaid 렌더링 중';
-  requestWysiwygMermaidRefresh();
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-  const results = await renderMermaidCodeBlocks(document, {
-    selector: '.toastui-editor-md-preview pre.lang-mermaid > code, .toastui-editor-md-preview pre > code[data-language="mermaid"], .toastui-editor-md-preview pre > code.language-mermaid',
-    scope: 'editor-markdown',
-  });
-  const failed = results.filter((result) => !result.ok).length;
-  state.mermaidStale = false;
-  elements.mermaidStatus.hidden = failed === 0;
-  elements.mermaidStatus.textContent = failed ? `${failed}개 렌더링 실패` : '';
-  elements.mermaidRefresh.disabled = false;
-  elements.mermaidRefresh.textContent = 'Mermaid 새로고침';
+  try {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    if (version !== mermaidRefreshVersion) return;
+    const results = editor.isWysiwygMode()
+      ? await requestWysiwygMermaidRefresh()
+      : await renderMermaidCodeBlocks(document, {
+        selector: '.toastui-editor-md-preview pre.lang-mermaid > code, .toastui-editor-md-preview pre > code[data-language="mermaid"], .toastui-editor-md-preview pre > code.language-mermaid',
+        scope: 'editor-markdown',
+      });
+    if (version !== mermaidRefreshVersion) return;
+    if (markdown !== editor.getMarkdown()) {
+      updateMermaidControls(true);
+      return;
+    }
+    const failed = results.filter((result) => !result.ok).length;
+    state.mermaidStale = failed > 0;
+    elements.mermaidStatus.hidden = failed === 0;
+    elements.mermaidStatus.textContent = failed ? `${failed}개 렌더링 실패` : '';
+  } catch (error) {
+    if (version !== mermaidRefreshVersion) return;
+    state.mermaidStale = true;
+    elements.mermaidStatus.hidden = false;
+    elements.mermaidStatus.textContent = `미리보기 갱신 실패: ${error.message}`;
+  } finally {
+    if (version === mermaidRefreshVersion) {
+      elements.mermaidRefresh.disabled = false;
+      elements.mermaidRefresh.textContent = 'Mermaid 새로고침';
+    }
+  }
 }
 
 function setBusy(busy, label = '') {
