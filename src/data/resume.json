@@ -56,11 +56,12 @@
                 },
                 {
                   "title": "Service Delivery Gateway",
-                  "summary": "기존 서비스의 요청 형식을 변환하고 라우팅 설정을 외부에서 관리하는 Gateway 개발",
+                  "summary": "레거시 요청 계약 변환과 외부 라우팅 설정의 조회, 캐시, 갱신 경로를 구성한 Service Delivery Gateway 개발",
                   "period": "2025.09 ~ 2025.12",
                   "highlights": [
-                    "WebFlux 필터로 query parameter를 JSON body로 변환하고 서비스별 예외 처리",
-                    "Spring Cloud Config와 Bus로 설정 갱신 경로 구성"
+                    "Native Repository를 composition으로 감싸 기존 설정 해석을 재사용하고, 파일 수정 시각에 따른 메모리 캐시로 동일 설정 재구성을 생략",
+                    "라우팅 설정을 외부화하고 Spring Cloud Config, RabbitMQ Bus와 주기적 self-refresh를 연결해 설정 갱신 경로 구성",
+                    "라우트별 WebFlux 필터로 query parameter를 JSON body로 변환하고 예외 항목과 복수 값 계약 처리"
                   ],
                   "tech": "Java, Spring Cloud Gateway/Config/Bus, WebFlux, RabbitMQ, Kubernetes, Jenkins"
                 },
