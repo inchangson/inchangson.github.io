@@ -9,7 +9,8 @@
     "test:editor": "node --test editor/**/*.test.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "test:mermaid": "playwright test"
   },
   "dependencies": {
     "@toast-ui/editor": "^3.2.2",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.63.0",
     "typescript": "^5.0.0",
     "vite": "^8.2.2"
   },

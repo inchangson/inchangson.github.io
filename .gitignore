@@ -14,3 +14,7 @@ RTK.md
 *.log
 *.env
 *.env.local
+
+# Browser regression test artifacts
+playwright-report/
+test-results/
