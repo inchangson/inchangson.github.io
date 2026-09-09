@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="app">
-      <aside class="sidebar">
+      <aside id="sidebar" class="sidebar">
         <div class="brand">
           <div>
             <span class="eyebrow">LOCAL WORKSPACE</span>
@@ -38,7 +38,8 @@
 
       <main class="workspace">
         <header class="topbar">
-          <div>
+          <button id="toggle-sidebar" class="button button--ghost" type="button" aria-controls="sidebar" aria-expanded="true">메뉴 접기</button>
+          <div class="topbar__document">
             <span id="document-kind" class="eyebrow">DOCUMENT</span>
             <strong id="document-title">글을 선택하세요</strong>
           </div>
@@ -154,6 +155,10 @@
             <div id="category-list" class="category-manage-list"></div>
           </div>
         </section>
+        <footer class="save-bar">
+          <span id="bottom-save-status" class="save-status" role="status" aria-live="polite">저장됨</span>
+          <button id="save-current" class="button button--primary" type="button" disabled>저장하기</button>
+        </footer>
       </main>
     </div>
 

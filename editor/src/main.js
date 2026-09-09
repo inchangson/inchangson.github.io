@@ -76,6 +76,10 @@ function mermaidPreviewPlugin(context) {
 }
 
 const elements = {
+  bottomSave: document.querySelector('#save-current'),
+  bottomStatus: document.querySelector('#bottom-save-status'),
+  sidebar: document.querySelector('#sidebar'),
+  toggleSidebar: document.querySelector('#toggle-sidebar'),
   postList: document.querySelector('#post-list'),
   postSidebar: document.querySelector('#post-sidebar'),
   navPosts: document.querySelector('#nav-posts'),
@@ -137,6 +141,8 @@ const elements = {
 };
 
 const state = {
+  busy: false,
+  modeViews: {},
   posts: [],
   currentSlug: null,
   revision: null,
@@ -230,6 +236,34 @@ fields.forEach((field) => {
   field.addEventListener('change', () => markDirty(false));
 });
 
+function syncSaveControls() {
+  elements.bottomStatus.textContent = elements.saveStatus.textContent;
+  elements.bottomStatus.className = elements.saveStatus.className;
+  elements.bottomSave.disabled = state.busy || (state.mode === 'posts' ? !(state.currentSlug || state.isNew) : state.mode === 'resume' ? !state.resume : state.mode === 'series' ? elements.seriesForm.hidden : !state.categoryRevision);
+}
+new MutationObserver(syncSaveControls).observe(elements.saveStatus, { childList: true, attributes: true, subtree: true });
+new MutationObserver(syncSaveControls).observe(elements.seriesForm, { attributes: true, attributeFilter: ['hidden'] });
+function setSidebarCollapsed(collapsed) {
+  document.querySelector('#app').classList.toggle('is-sidebar-collapsed', collapsed);
+  elements.sidebar.hidden = collapsed;
+  elements.toggleSidebar.setAttribute('aria-expanded', String(!collapsed));
+  elements.toggleSidebar.textContent = collapsed ? '메뉴 펼치기' : '메뉴 접기';
+}
+elements.toggleSidebar.addEventListener('click', () => {
+  const collapsed = !elements.sidebar.hidden;
+  setSidebarCollapsed(collapsed);
+  localStorage.setItem('blog-editor:sidebar-collapsed', String(collapsed));
+});
+setSidebarCollapsed(localStorage.getItem('blog-editor:sidebar-collapsed') === 'true');
+function saveActiveDocument() {
+  if (state.busy) return;
+  return ({ posts: saveCurrentPost, resume: saveResume, series: saveSeries, categories: saveCategories })[state.mode]();
+}
+elements.bottomSave.addEventListener('click', () => void saveActiveDocument());
+// Keep the editing selection when using persistent controls with a pointer.
+[elements.save, elements.bottomSave, elements.toggleSidebar, elements.saveResume, elements.saveCategories, elements.navPosts, elements.navResume, elements.navSeries, elements.navCategories].forEach(button => {
+  button.addEventListener('mousedown', event => event.preventDefault());
+});
 elements.search.addEventListener('input', renderPostList);
 elements.postViewTabs.addEventListener('click', (event) => {
   const button = event.target.closest('[data-post-view]');
@@ -261,7 +295,7 @@ elements.newCategory.addEventListener('click', addCategory);
 elements.saveCategories.addEventListener('click', () => void saveCategories());
 
 window.addEventListener('beforeunload', (event) => {
-  if (!state.dirty) return;
+  if (!state.dirty && !Object.values(state.modeViews).some(view => view.dirty)) return;
   event.preventDefault();
 });
 
@@ -276,9 +310,7 @@ window.addEventListener('resize', () => {
 document.addEventListener('keydown', (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
     event.preventDefault();
-    if (state.mode === 'resume') void saveResume();
-    else if (state.mode === 'series') void saveSeries();
-    else if (!elements.save.disabled) void saveCurrentPost();
+    void saveActiveDocument();
   }
 });
 
@@ -292,6 +324,7 @@ function markDirty(bodyChanged) {
 
 function markClean() {
   state.dirty = false;
+  if (state.modeViews[state.mode]) Object.assign(state.modeViews[state.mode], { dirty: false, bodyDirty: false });
   state.bodyDirty = false;
   elements.save.disabled = false;
   elements.saveStatus.textContent = '저장됨';
@@ -380,6 +413,7 @@ function createPostButton(post) {
 }
 
 async function selectPost(slug) {
+  if (state.busy) return;
   if (slug === state.currentSlug && !state.isNew) return;
   if (!confirmDiscard()) return;
   setBusy(true, '불러오는 중');
@@ -403,6 +437,7 @@ async function selectPost(slug) {
 }
 
 function beginNewPost() {
+  if (state.busy || state.mode !== 'posts') return;
   if (!confirmDiscard()) return;
   const today = new Date();
   const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
@@ -540,7 +575,7 @@ function validateForm() {
 }
 
 async function saveCurrentPost() {
-  if (elements.editorScreen.hidden) return;
+  if (state.busy || elements.editorScreen.hidden) return;
   let slug;
   try {
     slug = validateForm();
@@ -563,7 +598,6 @@ async function saveCurrentPost() {
     state.originalBody = saved.body;
     localStorage.setItem(LAST_POST_STORAGE_KEY, saved.slug);
     elements.slug.readOnly = true;
-    setEditorBody(saved.body);
     markClean();
     await loadPostList();
     updateDocumentHeader();
@@ -645,9 +679,15 @@ async function refreshMermaidPreviews() {
   }
 }
 
+let busyFocus;
 function setBusy(busy, label = '') {
+  state.busy = busy;
+  if (busy) busyFocus = document.activeElement;
+  for (const screen of [elements.editorScreen, elements.resumeScreen, elements.seriesScreen, elements.categoriesScreen, elements.sidebar]) screen.inert = busy;
   elements.save.disabled = busy;
   if (busy) elements.saveStatus.textContent = label;
+  else if (busyFocus?.isConnected && !busyFocus.closest('[hidden]')) busyFocus.focus({ preventScroll: true });
+  syncSaveControls();
 }
 
 let toastTimer;
@@ -722,9 +762,15 @@ async function loadSeries() {
 }
 
 async function switchMode(mode) {
-  if (!confirmDiscard()) return;
-  markClean();
+  if (state.busy || (state.mode === mode && state.modeViews[mode])) return;
+  state.modeViews[state.mode] = { dirty: state.dirty, bodyDirty: state.bodyDirty, scrollY: window.scrollY, focus: document.activeElement,
+    scrolls: [...document.querySelectorAll('#toast-editor *')].filter(node => node.scrollTop || node.scrollLeft).map(node => [node, node.scrollTop, node.scrollLeft]) };
+  const view = state.modeViews[mode];
   state.mode = mode;
+  state.dirty = view?.dirty || false;
+  state.bodyDirty = view?.bodyDirty || false;
+  elements.saveStatus.textContent = state.dirty ? '저장하지 않음' : '저장됨';
+  elements.saveStatus.classList.toggle('is-dirty', state.dirty);
   [elements.navPosts, elements.navResume, elements.navSeries, elements.navCategories].forEach((button) => button.classList.remove('is-active'));
   elements[`nav${mode[0].toUpperCase()}${mode.slice(1)}`]?.classList.add('is-active');
   elements.postSidebar.hidden = mode !== 'posts';
@@ -740,15 +786,24 @@ async function switchMode(mode) {
   elements.emptyState.hidden = mode !== 'posts' || hasPost;
   elements.documentKind.textContent = mode === 'posts' ? 'DOCUMENTS' : mode.toUpperCase();
   elements.documentTitle.textContent = mode === 'resume' ? 'Resume 편집' : mode === 'series' ? '시리즈 관리' : mode === 'categories' ? '카테고리 관리' : (elements.title.value || '글 목록');
-  if (mode === 'resume' && !state.resume) void loadResume();
-  if (mode === 'series') void loadSeries();
-  if (mode === 'categories') void loadCategories();
+  elements.newPost.hidden = mode !== 'posts';
+  if (mode === 'resume' && !state.resume) {
+    setBusy(true, '불러오는 중');
+    try { await loadResume(); } finally { setBusy(false); }
+  }
   if (mode === 'posts') {
     const initialSlug = resolveInitialPostSlug(state.posts, localStorage.getItem(LAST_POST_STORAGE_KEY));
     if (!hasPost && initialSlug) await selectPost(initialSlug);
     else if (!hasPost) elements.emptyState.hidden = false;
     else updateDocumentHeader();
   }
+  requestAnimationFrame(() => {
+    if (state.mode !== mode) return;
+    if (view?.focus?.isConnected && view.focus.closest('.editor-screen:not([hidden])')) view.focus.focus({ preventScroll: true });
+    window.scrollTo(0, view?.scrollY || 0);
+    for (const [node, top, left] of view?.scrolls || []) { node.scrollTop = top; node.scrollLeft = left; }
+  });
+  syncSaveControls();
 }
 
 const input = (label, path, value = '', multiline = false) => `<label class="field"><span>${label}</span>${multiline ? `<textarea rows="3" data-path="${path}">${escapeHtml(value)}</textarea>` : `<input data-path="${path}" value="${escapeHtml(value)}" />`}</label>`;
@@ -827,6 +882,14 @@ async function loadResume() {
   catch (error) { showToast(error.message, true); }
 }
 async function saveResume() {
+  if (state.busy || !state.resume) return;
+  setBusy(true, '저장 중');
+  try { await saveResumeRequest(); } finally {
+    if (elements.saveStatus.textContent === '저장 중') elements.saveStatus.textContent = '저장 실패';
+    setBusy(false);
+  }
+}
+async function saveResumeRequest() {
   try { const result = await api('/api/resume', { method: 'PUT', body: JSON.stringify({ data: state.resume, revision: state.resumeRevision }) }); state.resume = result.data; state.resumeRevision = result.revision; markClean(); showToast('Resume를 저장했습니다.'); }
   catch (error) { showToast(error.message, true); }
 }
@@ -846,6 +909,14 @@ function editSeries(id) {
   const item = state.series.find((series) => series.id === id); state.currentSeries = item; elements.seriesForm.hidden = false; elements.seriesId.value = item.id; elements.seriesId.readOnly = true; elements.seriesTitle.value = item.title; elements.seriesDescription.value = item.description; elements.seriesFormTitle.textContent = item.title; elements.deleteSeries.hidden = false;
 }
 async function saveSeries() {
+  if (state.busy || elements.seriesForm.hidden) return;
+  setBusy(true, '저장 중');
+  try { await saveSeriesRequest(); } finally {
+    if (elements.saveStatus.textContent === '저장 중') elements.saveStatus.textContent = '저장 실패';
+    setBusy(false);
+  }
+}
+async function saveSeriesRequest() {
   try {
     const payload = { id: elements.seriesId.value.trim(), title: elements.seriesTitle.value.trim(), description: elements.seriesDescription.value.trim(), revision: state.currentSeries?.revision };
     const saved = await api(state.currentSeries ? `/api/series/${encodeURIComponent(state.currentSeries.id)}` : '/api/series', { method: state.currentSeries ? 'PUT' : 'POST', body: JSON.stringify(payload) });
@@ -941,6 +1012,14 @@ elements.categoryList.addEventListener('click', (event) => {
 });
 
 async function saveCategories() {
+  if (state.busy || !state.categoryRevision) return;
+  setBusy(true, '저장 중');
+  try { await saveCategoriesRequest(); } finally {
+    if (elements.saveStatus.textContent === '저장 중') elements.saveStatus.textContent = '저장 실패';
+    setBusy(false);
+  }
+}
+async function saveCategoriesRequest() {
   try {
     const migrations = [...state.categoryMigrations];
     for (const category of state.categories) {
@@ -965,7 +1044,7 @@ async function saveCategories() {
     if (state.currentSlug) {
       const current = await api(`/api/posts/${encodeURIComponent(state.currentSlug)}`);
       state.revision = current.revision;
-      setForm(current.slug, current.metadata, false);
+      if (!state.modeViews.posts?.dirty) setForm(current.slug, current.metadata, false);
     }
     markClean(); showToast('카테고리와 연결된 글을 저장했습니다.');
   } catch (error) { showToast(error.message, true); }

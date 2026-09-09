@@ -163,3 +163,15 @@ dialog::backdrop { background: rgba(18,31,24,.52); backdrop-filter: blur(3px); }
   .editor-screen { width: calc(100% - 48px); }
   .topbar { padding-inline: 24px; }
 }
+
+/* Controls stay outside the scrolling document. */
+#app { --sidebar-width: 292px; grid-template-columns: var(--sidebar-width) minmax(0, 1fr); }
+#app.is-sidebar-collapsed { --sidebar-width: 0px; }
+.workspace { padding-top: 76px; padding-bottom: 76px; }
+.topbar { position: fixed; left: var(--sidebar-width); right: 0; height: 76px; gap: 16px; }
+.topbar__document { display: grid; gap: 4px; min-width: 0; margin-right: auto; }
+.topbar strong { max-width: 100%; }
+.topbar__actions { flex-shrink: 0; }
+#toggle-sidebar { flex-shrink: 0; }
+.save-bar { position: fixed; bottom: 0; left: var(--sidebar-width); right: 0; z-index: 5; display: flex; justify-content: flex-end; align-items: center; gap: 16px; min-height: 68px; padding: 12px 24px; border-top: 1px solid #dfe5df; background: rgba(250,251,248,.97); }
+#toast { bottom: 84px; }
