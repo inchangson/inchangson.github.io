@@ -446,6 +446,10 @@ a:hover {
   gap: 22px;
 }
 
+.resume-page .lede {
+  white-space: pre-line;
+}
+
 .resume-page .panel,
 .resume-page .resume-summary {
   border-radius: 6px;
@@ -483,6 +487,10 @@ a:hover {
   gap: 12px;
   margin: 0;
   padding-left: 1.25rem;
+}
+
+.summary-points > li {
+  white-space: pre-line;
 }
 
 .career-company {
