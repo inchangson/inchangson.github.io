@@ -50,9 +50,9 @@
                     "인증 및 계정 처리의 변경 지점을 Step과 정책 설정으로 분리해 고객사별 인가 정책, 가입 조건과 자격증명 규칙을 공통 흐름에서 수용",
                     "기존 계정과 자격증명 테이블을 재사용하고 로그인 수단과 세션 구조를 확장해, 기존 DB 변경을 최소화하면서 고객 인증과 자체 회원가입 수용",
                     "OAuth 인가 세션과 가입 세션의 수명을 분리하고 고객사 문맥과 가입 정책을 스냅샷으로 보존해, 원본 인가 세션 만료 후에도 가입 완료 가능",
-                    "DB 설정으로 인증 흐름을 확장할 때 발생할 수 있는 설정 및 데이터 불일치를 탐지하도록 12개 무결성 검사 규칙과 주기적 점검 기능 구현. 규칙별 실패 격리와 조회 시간 제한, 다중 인스턴스 중복 실행 제어 적용"
+                    "DB 설정으로 인증 흐름을 확장할 때 발생할 수 있는 설정 및 데이터 불일치를 선제적 탐지 및 모니터링 시스템 구축"
                   ],
-                  "tech": "Java, Spring Boot, PostgreSQL, OAuth 2.0, PKCE, JWT, SMS, OTP"
+                  "tech": "Java, Spring Boot, Spring JDBC, PostgreSQL, Thymeleaf, OAuth 2.1, JWT"
                 },
                 {
                   "title": "Service Delivery Gateway",
@@ -63,7 +63,7 @@
                     "라우팅 설정을 외부화하고 Spring Cloud Config, RabbitMQ Bus와 주기적 self-refresh를 연결해 설정 갱신 경로 구성",
                     "Spring Cloud Gateway를 활용해 레거시 API 연동을 위한 요청 변환 기능 구현"
                   ],
-                  "tech": "Java, Spring Cloud Gateway/Config/Bus, WebFlux, RabbitMQ, Kubernetes, Jenkins"
+                  "tech": "Java, Spring WebFlux, Spring Cloud Gateway, Spring Cloud Config, Spring Cloud Bus, RabbitMQ"
                 },
                 {
                   "title": "IVI 플랫폼 운영 및 개선",
@@ -73,7 +73,7 @@
                     "알람 원인 분석, 보안 취약점 제거와 인프라 업데이트, 사내 정책 변경에 따른 배포 파이프라인 개선 수행",
                     "쿠폰 통계 조회에서 저장된 수량을 재사용하도록 쿼리를 변경하고 복합 인덱스를 운영에 반영"
                   ],
-                  "tech": "PostgreSQL, WhaTap"
+                  "tech": "PostgreSQL, WhaTap, Azure"
                 }
               ]
             },
@@ -82,15 +82,15 @@
               "summary": "현대상용차, 타타대우, 포드링컨",
               "items": [
                 {
-                  "title": "사이트 운영 및 배포 개선",
-                  "summary": "현대상용차, 타타대우, 포드링컨 내비게이션 업데이트 사이트 운영과 CI/CD 구축",
+                  "title": "사이트 운영 및 CI/CD 구축",
+                  "summary": "3개 고객사의 내비게이션 업데이트 사이트 운영, 배포 자동화 및 보안 정책 대응",
                   "period": "2025.03 ~ 현재",
                   "highlights": [
-                    "여러 고객 사이트 운영과 사이트별 애플리케이션과 배포 설정 관리",
-                    "Jenkins 운영 배포를 VM 한 대씩 실행하도록 분리하고 원격 스크립트 실패를 파이프라인에 전달",
-                    "사내 정책 변경에 맞춰 대상 VM별 사용자 할당 관리 ID(UAMI)로 Blob Storage와 Key Vault에 접근하도록 개선. Jenkins를 통한 고정 키와 비밀값 전달 경로 제거"
+                    "고객사별 애플리케이션과 운영 환경에 맞춰 Jenkins CI/CD를 구축하고, 세 사이트의 배포 절차와 오류 처리 방식을 표준화",
+                    "운영 배포의 변경 범위를 서버 단위로 제한하고 실패 감지를 보강해, 서버별 결과를 확인하며 후속 배포를 진행할 수 있도록 개선",
+                    "사내 보안 정책 변경에 대응해 배포 인증을 Azure 관리 ID 기반으로 전환하고, Jenkins에서 스토리지 고정 키와 애플리케이션 비밀값을 전달하던 경로 제거"
                   ],
-                  "tech": "Jenkins, Azure Managed Identity, Blob Storage, Key Vault, Bash, Tomcat"
+                  "tech": "Jenkins, Azure Managed Identity, Azure Blob Storage, Azure Key Vault, Bash, Tomcat"
                 }
               ]
             }
@@ -107,10 +107,12 @@
               "items": [
                 {
                   "title": "관제 대시보드",
-                  "summary": "관제 모듈의 데이터를 모아 대시보드에 제공하는 API 개발",
+                  "summary": "여러 관제 모듈을 연계해 이벤트 처리와 사용자별 조회 흐름을 조정하는 오케스트레이션 API 개발",
                   "period": "2024.06 ~ 2024.12",
                   "highlights": [
-                    "이벤트 접수부터 종료까지의 처리 흐름, 지도 프리셋, 위젯 관리 구현"
+                    "이벤트 상태와 사용자 접근 범위, 이벤트 규칙 및 장치 정보를 검증하고, 상태 변경과 이력 등록을 순차 수행하는 관제 업무 흐름 구현",
+                    "사용자와 그룹의 알람 구독 정보를 이벤트 조회에 연결하고, 상태별, 등급별, 서비스 대상별 관제 현황 집계 구현",
+                    "사용자별 이벤트 숨김, 지도 프리셋과 위젯 개인화 및 위젯 소유자 검증 구현"
                   ],
                   "tech": "Java, Spring Boot, JPA, PostgreSQL, Redis, Kafka"
                 },
@@ -165,23 +167,31 @@
     },
     {
       "type": "keyValue",
-      "title": "기술",
+      "title": "기술 스택",
       "rows": [
         {
           "label": "Backend",
-          "value": "Java, Spring Boot, Spring MVC, Spring Cloud Gateway, MyBatis, JPA"
+          "value": "Java, Spring Boot, Spring MVC, Spring WebFlux, Spring JDBC, MyBatis, JPA, Thymeleaf"
+        },
+        {
+          "label": "Spring Cloud",
+          "value": "Spring Cloud Gateway, Spring Cloud Config, Spring Cloud Bus"
         },
         {
           "label": "Data",
           "value": "PostgreSQL, MySQL, Redis"
         },
         {
-          "label": "Integration",
-          "value": "REST API, OAuth 2.0, Kafka, RabbitMQ"
+          "label": "Auth & Messaging",
+          "value": "OAuth 2.0(PKCE), JWT, Kafka, RabbitMQ"
+        },
+        {
+          "label": "AI Application",
+          "value": "Python, FastAPI, LangChain, LangSmith"
         },
         {
           "label": "Test & Monitoring",
-          "value": "JUnit, Testcontainers, k6, WhaTap, Prometheus, LangSmith"
+          "value": "JUnit, Mockito, MockMvc, WhaTap"
         },
         {
           "label": "Delivery",
