@@ -22,7 +22,7 @@ function validateResume(value) {
     throw new PostStoreError(400, 'Resume 이름과 소개는 필수입니다.');
   }
   if (!Array.isArray(value.sections)) throw new PostStoreError(400, 'Resume 섹션 형식이 올바르지 않습니다.');
-  const allowed = new Set(['prose', 'timeline', 'list', 'keyValue']);
+  const allowed = new Set(['prose', 'timeline', 'list', 'keyValue', 'caseStudies']);
   for (const section of value.sections) {
     if (!section || !allowed.has(section.type) || !String(section.title || '').trim()) {
       throw new PostStoreError(400, 'Resume 섹션의 형식과 제목을 확인해 주세요.');

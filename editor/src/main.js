@@ -764,6 +764,8 @@ function renderResume() {
     if (section.type === 'prose') body += renderSimpleArray(section.paragraphs || [], `${base}.paragraphs`, '문단', 'paragraph');
     if (section.type === 'list') body += `<div class="nested-block"><div class="nested-title"><strong>목록</strong><button type="button" data-add="listItem" data-array="${base}.items">항목 추가</button></div>${(section.items || []).map((item, i) => `<div class="form-row">${input('강조 제목', `${base}.items.${i}.title`, item.title)}${input('내용', `${base}.items.${i}.detail`, item.detail, true)}${itemActions(`${base}.items`, i)}</div>`).join('')}</div>`;
     if (section.type === 'keyValue') body += `<div class="nested-block"><div class="nested-title"><strong>행</strong><button type="button" data-add="row" data-array="${base}.rows">행 추가</button></div>${(section.rows || []).map((row, i) => `<div class="form-row">${input('항목', `${base}.rows.${i}.label`, row.label)}${input('내용', `${base}.rows.${i}.value`, row.value, true)}${itemActions(`${base}.rows`, i)}</div>`).join('')}</div>`;
+    if (section.type === 'caseStudies') body += renderCollection(section.cases || [], `${base}.cases`, '대표 경험', 'caseStudy', renderCaseStudy);
+    if (section.type === 'timeline') body += renderCompany(section.company || {}, `${base}.company`);
     if (section.type === 'timeline') body += `<div class="nested-block"><div class="nested-title"><strong>그룹</strong><button type="button" data-add="group" data-array="${base}.groups">그룹 추가</button></div>${(section.groups || []).map((group, gi) => renderTimelineGroup(group, base, gi)).join('')}</div>`;
     return `<article class="structured-card section-card"><header><span class="type-badge">${sectionTypeName(section.type)}</span>${itemActions('sections', sectionIndex)}</header>${body}</article>`;
   }).join('');
@@ -772,34 +774,50 @@ function renderResume() {
 function renderSimpleArray(values, path, title, template) {
   return `<div class="nested-block"><div class="nested-title"><strong>${title}</strong><button type="button" data-add="${template}" data-array="${path}">추가</button></div>${values.map((value, i) => `<div class="form-row">${input(title, `${path}.${i}`, value, true)}${itemActions(path, i)}</div>`).join('')}</div>`;
 }
+function renderCollection(values, path, title, template, renderItem) {
+  return `<div class="nested-block"><div class="nested-title"><strong>${title}</strong><button type="button" data-add="${template}" data-array="${path}">추가</button></div>${values.map((value, index) => `<div class="nested-card">${itemActions(path, index)}${renderItem(value, `${path}.${index}`)}</div>`).join('')}</div>`;
+}
+function renderCompany(company, path) {
+  return `<div class="nested-block"><strong>회사</strong>${input('회사명', `${path}.name`, company.name)}${input('직무', `${path}.role`, company.role)}${input('재직 기간', `${path}.period`, company.period)}</div>`;
+}
+function renderTimelineItem(item, path) {
+  return input('제목', `${path}.title`, item.title) + input('설명', `${path}.summary`, item.summary) + input('기간', `${path}.period`, item.period) + renderSimpleArray(item.highlights || [], `${path}.highlights`, '성과', 'paragraph') + input('기술', `${path}.tech`, item.tech) + `<label class="field"><span>대표 경험 표시</span><select data-path="${path}.priority"><option value=""${item.priority !== 'featured' ? ' selected' : ''}>일반</option><option value="featured"${item.priority === 'featured' ? ' selected' : ''}>대표 경험</option></select></label>`;
+}
+function renderProject(project, path) {
+  return input('프로젝트명', `${path}.title`, project.title) + input('설명', `${path}.summary`, project.summary) + renderCollection(project.items || [], `${path}.items`, '타임라인 항목', 'timelineItem', renderTimelineItem);
+}
 function renderTimelineGroup(group, base, gi) {
   const path = `${base}.groups.${gi}`;
-  return `<div class="nested-card">${itemActions(`${base}.groups`, gi)}${input('그룹명', `${path}.title`, group.title)}${input('설명', `${path}.summary`, group.summary)}${input('기간', `${path}.period`, group.period)}<div class="nested-block"><div class="nested-title"><strong>타임라인 항목</strong><button type="button" data-add="timelineItem" data-array="${path}.items">항목 추가</button></div>${(group.items || []).map((item, ii) => {
-    const itemPath = `${path}.items.${ii}`;
-    return `<div class="nested-card">${itemActions(`${path}.items`, ii)}${input('제목', `${itemPath}.title`, item.title)}${input('설명', `${itemPath}.summary`, item.summary)}${input('기간', `${itemPath}.period`, item.period)}${renderSimpleArray(item.highlights || [], `${itemPath}.highlights`, '성과', 'paragraph')}${input('기술', `${itemPath}.tech`, item.tech)}</div>`;
-  }).join('')}</div></div>`;
+  let body = input('그룹명', `${path}.title`, group.title) + input('설명', `${path}.summary`, group.summary) + input('기간', `${path}.period`, group.period);
+  body += renderCollection(group.projects || [], `${path}.projects`, '프로젝트', 'project', renderProject);
+  if (group.items) body += renderCollection(group.items, `${path}.items`, '타임라인 항목', 'timelineItem', renderTimelineItem);
+  return `<div class="nested-card">${itemActions(`${base}.groups`, gi)}${body}</div>`;
 }
-function sectionTypeName(type) { return ({ prose: '일반 글', timeline: '타임라인', list: '글머리 목록', keyValue: '키-값 표' })[type]; }
+function renderCaseStudy(experience, path) {
+  return input('제목', `${path}.title`, experience.title) + input('설명', `${path}.summary`, experience.summary, true) + input('기간', `${path}.period`, experience.period) + renderCollection(experience.sections || [], `${path}.sections`, '상세 내용', 'caseDetail', (detail, detailPath) => input('소제목', `${detailPath}.title`, detail.title) + renderSimpleArray(detail.paragraphs || [], `${detailPath}.paragraphs`, '문단', 'paragraph'));
+}
+function sectionTypeName(type) { return ({ prose: '일반 글', timeline: '타임라인', list: '글머리 목록', keyValue: '키-값 표', caseStudies: '대표 경험' })[type]; }
 
 function getAt(path) { return path.split('.').reduce((value, key) => value[key], state.resume); }
-function setAt(path, value) { const keys = path.split('.'); const last = keys.pop(); const target = keys.reduce((item, key) => item[key], state.resume); target[last] = value; }
+function setAt(path, value) { const keys = path.split('.'); const last = keys.pop(); const target = keys.reduce((item, key) => (item[key] ??= {}), state.resume); target[last] = value; }
 function resumeChanged() { state.dirty = true; elements.saveStatus.textContent = '저장하지 않음'; elements.saveStatus.classList.add('is-dirty'); }
 
 elements.resumeScreen.addEventListener('input', (event) => { if (event.target.dataset.path) { setAt(event.target.dataset.path, event.target.value); resumeChanged(); } });
 elements.resumeScreen.addEventListener('click', (event) => {
   const button = event.target.closest('button'); if (!button) return;
-  if (button.dataset.add) { getAt(button.dataset.array).push(templateValue(button.dataset.add)); renderResume(); resumeChanged(); }
+  if (button.dataset.add) { if (!getAt(button.dataset.array)) setAt(button.dataset.array, []); getAt(button.dataset.array).push(templateValue(button.dataset.add)); renderResume(); resumeChanged(); }
   if (button.hasAttribute('data-remove')) { getAt(button.dataset.array).splice(Number(button.dataset.index), 1); renderResume(); resumeChanged(); }
   if (button.dataset.move) { const array = getAt(button.dataset.array); const from = Number(button.dataset.index); const to = from + Number(button.dataset.move); if (to >= 0 && to < array.length) { [array[from], array[to]] = [array[to], array[from]]; renderResume(); resumeChanged(); } }
 });
 function templateValue(type) {
-  return ({ contact: { label: '', url: '' }, paragraph: '', listItem: { title: '', detail: '' }, row: { label: '', value: '' }, group: { title: '', summary: '', period: '', items: [] }, timelineItem: { title: '', summary: '', period: '', highlights: [], tech: '' } })[type];
+  return ({ contact: { label: '', url: '' }, paragraph: '', listItem: { title: '', detail: '' }, row: { label: '', value: '' }, group: { title: '', summary: '', period: '', projects: [] }, project: { title: '', summary: '', items: [] }, caseStudy: { title: '', summary: '', period: '', sections: [] }, caseDetail: { title: '', paragraphs: [] }, timelineItem: { title: '', summary: '', period: '', highlights: [], tech: '' } })[type];
 }
 function addResumeSection() {
   const type = elements.newSectionType.value;
   const section = { type, title: '새 섹션', note: '' };
   if (type === 'prose') section.paragraphs = [];
-  if (type === 'timeline') section.groups = [];
+  if (type === 'timeline') { section.groups = []; section.company = { name: '', role: '', period: '' }; }
+  if (type === 'caseStudies') section.cases = [];
   if (type === 'list') section.items = [];
   if (type === 'keyValue') section.rows = [];
   state.resume.sections.push(section); renderResume(); resumeChanged();
@@ -955,7 +973,9 @@ async function saveCategories() {
 
 await Promise.all([loadPostList(), loadSeries(), loadCategories()]);
 const initialSlug = resolveInitialPostSlug(state.posts, localStorage.getItem(LAST_POST_STORAGE_KEY));
-if (initialSlug) {
+if (window.location.pathname.replace(/\/$/, '') === '/resume') {
+  await switchMode('resume');
+} else if (initialSlug) {
   await selectPost(initialSlug);
 } else {
   elements.documentTitle.textContent = '작성한 글이 없습니다';
