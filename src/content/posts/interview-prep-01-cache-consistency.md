@@ -29,7 +29,7 @@ draft: true
 
 파일 크기만으로 결정하기 어렵다. 파싱과 객체 생성이 반복되는지, 요청이 얼마나 몰리는지 함께 봐야 한다. 후속 실험의 합성 YAML은 20개, 총 76,403 bytes였다. Java 객체의 heap 점유량은 별도로 측정하지 않았다. 이 숫자로 운영 메모리가 충분하다고 결론 내릴 수는 없다.
 
-코드 근거는 `sp-gw-mgmt@private-revision`의 `src/main/java/com/example/configserver/StateAwareNativeEnvironmentRepository.java`다. `cache`, `findOne`, `getFileInfo`, `buildCacheKey`를 함께 읽으면 조회 순서가 보인다. 캐시 도입은 비공개 이력, 키 구성 변경은 비공개 이력이며 비공개 이력는 분석과 실험 기준이다. 실험 데이터는 블로그 저장소의 `demos/gateway-config/2026-09-08-results.json`에 있다.
+코드 근거는 비공개 Config Server 구현의 상태 기반 repository다. `cache`, `findOne`, 파일 메타데이터 조회와 키 구성 흐름을 함께 읽어 조회 순서를 확인했다. 재현용 실험 데이터는 블로그 저장소의 `demos/gateway-config/2026-09-08-results.json`에 있다.
 
 ## 왜 Redis, Memcached, DB를 쓰지 않았나요?
 
@@ -122,11 +122,11 @@ flowchart TD
 
 Gateway에는 1시간 주기의 자기 refresh 호출이 있다. 하지만 요청 실패와 최종 route 적용까지 확인하지 않았으므로 “1시간 안에 반드시 복구”라고 말할 수 없다. 보강한다면 마지막 적용 성공 시각과 버전을 노출하고, 재시도와 인스턴스별 수렴 확인을 추가하겠다.
 
-클라이언트 근거는 `gateway-example`의 `src/main/java/com/example/apigateway/route/SelfRefreshScheduler.java`와 `src/main/resources/application.yaml`이다. Bus 의존성 추가는 비공개 이력, 주기 변경은 비공개 이력이다. 서버 파일 변경을 자동으로 감시해 Bus를 호출하는 기능은 확인되지 않았다.
+클라이언트 근거는 비공개 Gateway의 self-refresh scheduler와 application 설정이다. 서버 파일 변경을 자동으로 감시해 Bus를 호출하는 기능은 확인되지 않았다.
 
 ## 직접 확인할 자료
 
-원본 저장소는 로컬의 `private-workspace`와 `gateway-example`다. 비공개 코드는 위 파일 경로와 커밋으로 추적하며, 공개 저장소 링크를 추정해 만들지 않았다.
+원본 업무 저장소의 이름·경로·커밋은 공개 문서에서 제거했다. 이 글의 재현 가능한 근거는 블로그 저장소의 합성 데이터와 Demo로 한정한다.
 
 블로그 저장소에서 다음 명령을 실행하면 mtime 충돌과 동시 miss를 확인할 수 있다.
 

@@ -18,7 +18,7 @@ draft: true
 
 이 경험은 자체 회원 인증과 OAuth 인가 경로를 구현하고, 포털/BFF와 실제 SMS, 개발 PostgreSQL을 연결해 검증한 작업이다. 운영 트래픽이나 장애 감소 수치는 없다. 면접에서는 처리량보다 **동시에 요청해도 지켜야 하는 조건**을 먼저 설명한다.
 
-구현 근거는 `auth-service`의 비공개 이력 기준이다. 아래 Java 경로는 `src/main/java/com/example/auth/` 아래다. 비공개 업무 코드는 경로와 메서드로 표시하고, 일반 원리는 공개 문서로 연결했다.
+구현 근거는 비공개 인증 서비스의 상태 전이와 동시성 테스트다. 업무 저장소의 이름·패키지·커밋은 공개 문서에서 제거했고, 일반 원리는 공개 표준 문서로 연결했다.
 
 ## “가장 어려웠던 문제는 무엇인가요?”
 
@@ -75,7 +75,7 @@ sequenceDiagram
 
 **꼬리질문: 모든 client에서 S256을 강제했나요?**
 
-“S256과 redirect·client binding을 함께 검증해야 합니다. 비공개 환경의 정책 설정과 배포 상태는 공개하지 않습니다.”
+“운영 정책은 S256을 강제하고 redirect와 client binding을 함께 검증해야 합니다. 비공개 환경의 하위 호환 설정과 현재 배포 상태는 공개 문서에서 제거했습니다.”
 
 코드 근거: `authz/domain/pkce/CodeChallenge.java`의 `verify`, `TokenService.exchangeAuthorizationCode`가 선택한 `PkceVerifyStep`의 호출. PKCE를 사용하더라도 redirect와 client binding 검증을 생략하지 않는다.
 
@@ -95,7 +95,7 @@ sequenceDiagram
 
 “탈취 토큰의 사용 시간을 줄일 수 있지만 재사용 탐지와 같은 기능은 아닙니다. RFC 9700은 public client의 refresh 보호에 sender constraint 또는 rotation을 요구합니다. 어떤 client를 허용하는지와 실제 보호 수단을 함께 확인해야 합니다.” [RFC 9700 §4.14.2](https://www.rfc-editor.org/rfc/rfc9700.html#section-4.14.2)
 
-코드 근거: `TokenService.exchangeRefreshToken`의 `revoke(...) != 1` 검사와 `issueForRotation`; `authz/token/repository/RefreshTokenRepository.java`의 `revoke`. 새 토큰에는 기존 절대 만료 시각을 전달하므로 갱신만으로 절대 수명을 계속 늘리지 않는다.
+구현은 기존 refresh token의 조건부 폐기가 정확히 1건 성공했을 때만 새 토큰을 발급한다. 새 토큰에는 기존 절대 만료 시각을 전달하므로 갱신만으로 절대 수명을 계속 늘리지 않는다. 내부 클래스와 repository 위치는 생략했다.
 
 ## “SMS 호출을 트랜잭션에 넣으면 더 안전하지 않나요?”
 
@@ -125,7 +125,7 @@ sequenceDiagram
 
 **꼬리질문: OTP 발송 횟수 제한을 복구 세션에만 두면요?**
 
-“복구 요청 제한은 공유 상태에서 원자적으로 처리해야 합니다. 실제 제한 키와 우회 조건은 공개하지 않으며 계정·네트워크 등 여러 축의 제한을 함께 검토합니다.”
+“세션 단위 제한만으로는 부족할 수 있습니다. 복구에서는 복수 신호를 조합한 비가역 조회 키와 DB의 원자적 카운터를 사용했습니다. 계정·네트워크·기기 축의 다층 제한은 후속 설계 항목입니다. 구체적인 키 구성과 우회 조건은 공개하지 않습니다.”
 
 **꼬리질문: 비밀번호 변경과 완료 SMS는 언제 확정되나요?**
 
@@ -135,16 +135,16 @@ sequenceDiagram
 
 “기본 프록시 방식에서는 자기 호출이 새 트랜잭션 경계를 만들지 않습니다. 그래서 복구 서비스에서 별도 `PasswordResetService` Bean을 호출하도록 분리했습니다. 애노테이션 유무뿐 아니라 프록시를 거치는 호출인지 확인합니다.” [Spring 트랜잭션 프록시 동작](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html)
 
-코드 근거: `recovery/service/PasswordResetService.java`의 `reset`, `requireBoundIdentity`; `IdentityRecoveryService.java`의 `confirmPasswordReset`; `recovery/repository/RecoverySessionRepository.java`, `RecoveryChallengeRateLimiter.java`. 발송 카운터와 OTP 오답 검증 횟수는 다른 제한이다. 계정 존재 여부를 드러내지 않는 응답, 만료와 일회용 복구 토큰, 요청 제한의 일반 원칙은 [OWASP Forgot Password Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html)에서 확인할 수 있다.
+구현은 비밀번호 변경, 잠금 해제, 복구 세션 완료를 하나의 트랜잭션으로 묶고 계정과 연락처의 결합을 잠금 상태에서 재검증한다. 발송 카운터와 OTP 오답 검증 횟수는 다른 제한이다. 내부 클래스·메서드·repository 이름은 생략했다. 계정 존재 여부를 드러내지 않는 응답, 만료와 일회용 복구 토큰, 요청 제한의 일반 원칙은 [OWASP Forgot Password Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html)에서 확인할 수 있다.
 
 **꼬리질문: 비밀번호 저장 방식은 어떻게 개선하겠어요?**
 
-“현재 `PasswordResetService.hashPassword`는 기존 `KeyUtils.hashPassword` 계약을 호출합니다. 호환성을 유지한 것이고 비밀번호 저장을 개선한 경험은 아닙니다. 새 버전의 해시 형식을 구분해 저장하고, 로그인 성공 시 Argon2id 같은 password KDF로 재해시하는 이행안을 검토하겠습니다. 로그인과 가입, 복구가 같은 형식을 처리해야 합니다.” 일반 SHA-256처럼 빠른 해시는 비밀번호 대입 공격 비용을 충분히 높이지 못하므로 password KDF를 써야 한다. [OWASP Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
+“현재 구현은 기존 비밀번호 저장 계약과의 호환성을 유지합니다. 구체적인 레거시 알고리즘과 함수명은 공개하지 않습니다. 새 버전의 해시 형식을 구분해 저장하고, 로그인 성공 시 Argon2id 같은 password KDF로 재해시하는 이행안을 검토하겠습니다.” [OWASP Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
 
 ## 면접 직전 확인할 세 가지
 
 - 수치 질문에는 개발계 검증 범위를 답한다. 운영 TPS와 사고 감소율은 측정하지 않았다.
 - 이메일 복구의 계정 정본과 credential 변경은 SMS 경로와 같다고 설명하지 않는다.
-- 기존 비밀번호 저장 계약의 호환성을 유지한 것이며, 현대적인 password KDF로 개선한 경험은 아니다.
+- 기존 저장 계약의 호환성을 유지한 것이며, modern password KDF로의 이행은 별도 과제다.
 
 [다음: 배포와 외부 API](/blog/interview-prep-04-delivery-external-api)

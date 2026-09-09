@@ -36,7 +36,7 @@ Kubernetes에서는 replica가 늘거나 교체된다. client 목록을 직접 �
 
 ## Kafka 초안에서 RabbitMQ로 바꾼 근거
 
-원본 이력 비공개 이력에는 Kafka Bus starter가 들어갔고, 비공개 이력에서 AMQP starter로 교체됐다. 비공개 이력은 RabbitMQ 접속 설정 방식 변경을 담고 있다. 이력은 제품 전환을 확인하는 근거다.
+원본 이력에서 Kafka Bus starter를 AMQP starter로 교체했고 RabbitMQ 접속 설정 방식도 변경했다. 비공개 커밋 식별자는 생략한다.
 
 전환 이유는 대상 환경에서 가용한 MQ가 RabbitMQ뿐이었다는 프로젝트 제약이다. 이 이유는 작업 맥락에 근거하며, dependency diff만으로 역추론한 사실이 아니다. Kafka와 RabbitMQ를 같은 조건으로 벤치마크한 결과도 없다.
 
@@ -90,7 +90,7 @@ Config Server가 여러 replica라면 각 Pod가 보는 volume도 확인해야 �
 
 **“가장 먼저 보강한다면요?”** 변경 버전을 발급하고 파일 반영 확인 뒤 event를 발행하며, client별 적용 결과를 추적하겠다. 현재 캐시가 같은 mtime에서 stale을 반환할 수 있으므로 신호 전파만 고쳐서는 충분하지 않다.
 
-원본 저장소 위치는 공개하지 않는다. 아래 경로는 역할을 설명하기 위해 일반화한 예시다.
+원본은 비공개 업무 저장소이며 이름과 로컬 위치는 공개하지 않는다.
 
 | 근거 | 루트 기준 경로 |
 |---|---|

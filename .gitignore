@@ -18,3 +18,4 @@ RTK.md
 # Browser regression test artifacts
 playwright-report/
 test-results/
+lab/b2g-resttemplate-lab/target/

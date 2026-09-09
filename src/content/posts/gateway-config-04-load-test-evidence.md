@@ -46,7 +46,7 @@ flowchart LR
 
 측정 시각은 2026-09-08 00:02 KST다. macOS arm64, Corretto 17.0.10, Spring Boot 3.5.6, Python 3.14.6을 사용했다. client와 서버는 같은 머신의 loopback을 이용했고 Kubernetes CPU·memory 제한은 적용하지 않았다. 커스텀 wrapper 로그는 WARN으로 낮췄고 native 로그는 INFO가 남았다. 운영 기본 로그 레벨과도 조건이 다르다.
 
-숫자의 근거는 원본 저장소 기준 커밋 비공개 이력의 `load-test/results/latest.json`이다. 블로그 저장소에도 `demos/gateway-config/2026-09-08-results.json`으로 고정 사본을 넣었다. 후속 실행으로 working tree의 latest가 바뀌어도 원본의 비공개 변경 이력이나 블로그의 날짜별 사본으로 기준 데이터를 확인할 수 있다.
+숫자의 원본 근거는 비공개 부하 테스트 결과다. 공개 검증을 위해 비식별 고정 사본을 `demos/gateway-config/2026-09-08-results.json`에 넣었다. 업무 저장소의 커밋과 파일 위치는 공개하지 않는다.
 
 | 시나리오 | 요청 | HTTP 오류 | 평균 ms | p95 ms | p99 ms | RPS | 구간 초 |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -118,9 +118,9 @@ python3 demos/gateway-config/cache_boundary_demo.py
 | 확인할 내용 | 블로그 저장소만 있을 때 | 원본 저장소가 있을 때 |
 |---|---|---|
 | 설계와 면접 답변 | 이 시리즈 1~4편 | Java 구현과 변경 이력 대조 |
-| 당시 정량값 | `demos/gateway-config/2026-09-08-results.json` | 커밋 비공개 이력의 `load-test/results/latest.json` |
+| 당시 정량값 | `demos/gateway-config/2026-09-08-results.json` | 비식별 고정 사본 |
 | cache 원리 실행 | `demos/gateway-config/cache_boundary_demo.py` | 실제 wrapper 비교 |
 | 실제 Spring HTTP 재실행 | `demos/gateway-config/README.md`의 안내 | `load-test/scripts/run.sh` |
 | 초기 보고서 | 이 글의 수치·한계 해설 | `docs/load-test/2026-09-08-report.md` |
 
-원본은 `private-workspace`, 기준 커밋은 비공개 이력다. 실제 하네스 재실행은 그 루트에서 `./load-test/scripts/run.sh`로 수행한다. fixture를 다시 생성하고 변경하므로 생성 데이터 전용 경로에서 실행해야 한다. 공개 블로그 Demo와 실제 Spring 부하 테스트의 차이는 위 표를 기준으로 구분하면 된다.
+원본은 비공개 업무 저장소이다. 재실행 경로와 커밋은 제거했고, 공개 블로그 Demo와 실제 Spring 부하 테스트의 차이는 위 표를 기준으로 구분한다.

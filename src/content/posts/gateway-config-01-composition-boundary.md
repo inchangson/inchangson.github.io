@@ -55,7 +55,7 @@ delegate를 직접 생성하면 native repository의 생성자 인자와 자동 
 
 여기에는 두 가지 제한이 있다. 설정 클래스에 `@Profile("native")`가 붙고, `AtomicBoolean`의 compare-and-set으로 첫 native Bean만 감싼다. 이것은 **중복 wrapping 방지**이지, 요청마다 발생하는 cache miss를 한 번으로 묶는 lock이 아니다. 두 동시성 문제를 혼동하면 4편의 중복 구성 현상을 설명할 수 없다.
 
-변경 이력 비공개 이력에서는 wrapping 대상을 넓은 `EnvironmentRepository`에서 `NativeEnvironmentRepository`로 좁혔다. Git이나 Vault repository에 같은 파일 탐색 규칙을 적용할 이유가 없었기 때문이다. 여러 native Bean이 있다면 모두 감싸는 것도 아니므로 이 구현을 범용 장식기로 설명해서는 안 된다.
+변경 이력에서는 wrapping 대상을 넓은 `EnvironmentRepository`에서 `NativeEnvironmentRepository`로 좁혔다. Git이나 Vault repository에 같은 파일 탐색 규칙을 적용할 이유가 없었기 때문이다. 여러 native Bean이 있다면 모두 감싸는 것도 아니므로 이 구현을 범용 장식기로 설명해서는 안 된다.
 
 ## 인터페이스를 구현해도 원본과 완전히 같지는 않다
 
@@ -69,7 +69,7 @@ delegate를 직접 생성하면 native repository의 생성자 인자와 자동 
 
 커스텀 파일 탐색은 native resolver보다 좁다. 첫 profile과 제한된 파일명을 보고 대상 하나를 고른다. 여기서 찾지 못했다고 native 해석까지 막으면, 프레임워크가 정상적으로 수행할 수 있는 요청을 wrapper가 거부할 수 있다.
 
-이력상 strict 탐색 실패 처리를 되돌린 커밋이 비공개 이력다. 현재는 파일 정보가 없으면 delegate로 돌아간다. 그 결과 기본 해석 가능성은 유지하지만 이 경로에는 커스텀 cache가 적용되지 않는다. 존재하지 않는 이름이나 wrapper가 이해하지 못하는 profile 요청이 반복될 때의 비용도 따로 봐야 한다.
+이력상 strict 탐색 실패 처리는 호환성 문제로 되돌렸다. 현재는 파일 정보가 없으면 delegate로 돌아간다. 그 결과 기본 해석 가능성은 유지하지만 이 경로에는 커스텀 cache가 적용되지 않는다. 존재하지 않는 이름이나 wrapper가 이해하지 못하는 profile 요청이 반복될 때의 비용도 따로 봐야 한다.
 
 ## 면접에서 설명한다면
 
@@ -81,12 +81,12 @@ delegate를 직접 생성하면 native repository의 생성자 인자와 자동 
 
 ## 근거를 찾아가는 경로
 
-원본 checkout은 `private-workspace`이며 아래는 그 루트 기준 경로다. 확인 기준 커밋은 비공개 이력다.
+원본은 비공개 업무 저장소이며, 로컬 위치와 커밋 식별자는 공개 문서에서 제거했다. 아래는 식별 가능한 패키지를 제거한 논리적 위치다.
 
 | 근거 | 경로 또는 확인 방법 |
 |---|---|
-| wrapping 조건과 첫 Bean 제한 | `src/main/java/com/example/configserver/StateAwareNativeConfigServerConfiguration.java` |
-| cache, state, fallback, name 변경 | `src/main/java/com/example/configserver/StateAwareNativeEnvironmentRepository.java` |
+| wrapping 조건과 첫 Bean 제한 | Config Server configuration |
+| cache, state, fallback, name 변경 | state-aware native repository |
 | wrapping 대상 변경 | 비공개 변경 이력 |
 | strict 탐색 rollback | 비공개 변경 이력 |
 | 블로그만으로 실행하는 Demo | `demos/gateway-config/cache_boundary_demo.py` |

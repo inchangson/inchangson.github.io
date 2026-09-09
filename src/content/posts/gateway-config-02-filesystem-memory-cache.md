@@ -89,9 +89,9 @@ metadata를 읽은 뒤 내용 읽기 전에 파일이 교체되는 경쟁도 있
 
 ## 코드와 Demo 경로
 
-원본 루트: `private-workspace`.
+원본은 비공개 업무 저장소이며 로컬 위치는 공개하지 않는다.
 
-- `src/main/java/com/example/configserver/StateAwareNativeEnvironmentRepository.java`: `getFileInfo`, `buildCacheKey`, `findOne`, `cleanupOldCacheEntries`
+- state-aware native repository: 파일 정보 조회, 키 구성, 조회, 이전 버전 정리
 - `load-test/scripts/load_test.py`: 실제 HTTP 기반 `test_invalidation`
 - 블로그 저장소 `demos/gateway-config/cache_boundary_demo.py`: 동일 초 mtime와 동시 miss 학습 모델
 - 블로그 저장소 `demos/gateway-config/2026-09-08-results.json`: 당시 측정값의 고정 사본. 4편에서 결과와 측정 한계를 해설한다.

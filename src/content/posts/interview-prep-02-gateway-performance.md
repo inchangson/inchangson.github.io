@@ -25,7 +25,7 @@ Gateway의 요청 변환 구현과 Config Server의 부하 실험은 서로 다�
 
 서로 다른 요청 형식을 라우트 설정으로 연결할 수 있기 때문이다. 다만 당시의 모든 대안 검토가 코드에 기록된 것은 아니다. 설계 관점에서 설명하면 기존 클라이언트와 서비스의 배포를 함께 맞추는 부담을 줄이는 대신, Gateway가 변환 계약을 맡게 된다. 업무 규칙까지 계속 넣으면 서비스 변경이 Gateway 변경으로 번지므로 범위를 제한해야 한다.
 
-개인 구현 근거는 `gateway-example`의 비공개 이력, 제외 항목 추가는 비공개 이력다. 기준 HEAD는 비공개 이력이며 파일은 `src/main/java/com/example/apigateway/filter/QueryParameterToRequestBodyGatewayFilterFactory.java`다.
+개인 구현 근거는 비공개 Gateway의 query-to-body 변환 필터와 제외 항목 변경 이력이다. 업무 저장소의 패키지·파일 경로·커밋은 공개 문서에서 제거했다.
 
 ## 실제 입력과 출력으로 설명해 보세요
 
@@ -84,11 +84,7 @@ flowchart LR
 
 > 과거 커밋에는 query 변환과 query가 없는 요청의 통과를 확인하는 테스트가 있습니다. 기준 HEAD에는 필터 테스트가 남아 있지 않고 context test만 있습니다. 현재 필터의 모든 계약이 자동 검증된 상태라고 답할 수는 없습니다.
 
-과거 파일은 `gateway-example`의 `src/test/java/com/example/apigateway/filter/QueryParameterToRequestBodyGatewayFilterFactoryTest.java`다. 다음처럼 당시 소스를 조회할 수 있다.
-
-```bash
-# 원본 이력 조회 명령은 비공개로 관리한다.
-```
+과거 비공개 이력에는 query 변환과 query가 없는 요청의 통과를 확인하는 테스트가 있었다. 공개 문서에서는 원본 파일 경로와 커밋 조회 명령을 제거했다.
 
 **꼬리 질문: 먼저 어떤 테스트를 추가하겠어요?**
 
@@ -104,7 +100,7 @@ fixture에는 application당 route 20개, 총 400개의 route 모양 설정을 �
 
 아니다. 측정 대상은 Config Server의 설정 조회였다. 별도로 측정한 Python mock API는 SQLite를 읽었지만, Config Server가 그 API를 통해 DB를 조회하지는 않았다. Gateway 요청 변환 필터의 지연이나 전체 API 처리량은 이 실험으로 알 수 없다.
 
-근거는 `sp-gw-mgmt@private-revision`의 `load-test/scripts/load_test.py`, `load-test/scripts/run.sh`, `load-test/results/latest.json`이다. 블로그 저장소에 당시 JSON을 `demos/gateway-config/2026-09-08-results.json`으로 보관했다.
+근거는 비공개 저장소의 부하 테스트 스크립트와 결과다. 공개 검증을 위해 당시 JSON의 비식별 사본을 `demos/gateway-config/2026-09-08-results.json`에 보관했다.
 
 ## 수치가 얼마나 좋아졌나요?
 
@@ -151,9 +147,9 @@ readiness가 `service-01/local`을 조회하므로 대상 캐시를 미리 채�
 | 말하려는 내용 | 확인할 자료 |
 |---|---|
 | 개인 구현 범위와 과거 테스트 | `docs/sp-gw-interview/source-map.md` |
-| body 대체와 타입 규칙 | `gateway-example`의 `QueryParameterToRequestBodyGatewayFilterFactory.apply`, `convertQueryParamsToMap` |
+| body 대체와 타입 규칙 | 비공개 query-to-body 필터의 적용·변환 로직 |
 | 실험 수치 | `demos/gateway-config/2026-09-08-results.json` |
 | 실험 실행 범위 | `demos/gateway-config/README.md`, 원본 `load-test/scripts/run.sh` |
 | 캐시의 동시성 및 stale 조건 | [면접 준비 1편](/blog/interview-prep-01-cache-consistency) |
 
-원본은 로컬 `private-workspace`와 `config-server-example`에 있다. 구현 코드, 후속 실험, 아직 실행하지 않은 개선안을 나눠 답하면 숫자와 기술 용어보다 실제로 판단한 내용을 설명하기 쉽다.
+원본 업무 저장소의 이름과 위치는 공개하지 않는다. 구현 코드, 후속 실험, 아직 실행하지 않은 개선안을 나눠 답하면 숫자와 기술 용어보다 실제로 판단한 내용을 설명하기 쉽다.

@@ -5,7 +5,8 @@ let weatherInfo;
 let weatherLocation;
 let weatherTemp;
 let weatherDesc;
-const apiKey = 'YOUR_API_KEY'; // 실제 API 키로 교체 필요
+// 정적 페이지에는 비밀 API 키를 넣지 않는다. 서버 프록시 연결 전에는 예시를 표시한다.
+const apiKey = '';
 const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
 // DOM 요소 초기화
@@ -18,6 +19,10 @@ function initWeatherElements() {
 
 // 현재 위치 가져오기
 function getCurrentLocation() {
+    if (!apiKey) {
+        showDefaultWeather();
+        return;
+    }
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -37,11 +42,10 @@ function getCurrentLocation() {
 // 날씨 데이터 가져오기
 async function getWeatherData(lat, lon) {
     try {
-        // API 키가 없는 경우 기본 데이터 표시
-        // if (apiKey === 'YOUR_API_KEY') {
-        //     showDefaultWeather();
-        //     return;
-        // }
+        if (!apiKey) {
+            showDefaultWeather();
+            return;
+        }
         
         const url = `${baseUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=en`;
         const response = await fetch(url);
@@ -72,7 +76,7 @@ function displayWeather(data) {
 
 // 기본 날씨 표시
 function showDefaultWeather() {
-    if (weatherLocation) weatherLocation.textContent = 'Seoul, South Korea';
+    if (weatherLocation) weatherLocation.textContent = 'Seoul, South Korea (예시)';
     if (weatherTemp) weatherTemp.textContent = '22°C';
     if (weatherDesc) weatherDesc.textContent = 'Clear';
 }
