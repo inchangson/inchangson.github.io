@@ -4,6 +4,9 @@ import SiteHeader from '../components/SiteHeader.astro';
 import PostCard from '../components/PostCard.astro';
 import { getBlogPosts } from '../lib/blog';
 
+// Temporarily send homepage visitors to the resume while blog drafts are prepared.
+return Astro.redirect('/resume', 302);
+
 const posts = (await getBlogPosts()).slice(0, 3);
 ---
 
