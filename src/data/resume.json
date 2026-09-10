@@ -127,10 +127,10 @@
             },
             {
               "title": "홈케어 플랫폼",
-              "summary": "AI Care B2B, B2C",
+              "summary": "AI Care B2G, B2C",
               "items": [
                 {
-                  "title": "AI Care B2B",
+                  "title": "AI Care B2G",
                   "summary": "공공기관 돌봄 서비스의 응급 출동, 생활 이상 징후 분석 연동과 홈 IoT 가입 처리 개발",
                   "period": "2022.09 ~ 2024.06",
                   "highlights": [
@@ -142,7 +142,7 @@
                   "tech": "Java, Spring Boot, RestTemplate, MyBatis, PostgreSQL"
                 },
                 {
-                  "title": "AI Care B2C 차세대 API 구축",
+                  "title": "AI Care B2C",
                   "summary": "개인 고객 돌봄 서비스의 일일안부 응답과 재전송, TV 안전 이벤트 조회 및 상품별 분석 연동 정책 개발",
                   "period": "2023.02 ~ 2024.06",
                   "highlights": [
