@@ -1,34 +1,34 @@
 # B2G 외부 연동 개선 회고
 
-> 이 디렉터리는 완성된 성공담이 아니라, legacy-service의 PARTNER_B·PartnerA 변경을 실제 커밋과 Java 8 재현 실험으로 다시 이해하는 작업 기록이다.
+> 이 디렉터리는 완성된 성공담이 아니라, 비공개 레거시 서비스의 파트너 A·B 연동 변경을 변경 이력과 Java 8 재현 실험으로 다시 이해하는 작업 기록이다.
 
 ## 먼저 바로잡은 한 문장
 
 현재 이력서에는 다음 문장이 있다.
 
-> PARTNER_B·PartnerA 호출을 공통 Sender와 RestTemplate으로 통합하고 연동 로그·예외 규격을 표준화
+> 파트너 A·B 호출을 공통 Sender와 RestTemplate으로 통합하고 연동 로그·예외 규격을 표준화
 
 코드에서 바로 확인되는 표현은 조금 다르다.
 
-- PARTNER_B과 PartnerA은 하나의 Sender가 아니라 연동처별 Sender로 분리되었다.
+- 파트너 A와 B는 하나의 Sender가 아니라 연동처별 Sender로 분리되었다.
 - 두 Sender가 공통으로 사용한 것은 `HttpConnectionUtils`와 주입된 `RestTemplate`이다.
 - 요청·응답 로그를 모은 경로는 확인되지만, timeout과 연결 실패까지 같은 결과 규격으로 바뀐 것은 아니다.
 - 커넥션 풀 Bean은 이 작업 전에 이미 존재했다. 이번 작업에서 풀을 새로 도입했다고 쓰면 안 된다.
 
 따라서 구현 사실에 가까운 표현은 다음과 같다.
 
-> PARTNER_B·PartnerA 발신 로직을 연동처별 Sender로 분리하고, 공통 RestTemplate 기반 전송과 요청·응답 로그 경로를 정리했다.
+> 파트너 A·B 발신 로직을 연동처별 Sender로 분리하고, 공통 RestTemplate 기반 전송과 요청·응답 로그 경로를 정리했다.
 
 ## 조사 범위
 
 | 구분 | 기준 | 사용 목적 |
 |---|---|---|
-| 주 변경 구간 | legacy-service 비공개 분석 구간 | Sender 분리와 HTTP·로그 공통화 과정 |
-| 종료 상태 | 비공개 이력의 커밋된 blob | 당시 구조 설명 |
-| 직후 보완 | 비공개 이력, 비공개 이력, 비공개 이력 | 정리 직후 발견된 파라미터·호출 시점 보완 |
+| 주 변경 구간 | 비공개 저장소의 관련 변경 이력 | Sender 분리와 HTTP·로그 공통화 과정 |
+| 종료 상태 | 분석 구간 종료 시점의 커밋 blob | 당시 구조 설명 |
+| 직후 보완 | 종료 이후의 관련 변경 3건 | 파라미터·호출 시점 보완 |
 | 실행 환경 | Java 8, Boot 1.5.12, Spring 4.3.16, HttpClient 4.5.5 | 당시 라이브러리 동작 재현 |
 
-시작 SHA는 종료 SHA의 조상이 아니다. 주 변경 구간은 시간순 선형 이력이 아니라 Git의 도달 가능성 차집합 `A..B`로 읽는다. 직후 보완은 범위를 무작정 늘리지 않고 관련 파일의 부모 대비 diff만 별도 후기에서 다룬다.
+시작 지점은 종료 지점의 조상이 아니다. 주 변경 구간은 시간순 선형 이력이 아니라 Git의 도달 가능성 차집합 `A..B`로 읽는다. 직후 보완은 범위를 무작정 늘리지 않고 관련 파일의 부모 대비 diff만 별도 후기에서 다룬다.
 
 ## 변경 흐름
 
@@ -36,8 +36,8 @@
 
 ```mermaid
 flowchart LR
-    A["기존 Service와 PushSender에<br/>연동 코드 분산"] --> B["PartnerA Sender 생성"]
-    B --> C["PARTNER_B Sender 생성"]
+    A["기존 Service와 PushSender에<br/>연동 코드 분산"] --> B["파트너 A Sender 생성"]
+    B --> C["파트너 B Sender 생성"]
     C --> D["Sender 내부 전송·로그<br/>공통 함수 적용"]
     D --> E["HttpConnectionUtils 적용"]
     E --> F["이전 발신 메서드와<br/>의존성 삭제"]

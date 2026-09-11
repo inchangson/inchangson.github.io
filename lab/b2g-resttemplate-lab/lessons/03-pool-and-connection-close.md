@@ -25,7 +25,7 @@ Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
 ## Lesson Learned
 
 1. 풀의 존재만으로 커넥션 재사용을 성과로 주장할 수 없다. 요청 헤더, 서버의 keep-alive 정책, 응답 소비와 연결 반환을 함께 확인해야 한다.
-2. legacy-service은 C1 이전부터 풀 Bean이 있었다. 이번 변경을 “풀 신규 도입”으로 표현하지 않는다.
+2. 비공개 레거시 서비스에는 C1 이전부터 풀 Bean이 있었다. 이번 변경을 “풀 신규 도입”으로 표현하지 않는다.
 3. close 제거 시 서버 idle timeout과 stale connection 처리도 검토해야 한다. 재시도로 POST를 중복 실행할 수 있으므로 무조건 재시도를 추가하지 않는다.
 4. 풀 대기 timeout, TCP 연결 timeout, 응답 read timeout은 서로 다른 대기를 제한한다. 다음 실험에서는 시작 시 고정한 설정과 실패 결과를 함께 다룬다.
 
