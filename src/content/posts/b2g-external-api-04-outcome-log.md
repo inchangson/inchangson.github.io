@@ -18,7 +18,7 @@ read timeout은 상대가 업무를 거절했다는 응답이 아니다. 상대�
 
 B2G `HttpConnectionUtils`는 HTTP 오류 상태의 `HttpStatusCodeException`을 Map으로 변환했다. 연결·읽기 실패는 같은 Map으로 바뀌지 않았다.
 
-PartnerA 내부 공통 함수는 요청 로그 → HTTP 호출 → 응답 로그 순서다. 전송 예외가 발생하면 응답 DB 로그를 건너뛰고 public Sender의 catch에서 서버 로그 후 false로 반환하는 경로가 있었다. PARTNER_B은 전송·파싱 예외를 내부 코드로 바꾼 뒤 응답 로그를 작성하지만, 요청 로그 자체의 실패는 다른 경계에 있다.
+파트너 A 내부 공통 함수는 요청 로그 → HTTP 호출 → 응답 로그 순서다. 전송 예외가 발생하면 응답 DB 로그를 건너뛰고 public Sender의 catch에서 서버 로그 후 false로 반환하는 경로가 있었다. 파트너 B는 전송·파싱 예외를 내부 코드로 바꾼 뒤 응답 로그를 작성하지만, 요청 로그 자체의 실패는 다른 경계에 있다.
 
 로그를 한 함수로 모았다는 사실과 모든 실패를 같은 규격으로 관찰한다는 주장은 다르다. 이것이 회고에서 이력서의 “예외 규격 표준화”를 좁혀 읽은 이유다.
 
@@ -86,7 +86,7 @@ finally에서 완료 로그를 쓰더라도 프로세스 강제 종료나 로그
 
 Spring의 기본 오류 처리 경로에서는 HTTP 4xx·5xx 응답이 상태를 가진 예외로 처리된다. 응답 자체를 받지 못한 I/O 실패는 `ResourceAccessException`으로 감싸질 수 있다. 이 Lab은 오류 처리기를 교체하지 않았다. HTTP 오류 상태와 응답 없는 예외를 하나의 catch가 모두 처리한다고 가정하면 안 된다.
 
-레거시 utility는 상태 예외만 Map으로 바꾼다. 그 결과 HTTP 500은 utility에서 정상 반환된 뒤 Sender의 응답 로그 코드로 이어진다. read timeout은 utility 밖으로 나가므로 같은 위치의 응답 로그가 실행되지 않는다. 실제 PartnerA public Sender에는 그 바깥의 catch가 있지만, 이미 건너뛴 응답 로그를 대신 작성해 주는 것은 아니다.
+레거시 utility는 상태 예외만 Map으로 바꾼다. 그 결과 HTTP 500은 utility에서 정상 반환된 뒤 Sender의 응답 로그 코드로 이어진다. read timeout은 utility 밖으로 나가므로 같은 위치의 응답 로그가 실행되지 않는다. 실제 파트너 A public Sender에는 그 바깥의 catch가 있지만, 이미 건너뛴 응답 로그를 대신 작성해 주는 것은 아니다.
 
 개선 데모의 변환 지점은 다음과 같다. 실제 코드에서 생성자 인자와 상세 분류 일부만 생략한 의사 코드다.
 

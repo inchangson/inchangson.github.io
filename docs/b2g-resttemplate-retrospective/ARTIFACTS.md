@@ -1,6 +1,6 @@
 # B2G 외부 연동 회고 산출물 지도
 
-이 문서는 B2G PARTNER_B·PartnerA Sender와 RestTemplate 회고에서 만든 자료의 위치, 읽는 순서, 검증 상태를 한곳에 모은다. 경로는 모두 `inchangson.github.io` 저장소 루트 기준이다.
+이 문서는 B2G 파트너 A·B Sender와 RestTemplate 회고에서 만든 자료의 위치, 읽는 순서, 검증 상태를 한곳에 모은다. 경로는 모두 `inchangson.github.io` 저장소 루트 기준이다.
 
 ## 권장 읽기 순서
 
@@ -27,7 +27,7 @@ flowchart LR
 | 구분 | 시작 경로 | 내용 | 상태 |
 |---|---|---|---|
 | 전체 안내 | [`docs/b2g-resttemplate-retrospective/README.md`](./README.md) | 조사 범위, 표현 경계, 질문과 검증 상태 | 완료 |
-| 프로덕션 근거 | [`docs/b2g-resttemplate-retrospective/source-map.md`](./source-map.md) | legacy-service 기준 파일·SHA·개인/팀 기여 경계 | 완료 |
+| 프로덕션 근거 | [`docs/b2g-resttemplate-retrospective/source-map.md`](./source-map.md) | 비공개 코드 경계와 공개 검증 자료, 개인/팀 기여 경계 | 완료 |
 | 변경 이력 | [`docs/b2g-resttemplate-retrospective/history.md`](./history.md) | 핵심 파일의 비병합 커밋 25개와 실패 경로 | 완료 |
 | Java 8 데모 | [`lab/b2g-resttemplate-lab/README.md`](../../lab/b2g-resttemplate-lab/README.md) | Boot 1.5.12 DemoApplication, 로컬 스텁, 실행법 | 기능 테스트 10개 통과 |
 | 실험별 회고 | [`lab/b2g-resttemplate-lab/lessons/`](../../lab/b2g-resttemplate-lab/lessons/) | 업무 성공, 공유 factory, pool, 예외·로그, 프로파일 | 5개 작성 완료 |
@@ -63,4 +63,4 @@ flowchart LR
 - 블로그 글의 `draft` 해제 여부를 결정한다.
 - 이력서 문구를 바꿀 때는 운영 성능 향상 수치를 사용하지 않는다.
 
-실제 PARTNER_B·PartnerA 주소와 인증 정보는 데모에 없다. 데모는 loopback 목적지만 허용하고 redirect를 차단하며, 프로파일 workload는 Docker `--network none`에서 실행했다.
+실제 파트너 A·B 주소와 인증 정보는 데모에 없다. 데모는 loopback 목적지만 허용하고 redirect를 차단하며, 프로파일 workload는 Docker `--network none`에서 실행했다.

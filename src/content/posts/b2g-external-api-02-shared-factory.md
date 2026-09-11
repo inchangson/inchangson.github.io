@@ -32,7 +32,7 @@ flowchart LR
 
 ## 당시 코드가 바꾼 것은 wrapper만이었다
 
-legacy-service 비공개 이력의 사용자 지정 timeout 분기는 주입된 RestTemplate에서 factory를 꺼내 setter를 호출한다. 다음은 해당 관계만 보존한 의사 코드다.
+비공개 레거시 서비스의 사용자 지정 timeout 분기는 주입된 RestTemplate에서 factory를 꺼내 setter를 호출한다. 다음은 해당 관계만 보존한 의사 코드다.
 
 ```java
 HttpComponentsClientHttpRequestFactory factory = sharedFactory;

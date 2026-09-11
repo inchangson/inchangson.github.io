@@ -16,7 +16,7 @@ tags: [java, spring, resttemplate, retrospective]
 
 ## 무엇을 비교했나
 
-legacy-service의 풀은 C1 이전부터 있던 설정이다. 이를 Java 8, Boot 1.5.12, HttpClient 4.5.5 데모에 축소 복제하고 로컬 JDK HttpServer를 사용했다. 실제 PARTNER_B·PartnerA 주소와 인증 정보는 없다.
+비공개 레거시 서비스의 풀은 C1 이전부터 있던 설정이다. 이를 Java 8, Boot 1.5.12, HttpClient 4.5.5 데모에 축소 복제하고 로컬 JDK HttpServer를 사용했다. 실제 파트너 A·B 주소와 인증 정보는 없다.
 
 동일한 RestTemplate과 동일한 풀로 POST 20회를 순차 실행했다. 먼저 레거시 utility를 거쳐 close 헤더를 넣고, 다음 구간에서는 헤더 없이 호출했다. 서버가 본 클라이언트 포트 집합과 완료 뒤 풀의 유휴 연결을 기록했다.
 

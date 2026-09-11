@@ -34,17 +34,11 @@ concurrent_miss_loads: 2
 
 ## 실제 측정 근거
 
-[고정 JSON](2026-09-08-results.json)은 원본 커밋 비공개 이력의 `load-test/results/latest.json`과 동일한 2026-09-08 00:02 KST 측정값이다. 원본에서 비공개 변경 이력으로도 확인한다. 실제 Spring HTTP 1,976건과 mock API 1,900건으로 총 3,876건이다. `success`는 HTTP 200 기준이다. raw 요청별 latency는 없고 percentile과 합계가 저장되어 있다. 4편에서 결과를 해설한다.
+[고정 JSON](2026-09-08-results.json)은 비공개 부하 테스트 결과에서 식별 정보를 제거해 보관한 2026-09-08 00:02 KST 측정값이다. 실제 Spring HTTP 1,976건과 mock API 1,900건으로 총 3,876건이다. `success`는 HTTP 200 기준이다. raw 요청별 latency는 없고 percentile과 합계가 저장되어 있다. 4편에서 결과를 해설한다.
 
-당시 원본 checkout:
+원본 부하 테스트는 비공개 저장소에서 실행한다. Java 17, Python 3, curl과 Gradle 의존성이 필요하고 8888/18080 포트를 사용하며 테스트 fixture를 다시 만든다. 공개 블로그 저장소에서 직접 실행하는 명령은 제공하지 않는다.
 
-```text
-private-workspace
-```
-
-기준 커밋 비공개 이력. 원본이 있다면 루트에서 `./load-test/scripts/run.sh`로 재실행한다. Java 17, Python 3, curl과 Gradle 의존성이 필요하다. 8888/18080 포트를 사용하고 `load-test/fixtures`를 다시 만든다. 이 스크립트는 원본 프로젝트가 필요하므로 블로그에서 직접 실행하는 명령이 아니다.
-
-| 근거 | 원본 루트 기준 경로 |
+| 근거 | 비공개 저장소의 논리적 경로 |
 |---|---|
 | wrapper 등록 | `src/main/java/com/example/configserver/StateAwareNativeConfigServerConfiguration.java` |
 | mtime·cache·fallback | `src/main/java/com/example/configserver/StateAwareNativeEnvironmentRepository.java` |
